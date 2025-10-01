@@ -74,7 +74,7 @@ export default function HomePage() {
         <div className="absolute inset-0 bg-[url('/aerial-view-of-dense-forest-canopy.jpg')] bg-cover bg-center opacity-10"></div>
         <div className="relative container mx-auto px-4 py-24 text-center">
           <Badge variant="secondary" className="mb-6 text-sm font-medium">
-            🌍 Hackathon Project 2024
+            🌍 Hackathon Project 2025
           </Badge>
           <h1 className="text-4xl md:text-6xl font-bold text-balance mb-6 bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
             Sistema de Monitoreo Global de Deforestación e Incendios Forestales
@@ -488,10 +488,10 @@ export default function HomePage() {
           <div className="text-center">
             <h3 className="text-2xl font-bold mb-4">Sistema de Monitoreo Forestal Global</h3>
             <p className="text-muted-foreground mb-6">
-              Desarrollado para Hackathon 2024 • Powered by NASA Satellite Data
+              Desarrollado para Hackathon 2025 • Powered by NASA Satellite Data
             </p>
             <div className="flex justify-center space-x-6 text-sm text-muted-foreground">
-              <span>© 2024 Equipo ForestWatch</span>
+              <span>© 2025 Equipo ForestWatch</span>
               <span>•</span>
               <span>Datos proporcionados por NASA</span>
               <span>•</span>
