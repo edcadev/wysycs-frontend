@@ -7,19 +7,9 @@ import D3ForestMap from '@/components/d3-forest-map';
 import ForestAdoptionDialog from '@/components/forest-adoption-dialog';
 import { forestsApi, firesApi } from '@/lib/api';
 import { getHealthColor, getHealthBgColor, getHealthProgressColor, formatDateES } from '@/lib/forest-utils';
+import Map  from "@/components/Maps/Map";
+import { Forest } from "@/interfaces/Forest";
 
-interface Forest {
-  id: number;
-  name: string;
-  latitude: number;
-  longitude: number;
-  community: string;
-  health: number;
-  co2_capture: string;
-  species_count: number;
-  fun_facts: string[];
-  created_at: string;
-}
 
 interface FireRisk {
   level: string;
@@ -307,19 +297,15 @@ const ForestDetailView = () => {
               </button>
             </div>
 
-            {/* Interactive D3 Map */}
-            <div className="bg-white rounded-2xl shadow-lg p-6">
+            <div className="bg-white rounded-2xl shadow-lg p-6" 
+            style={{height: '500px', width: '100%', display:'grid', gridTemplateRows:'1fr 6fr 2fr'}}>
               <h3 className="text-xl font-bold text-gray-900 mb-4 flex items-center gap-2">
                 <MapPin className="h-6 w-6 text-green-600" />
                 Mapa Interactivo
               </h3>
 
-              <D3ForestMap
-                latitude={forest.latitude}
-                longitude={forest.longitude}
-                forestName={forest.name}
-                fireRisk={fireRisk}
-              />
+              <Map forests={[forest]}/>
+              
 
               <div className="mt-4 p-4 bg-gray-50 rounded-lg">
                 <p className="text-sm text-gray-600">

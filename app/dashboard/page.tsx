@@ -21,6 +21,9 @@ import {
 import { forestsApi } from '@/lib/api'
 import { getHealthBadgeClasses, getHealthLabel, getHealthProgressColor } from '@/lib/forest-utils'
 
+import dynamic from "next/dynamic";
+const Map = dynamic(() => import("@/components/Maps/Map"), { ssr: false });
+
 // Tipos basados en response_forests.json
 interface Forest {
   id: string
@@ -334,12 +337,8 @@ export default function DashboardPage() {
             {/* Mapa - Placeholder */}
             <TabsContent value="mapa">
               <Card className="h-[600px] flex items-center justify-center">
-                <div className="text-center">
-                  <MapPin className="h-16 w-16 text-muted-foreground mx-auto mb-4" />
-                  <h3 className="text-lg font-semibold mb-2">Mapa Interactivo</h3>
-                  <p className="text-sm text-muted-foreground">
-                    Próximamente: Visualización geoespacial de todos los bosques
-                  </p>
+                <div className="h-full w-full">
+                  <Map zoom={5} forests={forests}/>
                 </div>
               </Card>
             </TabsContent>
