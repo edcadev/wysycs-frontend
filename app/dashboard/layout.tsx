@@ -2,6 +2,7 @@
 
 import { ReactNode } from 'react'
 import { useRouter, usePathname } from 'next/navigation'
+import Image from 'next/image'
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { DashboardHeader } from "@/components/dashboard-header"
@@ -112,10 +113,14 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
       {/* Sidebar */}
       <aside className="hidden lg:flex w-64 flex-col border-r bg-card/50 backdrop-blur sticky top-0 h-screen flex-shrink-0">
         <div className="p-6 border-b">
-          <div className="flex items-center space-x-2">
-            <div className="flex items-center justify-center w-10 h-10 rounded-lg bg-primary text-primary-foreground font-bold text-lg">
-              W
-            </div>
+          <div className="flex items-center space-x-3">
+            <Image
+              src="/wysycs-logo.SVG"
+              alt="WYSYCS Logo"
+              width={40}
+              height={40}
+              className="w-10 h-10"
+            />
             <span className="text-xl font-bold bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
               WYSYCS
             </span>

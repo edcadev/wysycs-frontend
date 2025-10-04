@@ -1,9 +1,16 @@
 "use client"
 
+import { useState } from "react"
+import Image from "next/image"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
+import {
+  Sheet,
+  SheetContent,
+  SheetTrigger,
+} from "@/components/ui/sheet"
 import {
   Satellite,
   Globe,
@@ -17,23 +24,43 @@ import {
   AlertTriangle,
   Menu,
 } from "lucide-react"
-import { useRouter } from "next/navigation"
 
 export default function HomePage() {
-  const router = useRouter()
+  const [isMenuOpen, setIsMenuOpen] = useState(false)
+
+  const menuItems = [
+    { href: "#inicio", label: "Inicio" },
+    { href: "#problema", label: "Problema" },
+    { href: "#solucion", label: "Solución" },
+    { href: "#tecnologias", label: "Tecnologías" },
+    { href: "#equipo", label: "Equipo" },
+    { href: "#impacto", label: "Impacto" },
+  ]
+
+  const closeMenu = () => setIsMenuOpen(false)
+
   return (
     <div className="min-h-screen bg-background">
       {/* Navigation Header */}
       <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
         <div className="container mx-auto px-4">
           <div className="flex h-16 items-center justify-between">
-            <div className="flex items-center space-x-2">
-              <div className="flex items-center justify-center w-10 h-10 rounded-lg bg-primary text-primary-foreground font-bold text-lg">
-                W
+            <div className="flex items-center space-x-3">
+              <Image
+                src="/wysycs-logo.SVG"
+                alt="WYSYCS Logo"
+                width={48}
+                height={48}
+                className="w-12 h-12"
+              />
+              <div className="flex flex-col">
+                <span className="text-3xl font-bold bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent leading-tight">
+                  WYSYCS
+                </span>
+                <span className="text-[10px] text-muted-foreground leading-tight -mt-1">
+                  What You See, You Can Save
+                </span>
               </div>
-              <span className="text-2xl font-bold bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
-                WYSCYS
-              </span>
             </div>
 
             <nav className="hidden md:flex items-center space-x-6">
@@ -58,13 +85,56 @@ export default function HomePage() {
             </nav>
 
             <div className="flex items-center space-x-4">
-              <Button onClick={()=> router.push('/dashboard')} variant="outline" size="sm" className="hidden sm:inline-flex bg-transparent">
-                <Satellite className="mr-2 h-4 w-4" />
-                Demo
+              <Button asChild variant="outline" size="sm" className="hidden sm:inline-flex bg-transparent">
+                <a href="/dashboard" target="_blank" rel="noopener noreferrer">
+                  <Satellite className="mr-2 h-4 w-4" />
+                  Demo
+                </a>
               </Button>
-              <Button className="md:hidden" variant="ghost" size="sm">
-                <Menu className="h-5 w-5" />
-              </Button>
+
+              {/* Mobile Menu */}
+              <Sheet open={isMenuOpen} onOpenChange={setIsMenuOpen}>
+                <SheetTrigger asChild>
+                  <Button variant="ghost" size="sm" className="md:hidden">
+                    <Menu className="h-5 w-5" />
+                    <span className="sr-only">Abrir menú</span>
+                  </Button>
+                </SheetTrigger>
+                <SheetContent side="top" className="w-full p-6">
+                  <div className="flex items-center justify-between mb-6">
+                    <div className="flex items-center gap-2">
+                      <div className="flex items-center justify-center w-8 h-8 rounded-lg bg-primary text-primary-foreground font-bold text-sm">
+                        W
+                      </div>
+                      <span className="text-lg font-bold bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
+                        WYSCYS
+                      </span>
+                    </div>
+                  </div>
+
+                  <nav className="flex flex-col gap-1">
+                    {menuItems.map((item) => (
+                      <a
+                        key={item.href}
+                        href={item.href}
+                        onClick={closeMenu}
+                        className="text-base font-medium hover:text-primary transition-colors px-4 py-3 rounded-md hover:bg-accent"
+                      >
+                        {item.label}
+                      </a>
+                    ))}
+
+                    <div className="pt-4 px-4">
+                      <Button asChild className="w-full" size="default">
+                        <a href="/dashboard" target="_blank" rel="noopener noreferrer" onClick={closeMenu}>
+                          <Satellite className="mr-2 h-4 w-4" />
+                          Acceder al Demo
+                        </a>
+                      </Button>
+                    </div>
+                  </nav>
+                </SheetContent>
+              </Sheet>
             </div>
           </div>
         </div>
@@ -88,13 +158,17 @@ export default function HomePage() {
             de deforestación e incendios forestales en tiempo real a escala global.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Button size="lg" className="text-lg px-8 py-6">
-              <Globe className="mr-2 h-5 w-5" />
-              Ver Demo en Vivo
+            <Button asChild size="lg" className="text-lg px-8 py-6">
+              <a href="/dashboard" target="_blank" rel="noopener noreferrer">
+                <Globe className="mr-2 h-5 w-5" />
+                Ver Demo en Vivo
+              </a>
             </Button>
-            <Button variant="outline" size="lg" className="text-lg px-8 py-6 bg-transparent">
-              <BarChart3 className="mr-2 h-5 w-5" />
-              Explorar Datos
+            <Button asChild variant="outline" size="lg" className="text-lg px-8 py-6 bg-transparent">
+              <a href="/dashboard" target="_blank" rel="noopener noreferrer">
+                <BarChart3 className="mr-2 h-5 w-5" />
+                Explorar Datos
+              </a>
             </Button>
           </div>
         </div>
@@ -470,9 +544,11 @@ export default function HomePage() {
             las futuras generaciones.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Button size="lg" variant="secondary" className="text-lg px-8 py-6">
-              <Satellite className="mr-2 h-5 w-5" />
-              Acceder a la Plataforma
+            <Button asChild size="lg" variant="secondary" className="text-lg px-8 py-6">
+              <a href="/dashboard" target="_blank" rel="noopener noreferrer">
+                <Satellite className="mr-2 h-5 w-5" />
+                Acceder a la Plataforma
+              </a>
             </Button>
             <Button
               size="lg"
