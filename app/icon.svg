@@ -1,0 +1,323 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 720" width="720" height="720">
+  <title>Logo satélite orbitando + árbol con ondas mejoradas</title>
+  <defs>
+    <style>
+      :root{
+        --line:#1e4635;   /* contornos (verde oscuro) */
+        --fill:#5f8163;   /* rellenos (verde medio) */
+        --light:#7a9b7e;  /* verde más claro para detalles */
+      }
+      .stroke{ stroke:var(--line); stroke-width:12; stroke-linecap:round; stroke-linejoin:round; fill:none; }
+      .fill{ fill:var(--fill); stroke:var(--line); stroke-width:12; stroke-linejoin:round; }
+      .panel-line{ stroke:var(--line); stroke-width:8; stroke-linecap:round; }
+    </style>
+  </defs>
+  
+  <!-- Círculo principal (órbita del satélite) -->
+  <circle cx="360" cy="360" r="280" class="stroke"/>
+  
+  <!-- Paisaje forestal centrado -->
+  <g id="landscape" transform="translate(360,360)">
+    <!-- Silueta de montaña de fondo -->
+    <g id="mountain">
+      <path d="M -180 100
+             L -120 -20
+             L -80 10
+             L -40 -60
+             L 0 -30
+             L 40 -80
+             L 80 0
+             L 120 -40
+             L 180 100
+             Z"
+            fill="var(--line)"
+            opacity="0.3"/>
+      <!-- Picos de nieve (detalles blancos en las cimas) -->
+      <path d="M -120 -20 L -110 -10 L -130 0 Z" fill="white" opacity="0.5"/>
+      <path d="M 40 -80 L 50 -70 L 30 -60 Z" fill="white" opacity="0.5"/>
+    </g>
+
+    <!-- Bosque (5 árboles estratégicamente colocados) -->
+    <!-- Árboles traseros (capa de fondo) -->
+    <g id="tree-back-left" transform="translate(-85,20) scale(0.5)">
+      <path d="M0 -140
+             L-50 -55
+             L-25 -55
+             L-60 10
+             L-35 10
+             L-75 90
+             L75 90
+             L35 10
+             L60 10
+             L25 -55
+             L50 -55 Z"
+            class="fill"/>
+      <rect x="-18" y="90" width="36" height="60" class="fill"/>
+    </g>
+
+    <g id="tree-back-right" transform="translate(90,15) scale(0.48)">
+      <path d="M0 -140
+             L-50 -55
+             L-25 -55
+             L-60 10
+             L-35 10
+             L-75 90
+             L75 90
+             L35 10
+             L60 10
+             L25 -55
+             L50 -55 Z"
+            class="fill"/>
+      <rect x="-18" y="90" width="36" height="60" class="fill"/>
+    </g>
+
+    <!-- Árbol central (protagonista, más grande) -->
+    <g id="tree-center" transform="translate(0,10) scale(0.75)">
+      <path d="M0 -140
+             L-50 -55
+             L-25 -55
+             L-60 10
+             L-35 10
+             L-75 90
+             L75 90
+             L35 10
+             L60 10
+             L25 -55
+             L50 -55 Z"
+            class="fill"/>
+      <rect x="-18" y="90" width="36" height="60" class="fill"/>
+    </g>
+
+    <!-- Árboles delanteros (flancos) -->
+    <g id="tree-left" transform="translate(-110,45) scale(0.6)">
+      <path d="M0 -140
+             L-50 -55
+             L-25 -55
+             L-60 10
+             L-35 10
+             L-75 90
+             L75 90
+             L35 10
+             L60 10
+             L25 -55
+             L50 -55 Z"
+            class="fill"/>
+      <rect x="-18" y="90" width="36" height="60" class="fill"/>
+    </g>
+
+    <g id="tree-right" transform="translate(115,40) scale(0.63)">
+      <path d="M0 -140
+             L-50 -55
+             L-25 -55
+             L-60 10
+             L-35 10
+             L-75 90
+             L75 90
+             L35 10
+             L60 10
+             L25 -55
+             L50 -55 Z"
+            class="fill"/>
+      <rect x="-18" y="90" width="36" height="60" class="fill"/>
+    </g>
+
+    <!-- Línea de suelo/terreno -->
+    <path d="M -200 100 Q -100 90 0 95 T 200 100"
+          stroke="var(--line)"
+          stroke-width="6"
+          fill="none"
+          stroke-linecap="round"/>
+  </g>
+  
+  <!-- Ondas de radio que siguen al satélite -->
+  <g id="waves-container">
+    <!-- Las ondas ahora rotan con el satélite -->
+    <animateTransform 
+      attributeName="transform" 
+      type="rotate" 
+      from="0 360 360"
+      to="360 360 360"
+      dur="20s" 
+      repeatCount="indefinite"/>
+    
+    <!-- Grupo de ondas posicionado donde está el satélite -->
+    <g id="waves" transform="translate(640,360)">
+      <!-- Las ondas semicirculares apuntando hacia el centro (hacia la izquierda pero invertidas) -->
+      <g>
+        <!-- Primera onda - semicírculo que se expande hacia el centro -->
+        <path d="M 0 8 A 8 8 0 0 1 0 -8" 
+              fill="none" 
+              stroke="var(--line)" 
+              stroke-width="4" 
+              stroke-linecap="round"
+              opacity="0">
+          <animate attributeName="d" 
+                   values="M 0 8 A 8 8 0 0 1 0 -8;
+                          M 0 30 A 30 30 0 0 1 0 -30;
+                          M 0 50 A 50 50 0 0 1 0 -50;
+                          M 0 70 A 70 70 0 0 1 0 -70" 
+                   dur="3s" 
+                   begin="0s" 
+                   repeatCount="indefinite"/>
+          <animate attributeName="opacity" 
+                   values="0;0.8;0.4;0" 
+                   dur="3s" 
+                   begin="0s" 
+                   repeatCount="indefinite"/>
+          <animate attributeName="stroke-width" 
+                   values="4;3;2;1" 
+                   dur="3s" 
+                   begin="0s" 
+                   repeatCount="indefinite"/>
+        </path>
+        
+        <!-- Segunda onda - semicírculo que se expande hacia el centro -->
+        <path d="M 0 8 A 8 8 0 0 1 0 -8" 
+              fill="none" 
+              stroke="var(--line)" 
+              stroke-width="4" 
+              stroke-linecap="round"
+              opacity="0">
+          <animate attributeName="d" 
+                   values="M 0 8 A 8 8 0 0 1 0 -8;
+                          M 0 30 A 30 30 0 0 1 0 -30;
+                          M 0 50 A 50 50 0 0 1 0 -50;
+                          M 0 70 A 70 70 0 0 1 0 -70" 
+                   dur="3s" 
+                   begin="0.75s" 
+                   repeatCount="indefinite"/>
+          <animate attributeName="opacity" 
+                   values="0;0.8;0.4;0" 
+                   dur="3s" 
+                   begin="0.75s" 
+                   repeatCount="indefinite"/>
+          <animate attributeName="stroke-width" 
+                   values="4;3;2;1" 
+                   dur="3s" 
+                   begin="0.75s" 
+                   repeatCount="indefinite"/>
+        </path>
+        
+        <!-- Tercera onda - semicírculo que se expande hacia el centro -->
+        <path d="M 0 8 A 8 8 0 0 1 0 -8" 
+              fill="none" 
+              stroke="var(--line)" 
+              stroke-width="4" 
+              stroke-linecap="round"
+              opacity="0">
+          <animate attributeName="d" 
+                   values="M 0 8 A 8 8 0 0 1 0 -8;
+                          M 0 30 A 30 30 0 0 1 0 -30;
+                          M 0 50 A 50 50 0 0 1 0 -50;
+                          M 0 70 A 70 70 0 0 1 0 -70" 
+                   dur="3s" 
+                   begin="1.5s" 
+                   repeatCount="indefinite"/>
+          <animate attributeName="opacity" 
+                   values="0;0.8;0.4;0" 
+                   dur="3s" 
+                   begin="1.5s" 
+                   repeatCount="indefinite"/>
+          <animate attributeName="stroke-width" 
+                   values="4;3;2;1" 
+                   dur="3s" 
+                   begin="1.5s" 
+                   repeatCount="indefinite"/>
+        </path>
+        
+        <!-- Indicador de emisión en el centro del satélite -->
+        <circle cx="0" cy="0" r="3" fill="var(--light)" opacity="0">
+          <animate attributeName="opacity" 
+                   values="0;1;0" 
+                   dur="0.5s" 
+                   repeatCount="indefinite"/>
+          <animate attributeName="r" 
+                   values="3;5;3" 
+                   dur="0.5s" 
+                   repeatCount="indefinite"/>
+        </circle>
+      </g>
+    </g>
+  </g>
+  
+  <!-- Satélite orbitando -->
+  <g id="satellite-orbit">
+    <!-- Animación orbital alrededor del círculo con inicio suave -->
+    <animateTransform 
+      attributeName="transform" 
+      type="rotate" 
+      from="0 360 360"
+      to="360 360 360"
+      dur="20s" 
+      repeatCount="indefinite"/>
+    
+    <!-- Grupo del satélite posicionado en la órbita -->
+    <g id="satellite" transform="translate(640,360)">
+      <!-- Rotar 90 grados para que la antena (punta) apunte hacia el centro -->
+      <g transform="rotate(90)">
+        <!-- Panel solar izquierdo -->
+        <g id="left-panel">
+          <rect x="-85" y="-20" width="70" height="40" rx="4" class="fill"/>
+          <!-- Líneas del panel solar -->
+          <line x1="-75" y1="-20" x2="-75" y2="20" class="panel-line"/>
+          <line x1="-60" y1="-20" x2="-60" y2="20" class="panel-line"/>
+          <line x1="-45" y1="-20" x2="-45" y2="20" class="panel-line"/>
+          <line x1="-30" y1="-20" x2="-30" y2="20" class="panel-line"/>
+        </g>
+        
+        <!-- Cuerpo del satélite -->
+        <rect x="-15" y="-25" width="30" height="50" rx="6" class="fill"/>
+        <!-- Ventana/sensor del satélite -->
+        <circle cx="0" cy="0" r="8" fill="var(--light)" stroke="var(--line)" stroke-width="6"/>
+        
+        <!-- Panel solar derecho -->
+        <g id="right-panel">
+          <rect x="15" y="-20" width="70" height="40" rx="4" class="fill"/>
+          <!-- Líneas del panel solar -->
+          <line x1="30" y1="-20" x2="30" y2="20" class="panel-line"/>
+          <line x1="45" y1="-20" x2="45" y2="20" class="panel-line"/>
+          <line x1="60" y1="-20" x2="60" y2="20" class="panel-line"/>
+          <line x1="75" y1="-20" x2="75" y2="20" class="panel-line"/>
+        </g>
+        
+        <!-- Antena del satélite (ahora apuntando hacia la izquierda = centro) -->
+        <g id="antenna">
+          <!-- Brazo de la antena -->
+          <rect x="-40" y="-3" width="15" height="6" rx="3" class="fill"/>
+          <!-- Plato de la antena orientado hacia el centro -->
+          <path d="M -45 -15 Q -53 0 -45 15 L -47 12 Q -49 0 -47 -12 Z" class="fill"/>
+        </g>
+        
+        <!-- Pequeña animación de vibración para dar vida -->
+        <animateTransform 
+          attributeName="transform" 
+          type="scale" 
+          values="1 1; 1.05 1.05; 1 1" 
+          dur="3s" 
+          repeatCount="indefinite"
+          additive="sum"/>
+      </g>
+    </g>
+  </g>
+  
+  <!-- Efecto de brillo en el satélite -->
+  <g id="satellite-glow" opacity="0.6">
+    <animateTransform 
+      attributeName="transform" 
+      type="rotate" 
+      values="0 360 360; 360 360 360" 
+      dur="20s" 
+      repeatCount="indefinite"/>
+    <circle cx="640" cy="360" r="4" fill="var(--light)">
+      <animate attributeName="r" 
+               values="4;8;4" 
+               dur="2s" 
+               repeatCount="indefinite"/>
+      <animate attributeName="opacity" 
+               values="0.6;1;0.6" 
+               dur="2s" 
+               repeatCount="indefinite"/>
+    </circle>
+  </g>
+</svg>
