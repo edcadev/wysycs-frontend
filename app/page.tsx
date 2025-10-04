@@ -1,3 +1,5 @@
+"use client"
+
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
@@ -15,8 +17,10 @@ import {
   AlertTriangle,
   Menu,
 } from "lucide-react"
+import { useRouter } from "next/navigation"
 
 export default function HomePage() {
+  const router = useRouter()
   return (
     <div className="min-h-screen bg-background">
       {/* Navigation Header */}
@@ -54,7 +58,7 @@ export default function HomePage() {
             </nav>
 
             <div className="flex items-center space-x-4">
-              <Button variant="outline" size="sm" className="hidden sm:inline-flex bg-transparent">
+              <Button onClick={()=> router.push('/dashboard')} variant="outline" size="sm" className="hidden sm:inline-flex bg-transparent">
                 <Satellite className="mr-2 h-4 w-4" />
                 Demo
               </Button>
