@@ -1,7 +1,8 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter } from "@/i18n/routing";
+import { useTranslations } from "next-intl";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -114,6 +115,7 @@ interface GlobalStats {
 }
 
 export default function GuardianProfilePage() {
+  const t = useTranslations("guardian");
   const router = useRouter();
   const [guardianEmail, setGuardianEmail] = useState("");
   const [guardianData, setGuardianData] = useState<GuardianData | null>(null);
@@ -128,7 +130,7 @@ export default function GuardianProfilePage() {
     e.preventDefault();
 
     if (!guardianEmail) {
-      setError("Por favor ingresa tu email");
+      setError(t("profile.error.required"));
       return;
     }
 
@@ -144,7 +146,7 @@ export default function GuardianProfilePage() {
       const progress = await gamificationApi.getGuardianProgress(guardianEmail);
       setGuardianProgress(progress);
     } catch (err) {
-      setError("No se encontró información del guardián con ese email");
+      setError(t("profile.error.notFound"));
       setGuardianData(null);
       setGuardianProgress(null);
     } finally {
@@ -179,7 +181,7 @@ export default function GuardianProfilePage() {
           className="mb-6"
         >
           <ArrowLeft className="mr-2 h-4 w-4" />
-          Volver al dashboard
+          {t("profile.backToDashboard")}
         </Button>
 
         {!guardianData ? (
@@ -190,9 +192,9 @@ export default function GuardianProfilePage() {
                   <Shield className="text-green-600 h-6 w-6" />
                 </div>
                 <div>
-                  <CardTitle className="text-2xl">Perfil de Guardián</CardTitle>
+                  <CardTitle className="text-2xl">{t("profile.title")}</CardTitle>
                   <p className="text-sm text-muted-foreground">
-                    Ingresa tu email para ver tus bosques adoptados
+                    {t("profile.description")}
                   </p>
                 </div>
               </div>
@@ -207,11 +209,11 @@ export default function GuardianProfilePage() {
 
               <form onSubmit={fetchGuardianData} className="space-y-4">
                 <div className="space-y-2">
-                  <Label htmlFor="email">Email de guardián</Label>
+                  <Label htmlFor="email">{t("profile.emailLabel")}</Label>
                   <Input
                     id="email"
                     type="email"
-                    placeholder="tu@email.com"
+                    placeholder={t("profile.emailPlaceholder")}
                     value={guardianEmail}
                     onChange={(e) => setGuardianEmail(e.target.value)}
                     disabled={loading}
@@ -222,12 +224,12 @@ export default function GuardianProfilePage() {
                   {loading ? (
                     <>
                       <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                      Buscando...
+                      {t("profile.searching")}
                     </>
                   ) : (
                     <>
                       <Shield className="mr-2 h-4 w-4" />
-                      Ver mi perfil
+                      {t("profile.viewProfile")}
                     </>
                   )}
                 </Button>
@@ -263,7 +265,7 @@ export default function GuardianProfilePage() {
                     }}
                     className="ml-auto"
                   >
-                    Cambiar guardián
+                    {t("profile.changeGuardian")}
                   </Button>
                 </div>
 
@@ -274,7 +276,7 @@ export default function GuardianProfilePage() {
                       <div className="flex items-center gap-2 mb-2">
                         <Leaf className="text-green-600 h-5 w-5" />
                         <span className="text-sm font-semibold text-gray-700">
-                          Bosques Adoptados
+                          {t("stats.adoptedForests")}
                         </span>
                       </div>
                       <p className="text-3xl font-bold text-green-700">
@@ -288,7 +290,7 @@ export default function GuardianProfilePage() {
                       <div className="flex items-center gap-2 mb-2">
                         <Award className="text-amber-600 h-5 w-5" />
                         <span className="text-sm font-semibold text-gray-700">
-                          Puntos Totales
+                          {t("stats.totalPoints")}
                         </span>
                       </div>
                       <p className="text-3xl font-bold text-amber-700">
@@ -306,7 +308,7 @@ export default function GuardianProfilePage() {
                       <div className="flex items-center gap-2 mb-2">
                         <TrendingUp className="text-purple-600 h-5 w-5" />
                         <span className="text-sm font-semibold text-gray-700">
-                          Nivel
+                          {t("stats.level")}
                         </span>
                       </div>
                       <p className="text-xl font-bold text-purple-700">
@@ -327,30 +329,30 @@ export default function GuardianProfilePage() {
                   <CardHeader>
                     <CardTitle className="flex items-center gap-2">
                       <Target className="h-6 w-6 text-purple-600" />
-                      Tu Progreso de Nivel
+                      {t("progress.title")}
                     </CardTitle>
                   </CardHeader>
                   <CardContent className="space-y-4">
                     <div className="flex items-center justify-between">
                       <div>
-                        <p className="text-sm text-gray-600">Nivel Actual</p>
+                        <p className="text-sm text-gray-600">{t("progress.currentLevel")}</p>
                         <p className="text-2xl font-bold text-purple-700">
                           {guardianProgress.current_level.emoji}{" "}
                           {guardianProgress.current_level.name}
                         </p>
                         <p className="text-sm text-gray-500">
-                          {guardianProgress.current_level.points} puntos
+                          {guardianProgress.current_level.points} {t("progress.points")}
                         </p>
                       </div>
                       {guardianProgress.next_level && (
                         <div className="text-right">
-                          <p className="text-sm text-gray-600">Próximo Nivel</p>
+                          <p className="text-sm text-gray-600">{t("progress.nextLevel")}</p>
                           <p className="text-xl font-bold text-purple-700">
                             {guardianProgress.next_level.name}
                           </p>
                           <p className="text-sm text-gray-500">
-                            Faltan {guardianProgress.next_level.points_needed}{" "}
-                            puntos
+                            {t("progress.missing")} {guardianProgress.next_level.points_needed}{" "}
+                            {t("progress.points")}
                           </p>
                         </div>
                       )}
@@ -360,7 +362,7 @@ export default function GuardianProfilePage() {
                       <div>
                         <div className="flex items-center justify-between mb-2">
                           <span className="text-sm font-medium text-gray-700">
-                            Progreso:{" "}
+                            {t("progress.progress")}{" "}
                             {guardianProgress.next_level.progress_percentage}%
                           </span>
                         </div>
@@ -377,7 +379,7 @@ export default function GuardianProfilePage() {
                       <div className="bg-amber-50 p-4 rounded-lg border border-amber-200">
                         <p className="text-amber-800 font-semibold flex items-center gap-2">
                           <Trophy className="h-5 w-5" />
-                          ¡Has alcanzado el nivel máximo!
+                          {t("progress.maxLevel")}
                         </p>
                       </div>
                     )}
@@ -391,14 +393,14 @@ export default function GuardianProfilePage() {
                   <CardHeader>
                     <CardTitle className="flex items-center gap-2">
                       <Trophy className="h-6 w-6 text-blue-600" />
-                      Estadísticas de la Comunidad
+                      {t("community.title")}
                     </CardTitle>
                   </CardHeader>
                   <CardContent className="space-y-4">
                     <div className="grid grid-cols-2 gap-4">
                       <div className="bg-white p-3 rounded-lg border border-blue-100">
                         <p className="text-xs text-gray-600 mb-1">
-                          Total Adopciones
+                          {t("community.totalAdoptions")}
                         </p>
                         <p className="text-2xl font-bold text-blue-700">
                           {globalStats.total_adoptions}
@@ -406,7 +408,7 @@ export default function GuardianProfilePage() {
                       </div>
                       <div className="bg-white p-3 rounded-lg border border-blue-100">
                         <p className="text-xs text-gray-600 mb-1">
-                          Guardianes Activos
+                          {t("community.activeGuardians")}
                         </p>
                         <p className="text-2xl font-bold text-blue-700">
                           {globalStats.total_guardians}
@@ -414,7 +416,7 @@ export default function GuardianProfilePage() {
                       </div>
                       <div className="bg-white p-3 rounded-lg border border-blue-100">
                         <p className="text-xs text-gray-600 mb-1">
-                          Alertas Enviadas
+                          {t("community.alertsSent")}
                         </p>
                         <p className="text-2xl font-bold text-blue-700">
                           {globalStats.total_alerts_sent}
@@ -422,7 +424,7 @@ export default function GuardianProfilePage() {
                       </div>
                       <div className="bg-white p-3 rounded-lg border border-blue-100">
                         <p className="text-xs text-gray-600 mb-1">
-                          Distribución
+                          {t("community.distribution")}
                         </p>
                         <div className="flex gap-1 text-xs">
                           <span title="Sembrador">
@@ -451,7 +453,7 @@ export default function GuardianProfilePage() {
               {/* Adopted Forests - Left Column (2/3) */}
               <div className="lg:col-span-2">
                 <h2 className="text-2xl font-bold text-gray-800 mb-4">
-                  Mis Bosques Protegidos
+                  {t("forests.title")}
                 </h2>
 
                 {guardianData.adopted_forests.length === 0 ? (
@@ -459,10 +461,10 @@ export default function GuardianProfilePage() {
                     <CardContent className="p-8 text-center">
                       <Heart className="h-16 w-16 text-gray-400 mx-auto mb-4" />
                       <p className="text-gray-600 mb-4">
-                        Aún no has adoptado ningún bosque
+                        {t("forests.noForests")}
                       </p>
                       <Button onClick={() => router.push("/dashboard")}>
-                        Explorar bosques
+                        {t("forests.explore")}
                       </Button>
                     </CardContent>
                   </Card>
@@ -473,7 +475,10 @@ export default function GuardianProfilePage() {
                         key={idx}
                         className="hover:shadow-xl transition-shadow cursor-pointer"
                         onClick={() =>
-                          router.push(`/dashboard/forests/${forest.forest_id}`)
+                          router.push({
+                            pathname: "/dashboard/forests/[id]",
+                            params: { id: forest.forest_id }
+                          })
                         }
                       >
                         <div
@@ -489,7 +494,7 @@ export default function GuardianProfilePage() {
                           <div className="space-y-2 text-sm mb-4">
                             <div className="flex justify-between">
                               <span className="text-gray-600">
-                                Fecha de adopción:
+                                {t("forests.adoptionDate")}
                               </span>
                               <span className="font-semibold">
                                 {formatDateES(forest.adoption_date)}
@@ -497,18 +502,18 @@ export default function GuardianProfilePage() {
                             </div>
                             <div className="flex justify-between">
                               <span className="text-gray-600">
-                                Días protegiendo:
+                                {t("forests.daysProtecting")}
                               </span>
                               <span className="font-semibold text-green-600">
                                 {getDaysSinceAdoption(forest.adoption_date)}{" "}
-                                días
+                                {t("forests.days")}
                               </span>
                             </div>
                           </div>
 
                           <div className="bg-green-50 p-3 rounded-lg">
                             <p className="text-xs font-semibold text-green-800 mb-1">
-                              Estado del bosque:
+                              {t("forests.forestStatus")}
                             </p>
                             <div className="flex items-center gap-2">
                               <div
@@ -523,7 +528,7 @@ export default function GuardianProfilePage() {
                           </div>
 
                           <Button variant="ghost" className="w-full mt-4">
-                            Ver detalles →
+                            {t("forests.viewDetails")}
                           </Button>
                         </CardContent>
                       </Card>
@@ -536,16 +541,16 @@ export default function GuardianProfilePage() {
               {leaderboard && leaderboard.leaderboard.length > 0 && (
                 <div className="lg:col-span-1">
                   <h2 className="text-2xl font-bold text-gray-800 mb-4">
-                    Tabla de Líderes
+                    {t("leaderboard.title")}
                   </h2>
                   <Card className="bg-gradient-to-br from-amber-50 to-yellow-50 border-2 border-amber-200 sticky top-4">
                     <CardHeader>
                       <CardTitle className="flex items-center gap-2 text-lg">
                         <Trophy className="h-5 w-5 text-amber-600" />
-                        Top Guardianes
+                        {t("leaderboard.topGuardians")}
                       </CardTitle>
                       <p className="text-xs text-muted-foreground">
-                        {leaderboard.total_guardians} guardianes totales
+                        {leaderboard.total_guardians} {t("leaderboard.totalGuardians")}
                       </p>
                     </CardHeader>
                     <CardContent>
@@ -593,7 +598,7 @@ export default function GuardianProfilePage() {
                                   </p>
                                   {isCurrentGuardian && (
                                     <span className="text-xs bg-purple-200 text-purple-800 px-1.5 py-0.5 rounded-full font-semibold">
-                                      Tú
+                                      {t("leaderboard.you")}
                                     </span>
                                   )}
                                 </div>

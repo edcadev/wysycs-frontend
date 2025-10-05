@@ -1,7 +1,8 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter } from "@/i18n/routing";
+import { useTranslations } from "next-intl";
 import {
   Card,
   CardContent,
@@ -66,6 +67,7 @@ interface GlobalStats {
 }
 
 export default function DashboardPage() {
+  const t = useTranslations('dashboard');
   const router = useRouter();
   const [forests, setForests] = useState<Forest[]>([]);
   const [selectedForest, setSelectedForest] = useState<Forest | null>(null);
@@ -147,7 +149,7 @@ export default function DashboardPage() {
               <CardHeader className="pb-3">
                 <CardTitle className="text-sm font-medium flex items-center gap-2">
                   <TreePine className="h-4 w-4 text-accent" />
-                  Total de Bosques
+                  {t('kpis.totalForests')}
                 </CardTitle>
               </CardHeader>
               <CardContent>
@@ -155,7 +157,7 @@ export default function DashboardPage() {
                   {globalStats.totalForests}
                 </div>
                 <p className="text-xs text-muted-foreground mt-1">
-                  Monitoreados activamente
+                  {t('kpis.monitored')}
                 </p>
               </CardContent>
             </Card>
@@ -164,7 +166,7 @@ export default function DashboardPage() {
               <CardHeader className="pb-3">
                 <CardTitle className="text-sm font-medium flex items-center gap-2">
                   <Activity className="h-4 w-4 text-primary" />
-                  Salud Promedio
+                  {t('kpis.averageHealth')}
                 </CardTitle>
               </CardHeader>
               <CardContent>
@@ -184,13 +186,13 @@ export default function DashboardPage() {
               <CardHeader className="pb-3">
                 <CardTitle className="text-sm font-medium flex items-center gap-2">
                   <TrendingUp className="h-4 w-4 text-accent" />
-                  CO₂ Capturado
+                  {t('kpis.co2Captured')}
                 </CardTitle>
               </CardHeader>
               <CardContent>
                 <div className="text-2xl font-bold">{globalStats.totalCO2}</div>
                 <p className="text-xs text-muted-foreground mt-1">
-                  Captura anual total
+                  {t('kpis.annualCapture')}
                 </p>
               </CardContent>
             </Card>
@@ -199,7 +201,7 @@ export default function DashboardPage() {
               <CardHeader className="pb-3">
                 <CardTitle className="text-sm font-medium flex items-center gap-2">
                   <TreePine className="h-4 w-4 text-primary" />
-                  Especies Totales
+                  {t('kpis.totalSpecies')}
                 </CardTitle>
               </CardHeader>
               <CardContent>
@@ -207,7 +209,7 @@ export default function DashboardPage() {
                   {globalStats.totalSpecies.toLocaleString()}
                 </div>
                 <p className="text-xs text-muted-foreground mt-1">
-                  Biodiversidad registrada
+                  {t('kpis.biodiversity')}
                 </p>
               </CardContent>
             </Card>
@@ -220,14 +222,14 @@ export default function DashboardPage() {
                 <AlertTriangle className="h-5 w-5 text-destructive" />
                 <div className="flex-1">
                   <p className="font-semibold text-destructive">
-                    {globalStats.criticalForests} bosques en estado crítico
+                    {globalStats.criticalForests} {t('kpis.criticalAlert')}
                   </p>
                   <p className="text-xs text-muted-foreground">
-                    Requieren atención inmediata
+                    {t('kpis.requireAttention')}
                   </p>
                 </div>
                 <Button variant="destructive" size="sm">
-                  Ver Detalles
+                  {t('kpis.viewDetails')}
                 </Button>
               </CardContent>
             </Card>
@@ -242,15 +244,15 @@ export default function DashboardPage() {
             <TabsList>
               <TabsTrigger value="lista">
                 <List className="h-4 w-4 mr-2" />
-                Lista de Bosques
+                {t('tabs.forestList')}
               </TabsTrigger>
               <TabsTrigger value="mapa">
                 <MapPin className="h-4 w-4 mr-2" />
-                Mapa
+                {t('tabs.map')}
               </TabsTrigger>
               <TabsTrigger value="stats">
                 <BarChart3 className="h-4 w-4 mr-2" />
-                Estadísticas
+                {t('tabs.statistics')}
               </TabsTrigger>
             </TabsList>
 
@@ -261,21 +263,21 @@ export default function DashboardPage() {
                 className="cursor-pointer"
                 onClick={() => setFilter("all")}
               >
-                Todos ({forests.length})
+                {t('tabs.all')} ({forests.length})
               </Badge>
               <Badge
                 variant={filter === "critical" ? "default" : "outline"}
                 className="cursor-pointer text-red-600 border-red-200"
                 onClick={() => setFilter("critical")}
               >
-                Críticos ({forests.filter((f) => f.health < 50).length})
+                {t('tabs.critical')} ({forests.filter((f) => f.health < 50).length})
               </Badge>
               <Badge
                 variant={filter === "moderate" ? "default" : "outline"}
                 className="cursor-pointer text-yellow-600 border-yellow-200"
                 onClick={() => setFilter("moderate")}
               >
-                Moderados (
+                {t('tabs.moderate')} (
                 {forests.filter((f) => f.health >= 50 && f.health < 70).length})
               </Badge>
               <Badge
@@ -283,7 +285,7 @@ export default function DashboardPage() {
                 className="cursor-pointer text-green-600 border-green-200"
                 onClick={() => setFilter("healthy")}
               >
-                Saludables ({forests.filter((f) => f.health >= 70).length})
+                {t('tabs.healthy')} ({forests.filter((f) => f.health >= 70).length})
               </Badge>
             </div>
           </div>
@@ -301,7 +303,7 @@ export default function DashboardPage() {
                     key={forest.id}
                     className="hover:shadow-lg transition-all cursor-pointer group"
                     onClick={() =>
-                      router.push(`/dashboard/forests/${forest.id}`)
+                      router.push(`/dashboard/forests/${forest.id}` as any)
                     }
                   >
                     <CardHeader>
@@ -329,7 +331,7 @@ export default function DashboardPage() {
                       <div className="mb-4">
                         <div className="flex items-center justify-between text-sm mb-2">
                           <span className="text-muted-foreground">
-                            Salud del Bosque
+                            {t('forest.health')}
                           </span>
                           <span className="font-semibold">
                             {forest.health_nasa.health_percentage}%
@@ -350,11 +352,11 @@ export default function DashboardPage() {
                       {/* Métricas */}
                       <div className="grid grid-cols-2 gap-4 text-sm">
                         <div>
-                          <p className="text-muted-foreground">CO₂ Anual</p>
+                          <p className="text-muted-foreground">{t('forest.annualCO2')}</p>
                           <p className="font-semibold">{forest.co2_capture}</p>
                         </div>
                         <div>
-                          <p className="text-muted-foreground">Especies</p>
+                          <p className="text-muted-foreground">{t('forest.species')}</p>
                           <p className="font-semibold">
                             {forest.species_count}
                           </p>
@@ -367,7 +369,7 @@ export default function DashboardPage() {
                         size="sm"
                         className="w-full mt-4 group-hover:bg-primary group-hover:text-primary-foreground transition-colors"
                       >
-                        Ver Detalles
+                        {t('forest.viewDetails')}
                         <ChevronRight className="h-4 w-4 ml-2" />
                       </Button>
                     </CardContent>
@@ -392,10 +394,10 @@ export default function DashboardPage() {
               <div className="text-center">
                 <BarChart3 className="h-16 w-16 text-muted-foreground mx-auto mb-4" />
                 <h3 className="text-lg font-semibold mb-2">
-                  Análisis Estadístico
+                  {t('forest.statisticalAnalysis')}
                 </h3>
                 <p className="text-sm text-muted-foreground">
-                  Próximamente: Gráficos y análisis temporal
+                  {t('forest.comingSoon')}
                 </p>
               </div>
             </Card>

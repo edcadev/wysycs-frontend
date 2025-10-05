@@ -1,11 +1,13 @@
 "use client"
 
 import { ReactNode } from 'react'
-import { useRouter, usePathname } from 'next/navigation'
+import { useRouter, usePathname } from '@/i18n/routing'
 import Image from 'next/image'
+import { useTranslations } from 'next-intl'
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { DashboardHeader } from "@/components/dashboard-header"
+import { LanguageSwitcher } from "@/components/language-switcher"
 import {
   LayoutDashboard,
   MapPin,
@@ -25,57 +27,57 @@ interface DashboardLayoutProps {
 }
 
 interface NavItem {
-  label: string
+  key: string
   icon: LucideIcon
   href: string
   enabled: boolean
 }
 
 interface PageConfig {
-  title: string
-  description: string
+  titleKey: string
+  descriptionKey: string
 }
 
 // Configuración de navegación del sidebar
 const NAV_ITEMS: NavItem[] = [
   {
-    label: 'Dashboard',
+    key: 'dashboard',
     icon: LayoutDashboard,
     href: '/dashboard',
     enabled: true,
   },
   {
-    label: 'Mapa Interactivo',
+    key: 'interactiveMap',
     icon: MapPin,
     href: '/dashboard/map',
     enabled: false,
   },
   {
-    label: 'Lista de Bosques',
+    key: 'forestList',
     icon: List,
     href: '/dashboard/forests',
     enabled: false,
   },
   {
-    label: 'Perfil de Guardián',
+    key: 'guardianProfile',
     icon: Shield,
     href: '/dashboard/guardian',
     enabled: true,
   },
   {
-    label: 'Estadísticas',
+    key: 'statistics',
     icon: BarChart3,
     href: '/dashboard/stats',
     enabled: false,
   },
   {
-    label: 'Alertas de Incendios',
+    key: 'fireAlerts',
     icon: Flame,
     href: '/dashboard/fires',
     enabled: true,
   },
   {
-    label: 'Configuración',
+    key: 'settings',
     icon: Settings,
     href: '/dashboard/settings',
     enabled: false,
@@ -85,20 +87,22 @@ const NAV_ITEMS: NavItem[] = [
 // Configuración de títulos y descripciones por página
 const PAGE_CONFIG: Record<string, PageConfig> = {
   '/dashboard': {
-    title: 'Dashboard de Monitoreo',
-    description: 'Visualización en tiempo real de bosques peruanos',
+    titleKey: 'dashboard.pages.dashboard.title',
+    descriptionKey: 'dashboard.pages.dashboard.description',
   },
   '/dashboard/fires': {
-    title: 'Monitoreo de Incendios',
-    description: 'Datos satelitales en tiempo real de NASA FIRMS',
+    titleKey: 'dashboard.pages.fires.title',
+    descriptionKey: 'dashboard.pages.fires.description',
   },
   '/dashboard/guardian': {
-    title: 'Perfil de Guardián',
-    description: 'Gestiona tus bosques adoptados',
+    titleKey: 'dashboard.pages.guardian.title',
+    descriptionKey: 'dashboard.pages.guardian.description',
   },
 }
 
 export default function DashboardLayout({ children }: DashboardLayoutProps) {
+  const t = useTranslations('dashboard.sidebar')
+  const tPages = useTranslations()
   const router = useRouter()
   const pathname = usePathname()
 
@@ -122,11 +126,11 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
               className="w-10 h-10"
             />
             <span className="text-xl font-bold bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
-              WYSYCS
+              {t('title')}
             </span>
           </div>
           <p className="text-xs text-muted-foreground mt-2">
-            Sistema de Monitoreo Forestal
+            {t('subtitle')}
           </p>
         </div>
 
@@ -140,11 +144,11 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
                 key={item.href}
                 variant={isActive ? 'default' : 'ghost'}
                 className="w-full justify-start gap-2"
-                onClick={() => item.enabled && router.push(item.href)}
+                onClick={() => item.enabled && router.push(item.href as any)}
                 disabled={!item.enabled}
               >
                 <Icon className="h-4 w-4" />
-                {item.label}
+                {t(item.key)}
               </Button>
             )
           })}
@@ -153,12 +157,12 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
         <div className="p-4 border-t">
           <Card className="bg-gradient-to-br from-accent/10 to-primary/10">
             <CardHeader className="pb-3">
-              <CardTitle className="text-sm">Estado del Sistema</CardTitle>
+              <CardTitle className="text-sm">{t('systemStatus')}</CardTitle>
             </CardHeader>
             <CardContent>
               <div className="flex items-center gap-2 text-xs text-muted-foreground">
                 <div className="h-2 w-2 rounded-full bg-green-500 animate-pulse" />
-                Datos actualizados hace 2h
+                {t('dataUpdated')}
               </div>
             </CardContent>
           </Card>
@@ -168,21 +172,22 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
       {/* Contenido Principal */}
       <main className="flex-1 overflow-y-auto">
         <DashboardHeader
-          title={currentPageConfig.title}
-          description={currentPageConfig.description}
+          title={tPages(currentPageConfig.titleKey)}
+          description={tPages(currentPageConfig.descriptionKey)}
           actions={
             <>
+              <LanguageSwitcher />
               <Button variant="outline" size="sm" onClick={handleRefresh}>
                 <RefreshCw className="h-4 w-4 mr-2" />
-                Actualizar
+                {tPages('dashboard.header.refresh')}
               </Button>
               <Button variant="outline" size="sm">
                 <Download className="h-4 w-4 mr-2" />
-                Exportar
+                {tPages('dashboard.header.export')}
               </Button>
               <Button size="sm">
                 <Bell className="h-4 w-4 mr-2" />
-                Alertas (3)
+                {tPages('dashboard.header.alerts')} (3)
               </Button>
             </>
           }
