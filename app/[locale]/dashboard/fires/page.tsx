@@ -22,6 +22,7 @@ import {
 } from "lucide-react"
 import { DashboardHeader } from '@/components/dashboard-header'
 import { firesApi } from '@/lib/api'
+import FireHeatmap from '@/components/Maps/Heatmap'
 
 interface Fire {
   latitude: number
@@ -75,8 +76,8 @@ export default function FiresPage() {
     try {
       setLoading(true)
       const data = await firesApi.getPeruFires(days)
-
-      const firesData = Array.isArray(data) ? data : []
+      
+      const firesData = data.fires
       setFires(firesData)
       calculateStats(firesData)
     } catch (error) {
@@ -284,15 +285,15 @@ export default function FiresPage() {
         {/* Tabs de contenido */}
         <Tabs defaultValue="alertas" className="w-full">
           <TabsList className="mb-4">
-            <TabsTrigger value="alertas">
+            <TabsTrigger value="alertas" className='cursor-pointer'>
               <List className="h-4 w-4 mr-2" />
               {tDashboard('tabs.activeAlerts')}
             </TabsTrigger>
-            <TabsTrigger value="analisis">
+            <TabsTrigger value="analisis" className='cursor-pointer'>
               <Search className="h-4 w-4 mr-2" />
               {tDashboard('tabs.riskAnalysis')}
             </TabsTrigger>
-            <TabsTrigger value="mapa">
+            <TabsTrigger value="mapa" className='cursor-pointer'>
               <MapPin className="h-4 w-4 mr-2" />
               {tDashboard('tabs.map')}
             </TabsTrigger>
@@ -548,12 +549,8 @@ export default function FiresPage() {
           {/* Tab: Mapa - Placeholder */}
           <TabsContent value="mapa">
             <Card className="h-[600px] flex items-center justify-center">
-              <div className="text-center">
-                <MapPin className="h-16 w-16 text-muted-foreground mx-auto mb-4" />
-                <h3 className="text-lg font-semibold mb-2">{t('map.title')}</h3>
-                <p className="text-sm text-muted-foreground">
-                  {t('map.description')}
-                </p>
+              <div className="h-full w-full">
+                <FireHeatmap fires={fires}/>
               </div>
             </Card>
           </TabsContent>

@@ -1,0 +1,364 @@
+
+"use client"
+
+import { useState, useEffect } from 'react'
+import { useRouter } from 'next/navigation'
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import { Badge } from "@/components/ui/badge"
+import { Button } from "@/components/ui/button"
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import {
+  MapPin,
+  List,
+  BarChart3,
+  TreePine,
+  Activity,
+  TrendingUp,
+  AlertTriangle,
+  ChevronRight,
+  RefreshCw,
+} from "lucide-react"
+import { forestsApi } from '@/lib/api'
+import { getHealthBadgeClasses, getHealthLabel, getHealthProgressColor } from '@/lib/forest-utils'
+
+import dynamic from "next/dynamic";
+const Map = dynamic(() => import("@/components/Maps/Map"), { ssr: false });
+
+// Tipos basados en response_forests.json
+interface Forest {
+  id: string
+  name: string
+  latitude: number
+  longitude: number
+  health: number
+  co2_capture: string
+  species_count: number
+  community: string
+  fun_facts: string[]
+  created_at: string
+}
+
+interface GlobalStats {
+  totalForests: number
+  averageHealth: number
+  totalCO2: string
+  totalSpecies: number
+  criticalForests: number
+  healthyForests: number
+}
+
+export default function DashboardPage() {
+  const router = useRouter()
+  const [forests, setForests] = useState<Forest[]>([])
+  const [forestsMap, setForestsMap] = useState<Forest[]>([])
+  const [selectedForest, setSelectedForest] = useState<Forest | null>(null)
+  const [loading, setLoading] = useState(true)
+  const [globalStats, setGlobalStats] = useState<GlobalStats | null>(null)
+  const [filter, setFilter] = useState<'all' | 'critical' | 'moderate' | 'healthy'>('all')
+
+  // Cargar datos de bosques desde la API
+  useEffect(() => {
+    fetchForests()
+  }, [])
+
+  const fetchForests = async () => {
+    try {
+      setLoading(true)
+      const data = await forestsApi.getAll()
+      setForests(data)
+      setForestsMap(data)
+      calculateGlobalStats(data)
+    } catch (error) {
+      console.error('Error al cargar bosques:', error)
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  // Calcular estadísticas globales
+  const calculateGlobalStats = (forestsData: Forest[]) => {
+    const totalForests = forestsData.length
+    const averageHealth = Math.round(
+      forestsData.reduce((sum, f) => sum + f.health, 0) / totalForests
+    )
+    
+    // Extraer números de CO2 y sumar
+    const totalCO2Value = forestsData.reduce((sum, f) => {
+      const match = f.co2_capture.match(/[\d,]+/)
+      return sum + (match ? parseInt(match[0].replace(',', '')) : 0)
+    }, 0)
+    
+    const totalSpecies = forestsData.reduce((sum, f) => sum + f.species_count, 0)
+    const criticalForests = forestsData.filter(f => f.health < 50).length
+    const healthyForests = forestsData.filter(f => f.health >= 70).length
+
+    setGlobalStats({
+      totalForests,
+      averageHealth,
+      totalCO2: `${totalCO2Value.toLocaleString()} ton/año`,
+      totalSpecies,
+      criticalForests,
+      healthyForests,
+    })
+  }
+
+  // Filtrar bosques según el nivel de salud
+  const getFilteredForests = () => {
+    switch (filter) {
+      case 'critical':
+        return forests.filter(f => f.health < 50)
+      case 'moderate':
+        return forests.filter(f => f.health >= 50 && f.health < 70)
+      case 'healthy':
+        return forests.filter(f => f.health >= 70)
+      default:
+        return forests
+    }
+  }
+
+
+  return (
+    <>
+      {/* KPIs Globales */}
+      {globalStats && (
+          <section className="container mx-auto px-6 py-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+              <Card className="hover:shadow-lg transition-shadow">
+                <CardHeader className="pb-3">
+                  <CardTitle className="text-sm font-medium flex items-center gap-2">
+                    <TreePine className="h-4 w-4 text-accent" />
+                    Total de Bosques
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="text-3xl font-bold">{globalStats.totalForests}</div>
+                  <p className="text-xs text-muted-foreground mt-1">
+                    Monitoreados activamente
+                  </p>
+                </CardContent>
+              </Card>
+
+              <Card className="hover:shadow-lg transition-shadow">
+                <CardHeader className="pb-3">
+                  <CardTitle className="text-sm font-medium flex items-center gap-2">
+                    <Activity className="h-4 w-4 text-primary" />
+                    Salud Promedio
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="text-3xl font-bold">{globalStats.averageHealth}%</div>
+                  <div className="mt-2 h-2 bg-muted rounded-full overflow-hidden">
+                    <div 
+                      className="h-full bg-gradient-to-r from-primary to-accent transition-all"
+                      style={{ width: `${globalStats.averageHealth}%` }}
+                    />
+                  </div>
+                </CardContent>
+              </Card>
+
+              <Card className="hover:shadow-lg transition-shadow">
+                <CardHeader className="pb-3">
+                  <CardTitle className="text-sm font-medium flex items-center gap-2">
+                    <TrendingUp className="h-4 w-4 text-accent" />
+                    CO₂ Capturado
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="text-2xl font-bold">{globalStats.totalCO2}</div>
+                  <p className="text-xs text-muted-foreground mt-1">
+                    Captura anual total
+                  </p>
+                </CardContent>
+              </Card>
+
+              <Card className="hover:shadow-lg transition-shadow">
+                <CardHeader className="pb-3">
+                  <CardTitle className="text-sm font-medium flex items-center gap-2">
+                    <TreePine className="h-4 w-4 text-primary" />
+                    Especies Totales
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="text-3xl font-bold">
+                    {globalStats.totalSpecies.toLocaleString()}
+                  </div>
+                  <p className="text-xs text-muted-foreground mt-1">
+                    Biodiversidad registrada
+                  </p>
+                </CardContent>
+              </Card>
+            </div>
+
+            {/* Alerta de bosques críticos */}
+            {globalStats.criticalForests > 0 && (
+              <Card className="mt-4 border-destructive/50 bg-destructive/5">
+                <CardContent className="flex items-center gap-3 py-4">
+                  <AlertTriangle className="h-5 w-5 text-destructive" />
+                  <div className="flex-1">
+                    <p className="font-semibold text-destructive">
+                      {globalStats.criticalForests} bosques en estado crítico
+                    </p>
+                    <p className="text-xs text-muted-foreground">
+                      Requieren atención inmediata
+                    </p>
+                  </div>
+                  <Button variant="destructive" size="sm">
+                    Ver Detalles
+                  </Button>
+                </CardContent>
+              </Card>
+            )}
+          </section>
+        )}
+
+        {/* Tabs de contenido */}
+        <section className="container mx-auto px-6 pb-6">
+          <Tabs defaultValue="lista" className="w-full">
+            <div className="flex items-center justify-between mb-4">
+              <TabsList>
+                <TabsTrigger value="lista">
+                  <List className="h-4 w-4 mr-2" />
+                  Lista de Bosques
+                </TabsTrigger>
+                <TabsTrigger value="mapa">
+                  <MapPin className="h-4 w-4 mr-2" />
+                  Mapa
+                </TabsTrigger>
+                {/* <TabsTrigger value="stats">
+                  <BarChart3 className="h-4 w-4 mr-2" />
+                  Estadísticas
+                </TabsTrigger> */}
+              </TabsList>
+
+              {/* Filtros */}
+              <div className="flex items-center gap-2">
+                <Badge 
+                  variant={filter === 'all' ? 'default' : 'outline'}
+                  className="cursor-pointer"
+                  onClick={() => {setFilter('all'); setForestsMap(forests)}}
+                >
+                  Todos ({forests.length})
+                </Badge>
+                <Badge 
+                  variant={filter === 'critical' ? 'default' : 'outline'}
+                  className="cursor-pointer text-red-600 border-red-200"
+                  onClick={() => {setFilter('critical'); setForestsMap(forests.filter(f => f.health < 50))}}
+                >
+                  Críticos ({forests.filter(f => f.health < 50).length})
+                </Badge>
+                <Badge 
+                  variant={filter === 'moderate' ? 'default' : 'outline'}
+                  className="cursor-pointer text-yellow-600 border-yellow-200"
+                  onClick={() => {setFilter('moderate'); setForestsMap(forests.filter(f => f.health >= 50 && f.health < 70))}}
+                >
+                  Moderados ({forests.filter(f => f.health >= 50 && f.health < 70).length})
+                </Badge>
+                <Badge 
+                  variant={filter === 'healthy' ? 'default' : 'outline'}
+                  className="cursor-pointer text-green-600 border-green-200"
+                  onClick={() => {setFilter('healthy'); setForestsMap(forests.filter(f => f.health >= 70))}}
+                >
+                  Saludables ({forests.filter(f => f.health >= 70).length})
+                </Badge>
+              </div>
+            </div>
+
+            {/* Lista de Bosques */}
+            <TabsContent value="lista" className="space-y-4">
+              {loading ? (
+                <div className="flex items-center justify-center py-12">
+                  <RefreshCw className="h-8 w-8 animate-spin text-primary" />
+                </div>
+              ) : (
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+                  {getFilteredForests().map((forest) => (
+                    <Card
+                      key={forest.id}
+                      className="hover:shadow-lg transition-all cursor-pointer group"
+                      onClick={() => router.push(`/dashboard/forests/${forest.id}`)}
+                    >
+                      <CardHeader>
+                        <div className="flex items-start justify-between">
+                          <div className="flex-1">
+                            <CardTitle className="text-lg group-hover:text-primary transition-colors">
+                              {forest.name}
+                            </CardTitle>
+                            <CardDescription className="flex items-center gap-1 mt-1">
+                              <MapPin className="h-3 w-3" />
+                              {forest.community}
+                            </CardDescription>
+                          </div>
+                          <Badge className={getHealthBadgeClasses(forest.health)}>
+                            {getHealthLabel(forest.health)}
+                          </Badge>
+                        </div>
+                      </CardHeader>
+                      <CardContent>
+                        {/* Barra de salud */}
+                        <div className="mb-4">
+                          <div className="flex items-center justify-between text-sm mb-2">
+                            <span className="text-muted-foreground">Salud del Bosque</span>
+                            <span className="font-semibold">{forest.health}%</span>
+                          </div>
+                          <div className="h-2 bg-muted rounded-full overflow-hidden">
+                            <div
+                              className={`h-full transition-all ${getHealthProgressColor(forest.health)}`}
+                              style={{ width: `${forest.health}%` }}
+                            />
+                          </div>
+                        </div>
+
+                        {/* Métricas */}
+                        <div className="grid grid-cols-2 gap-4 text-sm">
+                          <div>
+                            <p className="text-muted-foreground">CO₂ Anual</p>
+                            <p className="font-semibold">{forest.co2_capture}</p>
+                          </div>
+                          <div>
+                            <p className="text-muted-foreground">Especies</p>
+                            <p className="font-semibold">{forest.species_count}</p>
+                          </div>
+                        </div>
+
+                        {/* Acción */}
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          className="w-full mt-4 group-hover:bg-primary group-hover:text-primary-foreground transition-colors"
+                        >
+                          Ver Detalles
+                          <ChevronRight className="h-4 w-4 ml-2" />
+                        </Button>
+                      </CardContent>
+                    </Card>
+                  ))}
+                </div>
+              )}
+            </TabsContent>
+
+            {/* Mapa - Placeholder */}
+            <TabsContent value="mapa">
+              <Card className="h-[600px] flex items-center justify-center">
+                <div className="h-full w-full">
+                  <Map zoom={5} forests={forestsMap}/>
+                </div>
+              </Card>
+            </TabsContent>
+
+            {/* Estadísticas - Placeholder */}
+            {/* <TabsContent value="stats">
+              <Card className="h-[600px] flex items-center justify-center">
+                <div className="text-center">
+                  <BarChart3 className="h-16 w-16 text-muted-foreground mx-auto mb-4" />
+                  <h3 className="text-lg font-semibold mb-2">Análisis Estadístico</h3>
+                  <p className="text-sm text-muted-foreground">
+                    Próximamente: Gráficos y análisis temporal
+                  </p>
+                </div>
+              </Card>
+            </TabsContent> */}
+          </Tabs>
+        </section>
+    </>
+  )
+}
