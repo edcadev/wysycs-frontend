@@ -76,21 +76,21 @@
       "subtitle": "Un equipo multidisciplinario de desarrolladores, científicos de datos y especialistas en ciencias ambientales comprometidos con la conservación forestal.",
       "photoPlaceholder": "Foto del Equipo",
       "photoDesc": "Equipo trabajando en el hackathon",
-      "ana": {
-        "role": "Full Stack Developer",
-        "description": "Especialista en React y Node.js con experiencia en aplicaciones geoespaciales"
+      "eduardo": {
+        "role": "Desarrollador Frontend",
+        "description": "Especialista en Next.js, Angular y arquitectura UI/UX, enfocado en soluciones escalables y experiencias digitales de alto impacto."
       },
-      "carlos": {
-        "role": "Data Scientist",
-        "description": "Experto en análisis de datos satelitales y algoritmos de detección de patrones"
+      "stefano": {
+        "role": "Desarrollador Backend",
+        "description": "Experto en Python, FastAPI y SQL, construyendo APIs de alto rendimiento y arquitecturas backend eficientes para aplicaciones críticas."
       },
-      "laura": {
-        "role": "Científica Ambiental",
-        "description": "PhD en Ciencias Forestales con 10 años de experiencia en conservación"
+      "mathias": {
+        "role": "Desarrollador Frontend",
+        "description": "Experto en ecosistema Next.js, Nuxt, Vue y diseño UI/UX, optimizando rendimiento web y entregando productos de calidad empresarial."
       },
       "miguel": {
-        "role": "UI/UX Designer",
-        "description": "Diseñador especializado en interfaces para aplicaciones científicas y ambientales"
+        "role": "Desarrollador Backend",
+        "description": "Especialista en Nest.js, SQL y arquitectura API REST, diseñando soluciones escalables y sistemas robustos de nivel empresarial."
       }
     },
     "impact": {
