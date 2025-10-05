@@ -173,8 +173,8 @@ export default function GuardianProfilePage() {
   }, []);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-emerald-50 to-green-100">
-      <div className="container mx-auto px-4 py-8">
+    <div className="min-h-screen bg-gradient-to-br from-emerald-50 to-green-100 overflow-x-hidden">
+      <div className="container mx-auto px-4 py-8 max-w-full">
         <Button
           variant="ghost"
           onClick={() => router.push("/dashboard")}
@@ -192,7 +192,9 @@ export default function GuardianProfilePage() {
                   <Shield className="text-green-600 h-6 w-6" />
                 </div>
                 <div>
-                  <CardTitle className="text-2xl">{t("profile.title")}</CardTitle>
+                  <CardTitle className="text-2xl">
+                    {t("profile.title")}
+                  </CardTitle>
                   <p className="text-sm text-muted-foreground">
                     {t("profile.description")}
                   </p>
@@ -240,18 +242,20 @@ export default function GuardianProfilePage() {
           <>
             {/* Guardian Header */}
             <Card className="mb-6">
-              <CardContent className="p-8">
-                <div className="flex items-center gap-4 mb-6">
-                  <div className="bg-green-100 w-20 h-20 rounded-full flex items-center justify-center">
-                    <Shield className="text-green-600 h-10 w-10" />
+              <CardContent className="p-4 sm:p-6">
+                <div className="flex items-center gap-3 sm:gap-4 mb-6">
+                  <div className="bg-green-100 w-12 h-12 sm:w-16 sm:h-16 rounded-full flex items-center justify-center flex-shrink-0">
+                    <Shield className="text-green-600 h-6 w-6 sm:h-8 sm:w-8" />
                   </div>
-                  <div>
-                    <h1 className="text-3xl font-bold text-gray-800">
+                  <div className="flex-1 min-w-0">
+                    <h1 className="text-lg sm:text-2xl font-bold text-gray-800 truncate">
                       {guardianData.guardian_name || "Guardián"}
                     </h1>
-                    <p className="text-gray-600 flex items-center gap-2">
-                      <Mail className="h-4 w-4" />
-                      {guardianData.guardian_email}
+                    <p className="text-gray-600 flex items-center gap-1.5 text-xs sm:text-sm">
+                      <Mail className="h-3 w-3 sm:h-4 sm:w-4 flex-shrink-0" />
+                      <span className="truncate">
+                        {guardianData.guardian_email}
+                      </span>
                     </p>
                   </div>
                   <Button
@@ -263,16 +267,16 @@ export default function GuardianProfilePage() {
                       setGuardianEmail("");
                       setError(null);
                     }}
-                    className="ml-auto"
+                    className="hidden sm:flex"
                   >
                     {t("profile.changeGuardian")}
                   </Button>
                 </div>
 
                 {/* Stats Grid */}
-                <div className="grid md:grid-cols-3 gap-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
                   <Card className="bg-gradient-to-br from-green-50 to-emerald-50 border-2 border-green-200">
-                    <CardContent className="p-4">
+                    <CardContent className="p-4 min-w-0">
                       <div className="flex items-center gap-2 mb-2">
                         <Leaf className="text-green-600 h-5 w-5" />
                         <span className="text-sm font-semibold text-gray-700">
@@ -286,7 +290,7 @@ export default function GuardianProfilePage() {
                   </Card>
 
                   <Card className="bg-gradient-to-br from-amber-50 to-yellow-50 border-2 border-amber-200">
-                    <CardContent className="p-4">
+                    <CardContent className="p-4 min-w-0">
                       <div className="flex items-center gap-2 mb-2">
                         <Award className="text-amber-600 h-5 w-5" />
                         <span className="text-sm font-semibold text-gray-700">
@@ -304,7 +308,7 @@ export default function GuardianProfilePage() {
                       guardianData.guardian_level
                     )}`}
                   >
-                    <CardContent className="p-4">
+                    <CardContent className="p-4 min-w-0">
                       <div className="flex items-center gap-2 mb-2">
                         <TrendingUp className="text-purple-600 h-5 w-5" />
                         <span className="text-sm font-semibold text-gray-700">
@@ -322,7 +326,7 @@ export default function GuardianProfilePage() {
             </Card>
 
             {/* Gamification Stats - Two Column Layout */}
-            <div className="grid md:grid-cols-2 gap-6 mb-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
               {/* Guardian Progress Card */}
               {guardianProgress && (
                 <Card className="bg-gradient-to-br from-purple-50 to-pink-50 border-2 border-purple-200">
@@ -333,25 +337,31 @@ export default function GuardianProfilePage() {
                     </CardTitle>
                   </CardHeader>
                   <CardContent className="space-y-4">
-                    <div className="flex items-center justify-between">
-                      <div>
-                        <p className="text-sm text-gray-600">{t("progress.currentLevel")}</p>
-                        <p className="text-2xl font-bold text-purple-700">
+                    <div className="flex flex-col sm:flex-row items-start sm:items-center sm:justify-between gap-4">
+                      <div className="min-w-0 flex-1">
+                        <p className="text-sm text-gray-600">
+                          {t("progress.currentLevel")}
+                        </p>
+                        <p className="text-xl sm:text-2xl font-bold text-purple-700 break-words">
                           {guardianProgress.current_level.emoji}{" "}
                           {guardianProgress.current_level.name}
                         </p>
                         <p className="text-sm text-gray-500">
-                          {guardianProgress.current_level.points} {t("progress.points")}
+                          {guardianProgress.current_level.points}{" "}
+                          {t("progress.points")}
                         </p>
                       </div>
                       {guardianProgress.next_level && (
-                        <div className="text-right">
-                          <p className="text-sm text-gray-600">{t("progress.nextLevel")}</p>
-                          <p className="text-xl font-bold text-purple-700">
+                        <div className="text-left sm:text-right min-w-0 flex-1">
+                          <p className="text-sm text-gray-600">
+                            {t("progress.nextLevel")}
+                          </p>
+                          <p className="text-lg sm:text-xl font-bold text-purple-700 break-words">
                             {guardianProgress.next_level.name}
                           </p>
                           <p className="text-sm text-gray-500">
-                            {t("progress.missing")} {guardianProgress.next_level.points_needed}{" "}
+                            {t("progress.missing")}{" "}
+                            {guardianProgress.next_level.points_needed}{" "}
                             {t("progress.points")}
                           </p>
                         </div>
@@ -397,7 +407,7 @@ export default function GuardianProfilePage() {
                     </CardTitle>
                   </CardHeader>
                   <CardContent className="space-y-4">
-                    <div className="grid grid-cols-2 gap-4">
+                    <div className="grid grid-cols-1 xs:grid-cols-2 gap-4">
                       <div className="bg-white p-3 rounded-lg border border-blue-100">
                         <p className="text-xs text-gray-600 mb-1">
                           {t("community.totalAdoptions")}
@@ -422,21 +432,24 @@ export default function GuardianProfilePage() {
                           {globalStats.total_alerts_sent}
                         </p>
                       </div>
-                      <div className="bg-white p-3 rounded-lg border border-blue-100">
+                      <div className="bg-white p-3 rounded-lg border border-blue-100 xs:col-span-2">
                         <p className="text-xs text-gray-600 mb-1">
                           {t("community.distribution")}
                         </p>
-                        <div className="flex gap-1 text-xs">
-                          <span title="Sembrador">
+                        <div className="flex flex-wrap gap-2 text-xs">
+                          <span title="Sembrador" className="whitespace-nowrap">
                             🌱 {globalStats.level_distribution.Sembrador}
                           </span>
-                          <span title="Protector">
+                          <span title="Protector" className="whitespace-nowrap">
                             🌳 {globalStats.level_distribution.Protector}
                           </span>
-                          <span title="Guardián">
+                          <span title="Guardián" className="whitespace-nowrap">
                             🦅 {globalStats.level_distribution.Guardián}
                           </span>
-                          <span title="Líder Ancestral">
+                          <span
+                            title="Líder Ancestral"
+                            className="whitespace-nowrap"
+                          >
                             🏆{" "}
                             {globalStats.level_distribution["Líder Ancestral"]}
                           </span>
@@ -449,7 +462,7 @@ export default function GuardianProfilePage() {
             </div>
 
             {/* Main Content Grid - Forests and Leaderboard */}
-            <div className="grid lg:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
               {/* Adopted Forests - Left Column (2/3) */}
               <div className="lg:col-span-2">
                 <h2 className="text-2xl font-bold text-gray-800 mb-4">
@@ -469,7 +482,7 @@ export default function GuardianProfilePage() {
                     </CardContent>
                   </Card>
                 ) : (
-                  <div className="grid md:grid-cols-2 gap-6">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     {guardianData.adopted_forests.map((forest, idx) => (
                       <Card
                         key={idx}
@@ -477,7 +490,7 @@ export default function GuardianProfilePage() {
                         onClick={() =>
                           router.push({
                             pathname: "/dashboard/forests/[id]",
-                            params: { id: forest.forest_id }
+                            params: { id: forest.forest_id },
                           })
                         }
                       >
@@ -486,25 +499,25 @@ export default function GuardianProfilePage() {
                             forest.health_nasa.health_percentage
                           )}`}
                         ></div>
-                        <CardContent className="p-6">
-                          <h3 className="text-xl font-bold text-gray-800 mb-3">
+                        <CardContent className="p-4 sm:p-6 min-w-0">
+                          <h3 className="text-lg sm:text-xl font-bold text-gray-800 mb-3 break-words">
                             {forest.forests.name}
                           </h3>
 
-                          <div className="space-y-2 text-sm mb-4">
-                            <div className="flex justify-between">
-                              <span className="text-gray-600">
+                          <div className="space-y-2 text-xs sm:text-sm mb-4">
+                            <div className="flex justify-between gap-2">
+                              <span className="text-gray-600 flex-shrink-0">
                                 {t("forests.adoptionDate")}
                               </span>
-                              <span className="font-semibold">
+                              <span className="font-semibold text-right">
                                 {formatDateES(forest.adoption_date)}
                               </span>
                             </div>
-                            <div className="flex justify-between">
-                              <span className="text-gray-600">
+                            <div className="flex justify-between gap-2">
+                              <span className="text-gray-600 flex-shrink-0">
                                 {t("forests.daysProtecting")}
                               </span>
-                              <span className="font-semibold text-green-600">
+                              <span className="font-semibold text-green-600 text-right whitespace-nowrap">
                                 {getDaysSinceAdoption(forest.adoption_date)}{" "}
                                 {t("forests.days")}
                               </span>
@@ -522,7 +535,9 @@ export default function GuardianProfilePage() {
                                 )}`}
                               ></div>
                               <span className="text-sm text-green-700">
-                                {getHealthLabel(forest.health_nasa.health_percentage)}
+                                {getHealthLabel(
+                                  forest.health_nasa.health_percentage
+                                )}
                               </span>
                             </div>
                           </div>
@@ -539,18 +554,19 @@ export default function GuardianProfilePage() {
 
               {/* Leaderboard - Right Column (1/3) */}
               {leaderboard && leaderboard.leaderboard.length > 0 && (
-                <div className="lg:col-span-1">
-                  <h2 className="text-2xl font-bold text-gray-800 mb-4">
+                <div className="lg:col-span-1 min-w-0">
+                  <h2 className="text-xl sm:text-2xl font-bold text-gray-800 mb-4">
                     {t("leaderboard.title")}
                   </h2>
-                  <Card className="bg-gradient-to-br from-amber-50 to-yellow-50 border-2 border-amber-200 sticky top-4">
+                  <Card className="bg-gradient-to-br from-amber-50 to-yellow-50 border-2 border-amber-200 lg:sticky lg:top-4">
                     <CardHeader>
                       <CardTitle className="flex items-center gap-2 text-lg">
                         <Trophy className="h-5 w-5 text-amber-600" />
                         {t("leaderboard.topGuardians")}
                       </CardTitle>
                       <p className="text-xs text-muted-foreground">
-                        {leaderboard.total_guardians} {t("leaderboard.totalGuardians")}
+                        {leaderboard.total_guardians}{" "}
+                        {t("leaderboard.totalGuardians")}
                       </p>
                     </CardHeader>
                     <CardContent>
@@ -591,18 +607,18 @@ export default function GuardianProfilePage() {
                                 )}
                               </div>
 
-                              <div className="flex-1 min-w-0">
-                                <div className="flex items-center gap-1">
-                                  <p className="font-bold text-sm text-gray-800 truncate">
+                              <div className="flex-1 min-w-0 overflow-hidden">
+                                <div className="flex items-center gap-1 flex-wrap">
+                                  <p className="font-bold text-sm text-gray-800 truncate max-w-full">
                                     {entry.guardian_name}
                                   </p>
                                   {isCurrentGuardian && (
-                                    <span className="text-xs bg-purple-200 text-purple-800 px-1.5 py-0.5 rounded-full font-semibold">
+                                    <span className="text-xs bg-purple-200 text-purple-800 px-1.5 py-0.5 rounded-full font-semibold flex-shrink-0">
                                       {t("leaderboard.you")}
                                     </span>
                                   )}
                                 </div>
-                                <p className="text-xs text-gray-600">
+                                <p className="text-xs text-gray-600 truncate">
                                   {entry.level_emoji} {entry.guardian_level}
                                 </p>
                               </div>
