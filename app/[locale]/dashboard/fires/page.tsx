@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import { useTranslations } from 'next-intl'
+import dynamic from 'next/dynamic'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
@@ -22,7 +23,15 @@ import {
 } from "lucide-react"
 import { DashboardHeader } from '@/components/dashboard-header'
 import { firesApi } from '@/lib/api'
-import FireHeatmap from '@/components/Maps/Heatmap'
+
+const FireHeatmap = dynamic(() => import('@/components/Maps/Heatmap'), {
+  ssr: false,
+  loading: () => (
+    <div className="h-full w-full flex items-center justify-center">
+      <RefreshCw className="h-8 w-8 animate-spin text-primary" />
+    </div>
+  ),
+})
 
 interface Fire {
   latitude: number
