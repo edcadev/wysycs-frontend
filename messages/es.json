@@ -1,0 +1,395 @@
+{
+  "landing": {
+    "nav": {
+      "home": "Inicio",
+      "problem": "Problema",
+      "solution": "Solución",
+      "technologies": "Tecnologías",
+      "team": "Equipo",
+      "impact": "Impacto",
+      "demo": "Demo",
+      "openMenu": "Abrir menú",
+      "accessDemo": "Acceder al Demo"
+    },
+    "hero": {
+      "badge": "🌍 Hackathon Project 2025",
+      "title": "Sistema de Monitoreo Global de Deforestación e Incendios Forestales",
+      "subtitle": "Plataforma avanzada que utiliza datos satelitales de la NASA para detectar, monitorear y visualizar eventos de deforestación e incendios forestales en tiempo real a escala global.",
+      "liveDemoButton": "Ver Demo en Vivo",
+      "exploreDataButton": "Explorar Datos"
+    },
+    "problem": {
+      "title": "El Desafío Global",
+      "subtitle": "Los bosques del mundo enfrentan amenazas sin precedentes. Necesitamos herramientas avanzadas para monitorear y responder a estos desafíos ambientales críticos.",
+      "deforestation": {
+        "title": "Deforestación Acelerada",
+        "description": "Pérdida de 10 millones de hectáreas de bosque anualmente a nivel mundial"
+      },
+      "fires": {
+        "title": "Incendios Forestales",
+        "description": "Aumento del 75% en incendios forestales en las últimas dos décadas"
+      },
+      "monitoring": {
+        "title": "Falta de Monitoreo",
+        "description": "Detección tardía de eventos críticos por falta de sistemas integrados"
+      }
+    },
+    "solution": {
+      "title": "Nuestra Solución",
+      "subtitle": "Una plataforma integral que combina datos satelitales de la NASA con tecnología avanzada para proporcionar monitoreo en tiempo real y análisis predictivo.",
+      "screenshotPlaceholder": "Captura de Pantalla del Sistema",
+      "dashboardPlaceholder": "Dashboard principal con mapas interactivos",
+      "satellite": {
+        "title": "Datos Satelitales NASA",
+        "description": "Integración directa con APIs de la NASA para datos actualizados cada 2 horas"
+      },
+      "maps": {
+        "title": "Mapas Interactivos",
+        "description": "Visualización geoespacial avanzada con capacidades de zoom y filtrado"
+      },
+      "realtime": {
+        "title": "Tiempo Real",
+        "description": "Actualizaciones automáticas siguiendo los ciclos de captura satelital"
+      },
+      "analysis": {
+        "title": "Análisis Temporal",
+        "description": "Seguimiento de tendencias y patrones históricos de deforestación"
+      },
+      "gallery": {
+        "title": "Galería del Proyecto",
+        "dataAnalysis": "Análisis de Datos",
+        "fireDetection": "Detección de Incendios",
+        "globalView": "Vista Global"
+      }
+    },
+    "technologies": {
+      "title": "Tecnologías Utilizadas",
+      "subtitle": "Stack tecnológico moderno y robusto para garantizar rendimiento, escalabilidad y confiabilidad.",
+      "architecturePlaceholder": "Diagrama de Arquitectura",
+      "architectureDesc": "Flujo de datos y componentes del sistema",
+      "frontend": "Frontend",
+      "backend": "Backend & APIs",
+      "infrastructure": "Infraestructura"
+    },
+    "team": {
+      "title": "Nuestro Equipo",
+      "subtitle": "Un equipo multidisciplinario de desarrolladores, científicos de datos y especialistas en ciencias ambientales comprometidos con la conservación forestal.",
+      "photoPlaceholder": "Foto del Equipo",
+      "photoDesc": "Equipo trabajando en el hackathon",
+      "ana": {
+        "role": "Full Stack Developer",
+        "description": "Especialista en React y Node.js con experiencia en aplicaciones geoespaciales"
+      },
+      "carlos": {
+        "role": "Data Scientist",
+        "description": "Experto en análisis de datos satelitales y algoritmos de detección de patrones"
+      },
+      "laura": {
+        "role": "Científica Ambiental",
+        "description": "PhD en Ciencias Forestales con 10 años de experiencia en conservación"
+      },
+      "miguel": {
+        "role": "UI/UX Designer",
+        "description": "Diseñador especializado en interfaces para aplicaciones científicas y ambientales"
+      }
+    },
+    "impact": {
+      "title": "Impacto Esperado",
+      "subtitle": "Nuestro objetivo es democratizar el acceso a información crítica sobre el estado de los bosques mundiales y facilitar la toma de decisiones informadas.",
+      "researchers": {
+        "title": "Para Investigadores",
+        "description": "Acceso a datos actualizados para estudios en ciencias ambientales y climáticas"
+      },
+      "governments": {
+        "title": "Para Gobiernos",
+        "description": "Herramientas para políticas de protección ambiental y respuesta a emergencias"
+      },
+      "public": {
+        "title": "Para el Público",
+        "description": "Concienciación sobre el estado actual de los bosques y desafíos ambientales"
+      }
+    },
+    "cta": {
+      "title": "Únete a la Misión de Conservación Global",
+      "subtitle": "Explora nuestra plataforma y descubre cómo la tecnología puede ayudar a proteger los bosques del mundo para las futuras generaciones.",
+      "platformButton": "Acceder a la Plataforma",
+      "contactButton": "Contactar al Equipo"
+    },
+    "footer": {
+      "title": "Sistema de Monitoreo Forestal Global",
+      "subtitle": "Desarrollado para Hackathon 2025 • Powered by NASA Satellite Data",
+      "copyright": "© 2025 Equipo ForestWatch",
+      "nasa": "Datos proporcionados por NASA",
+      "openSource": "Proyecto Open Source"
+    }
+  },
+  "dashboard": {
+    "sidebar": {
+      "title": "WYSYCS",
+      "subtitle": "Sistema de Monitoreo Forestal",
+      "dashboard": "Dashboard",
+      "interactiveMap": "Mapa Interactivo",
+      "forestList": "Lista de Bosques",
+      "guardianProfile": "Perfil de Guardián",
+      "statistics": "Estadísticas",
+      "fireAlerts": "Alertas de Incendios",
+      "settings": "Configuración",
+      "systemStatus": "Estado del Sistema",
+      "dataUpdated": "Datos actualizados hace 2h"
+    },
+    "header": {
+      "refresh": "Actualizar",
+      "export": "Exportar",
+      "alerts": "Alertas"
+    },
+    "pages": {
+      "dashboard": {
+        "title": "Dashboard de Monitoreo",
+        "description": "Visualización en tiempo real de bosques peruanos"
+      },
+      "fires": {
+        "title": "Monitoreo de Incendios",
+        "description": "Datos satelitales en tiempo real de NASA FIRMS"
+      },
+      "guardian": {
+        "title": "Perfil de Guardián",
+        "description": "Gestiona tus bosques adoptados"
+      }
+    },
+    "kpis": {
+      "totalForests": "Total de Bosques",
+      "monitored": "Monitoreados activamente",
+      "averageHealth": "Salud Promedio",
+      "co2Captured": "CO₂ Capturado",
+      "annualCapture": "Captura anual total",
+      "totalSpecies": "Especies Totales",
+      "biodiversity": "Biodiversidad registrada",
+      "criticalAlert": "bosques en estado crítico",
+      "requireAttention": "Requieren atención inmediata",
+      "viewDetails": "Ver Detalles"
+    },
+    "tabs": {
+      "forestList": "Lista de Bosques",
+      "map": "Mapa",
+      "statistics": "Estadísticas",
+      "activeAlerts": "Alertas Activas",
+      "riskAnalysis": "Análisis de Riesgo",
+      "all": "Todos",
+      "critical": "Críticos",
+      "moderate": "Moderados",
+      "healthy": "Saludables"
+    },
+    "forest": {
+      "health": "Salud del Bosque",
+      "annualCO2": "CO₂ Anual",
+      "species": "Especies",
+      "viewDetails": "Ver Detalles",
+      "statisticalAnalysis": "Análisis Estadístico",
+      "comingSoon": "Próximamente: Gráficos y análisis temporal"
+    }
+  },
+  "fires": {
+    "period": {
+      "title": "Período de Análisis",
+      "description": "Selecciona el rango de días para visualizar incendios",
+      "day": "día",
+      "days": "días"
+    },
+    "kpis": {
+      "totalFires": "Total Incendios",
+      "detected": "Detectados en el período",
+      "highConfidence": "Alta Confianza",
+      "confirmed": "Incendios confirmados",
+      "averageBrightness": "Brillo Promedio",
+      "temperature": "Temperatura detectada",
+      "dataSource": "Fuente de Datos",
+      "satellite": "Satélite de monitoreo"
+    },
+    "alerts": {
+      "highConfidence": "incendios de alta confianza detectados",
+      "requireMonitoring": "Requieren monitoreo inmediato",
+      "activeFires": "Incendios Activos en Perú",
+      "realtime": "Detecciones satelitales en tiempo real",
+      "loading": "Cargando datos satelitales...",
+      "noFires": "No se detectaron incendios en el período seleccionado"
+    },
+    "table": {
+      "location": "Ubicación",
+      "brightness": "Brillo (K)",
+      "confidence": "Confianza",
+      "date": "Fecha",
+      "time": "Hora",
+      "high": "Alta",
+      "nominal": "Nominal",
+      "low": "Baja",
+      "showing": "Mostrando",
+      "of": "de",
+      "totalFires": "incendios totales"
+    },
+    "source": {
+      "title": "Fuente de datos:",
+      "description": "NASA FIRMS (Fire Information for Resource Management System) - Satélite VIIRS",
+      "updateFrequency": "Los datos se actualizan cada 2-4 horas con información satelital en tiempo real."
+    },
+    "analysis": {
+      "title": "Analizar Ubicación Personalizada",
+      "description": "Busca incendios en coordenadas específicas",
+      "latitude": "Latitud (ej: -8.3)",
+      "longitude": "Longitud (ej: -75.6)",
+      "radius": "Radio (km)",
+      "analyze": "Analizar",
+      "analyzing": "Analizando...",
+      "testLocations": "Ubicaciones de prueba:",
+      "level": "Nivel:",
+      "firesDetected": "incendios detectados",
+      "closestFire": "Incendio más cercano:",
+      "recommendations": "Recomendaciones:",
+      "firesInArea": "Incendios en el área",
+      "distance": "Distancia:",
+      "brightness": "Brillo:",
+      "updateAnalysis": "Actualizar análisis"
+    },
+    "map": {
+      "title": "Mapa Interactivo de Incendios",
+      "description": "Próximamente: Visualización geoespacial de todos los incendios activos"
+    }
+  },
+  "guardian": {
+    "profile": {
+      "title": "Perfil de Guardián",
+      "description": "Ingresa tu email para ver tus bosques adoptados",
+      "emailLabel": "Email de guardián",
+      "emailPlaceholder": "tu@email.com",
+      "viewProfile": "Ver mi perfil",
+      "searching": "Buscando...",
+      "changeGuardian": "Cambiar guardián",
+      "backToDashboard": "Volver al dashboard",
+      "error": {
+        "required": "Por favor ingresa tu email",
+        "notFound": "No se encontró información del guardián con ese email"
+      }
+    },
+    "stats": {
+      "adoptedForests": "Bosques Adoptados",
+      "totalPoints": "Puntos Totales",
+      "level": "Nivel"
+    },
+    "progress": {
+      "title": "Tu Progreso de Nivel",
+      "currentLevel": "Nivel Actual",
+      "points": "puntos",
+      "nextLevel": "Próximo Nivel",
+      "missing": "Faltan",
+      "progress": "Progreso:",
+      "maxLevel": "¡Has alcanzado el nivel máximo!"
+    },
+    "community": {
+      "title": "Estadísticas de la Comunidad",
+      "totalAdoptions": "Total Adopciones",
+      "activeGuardians": "Guardianes Activos",
+      "alertsSent": "Alertas Enviadas",
+      "distribution": "Distribución"
+    },
+    "forests": {
+      "title": "Mis Bosques Protegidos",
+      "noForests": "Aún no has adoptado ningún bosque",
+      "explore": "Explorar bosques",
+      "adoptionDate": "Fecha de adopción:",
+      "daysProtecting": "Días protegiendo:",
+      "days": "días",
+      "forestStatus": "Estado del bosque:",
+      "viewDetails": "Ver detalles →"
+    },
+    "leaderboard": {
+      "title": "Tabla de Líderes",
+      "topGuardians": "Top Guardianes",
+      "totalGuardians": "guardianes totales",
+      "you": "Tú"
+    }
+  },
+  "forestDetail": {
+    "loading": "Cargando información del bosque...",
+    "error": "No se pudo cargar la información del bosque",
+    "backToForests": "Volver a bosques",
+    "forestHealth": "Salud del Bosque",
+    "co2Capture": "Captura de CO₂",
+    "species": "Especies",
+    "community": "Comunidad",
+    "funFacts": {
+      "title": "Datos Curiosos e Importantes"
+    },
+    "fireRisk": {
+      "title": "Análisis de Riesgo de Incendio",
+      "description": "Analiza el riesgo de incendio en tiempo real usando datos satelitales de la NASA",
+      "analyzeNow": "Analizar Riesgo Ahora",
+      "analyzing": "Analizando...",
+      "firesDetected": "incendio(s) detectado(s)",
+      "closestFire": "Incendio más cercano a",
+      "updateAnalysis": "Actualizar análisis"
+    },
+    "adoption": {
+      "title": "Conviértete en Guardián",
+      "description": "Adopta este bosque y contribuye directamente a su protección y conservación",
+      "adoptButton": "Adoptar Bosque"
+    },
+    "map": {
+      "title": "Mapa Interactivo",
+      "coordinates": "Coordenadas:"
+    },
+    "status": {
+      "title": "Estado del Bosque",
+      "overallHealth": "Salud General",
+      "lastUpdate": "Fecha de actualización"
+    }
+  },
+  "adoption": {
+    "title": "Adopta tu Bosque",
+    "subtitle": "Conviértete en guardián digital de la Amazonía",
+    "congratulations": "¡Felicidades!",
+    "successMessage": "Adoptaste {forestName}. Revisa tu email para más detalles.",
+    "form": {
+      "name": "Tu nombre completo",
+      "namePlaceholder": "Ej: María López",
+      "email": "Email",
+      "emailPlaceholder": "tu@email.com",
+      "emailHelp": "Recibirás alertas de incendios y reportes de salud del bosque",
+      "telegram": "Telegram Chat ID (opcional)",
+      "telegramPlaceholder": "123456789",
+      "telegramHelp": "Para recibir alertas instantáneas por Telegram",
+      "required": "Por favor completa todos los campos requeridos"
+    },
+    "benefits": {
+      "title": "¿Qué obtienes como Guardián?",
+      "fireAlerts": "🔥 Alertas en tiempo real de incendios cercanos",
+      "healthReports": "📊 Reportes mensuales de salud del bosque (NDVI)",
+      "gamification": "🏆 Puntos y niveles por proteger el bosque",
+      "impact": "🌍 Impacto medible en conservación"
+    },
+    "buttons": {
+      "cancel": "Cancelar",
+      "adopt": "Adoptar Bosque",
+      "adopting": "Adoptando..."
+    },
+    "info": {
+      "title": "Al adoptar este bosque, recibirás alertas en tiempo real y reportes de salud."
+    }
+  },
+  "common": {
+    "loading": "Cargando...",
+    "error": "Error",
+    "success": "Éxito",
+    "close": "Cerrar",
+    "save": "Guardar",
+    "cancel": "Cancelar",
+    "confirm": "Confirmar",
+    "delete": "Eliminar",
+    "edit": "Editar",
+    "search": "Buscar",
+    "filter": "Filtrar",
+    "sort": "Ordenar",
+    "next": "Siguiente",
+    "previous": "Anterior",
+    "viewMore": "Ver más",
+    "viewLess": "Ver menos"
+  }
+}

@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
+import { useTranslations } from 'next-intl'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
@@ -50,6 +51,8 @@ interface RiskAnalysis {
 }
 
 export default function FiresPage() {
+  const t = useTranslations('fires')
+  const tDashboard = useTranslations('dashboard')
   const [fires, setFires] = useState<Fire[]>([])
   const [stats, setStats] = useState<Stats | null>(null)
   const [loading, setLoading] = useState(true)
@@ -74,7 +77,6 @@ export default function FiresPage() {
       setLoading(true)
       const data = await firesApi.getPeruFires(days)
       
-      // const firesData = Array.isArray(data.fires) ? data.fires : []
       const firesData = data.fires
       setFires(firesData)
       calculateStats(firesData)
@@ -156,8 +158,8 @@ export default function FiresPage() {
   return (
     <>
       <DashboardHeader
-        title="Monitoreo de Incendios"
-        description="Sistema de detección y análisis de incendios forestales en tiempo real"
+        title={t('kpis.dataSource')}
+        description={t('alerts.realtime')}
         actions={
           <div className="flex items-center gap-2">
             <Badge variant="outline" className="text-xs">
@@ -166,7 +168,7 @@ export default function FiresPage() {
             </Badge>
             <Button onClick={fetchFiresData} variant="outline" size="sm" disabled={loading}>
               <RefreshCw className={`h-4 w-4 mr-2 ${loading ? 'animate-spin' : ''}`} />
-              Actualizar
+              {t('analysis.updateAnalysis')}
             </Button>
           </div>
         }
@@ -178,9 +180,9 @@ export default function FiresPage() {
           <CardHeader>
             <CardTitle className="flex items-center gap-2 text-lg">
               <Calendar className="h-5 w-5 text-primary" />
-              Período de Análisis
+              {t('period.title')}
             </CardTitle>
-            <CardDescription>Selecciona el rango de días para visualizar incendios</CardDescription>
+            <CardDescription>{t('period.description')}</CardDescription>
           </CardHeader>
           <CardContent>
             <div className="flex gap-2">
@@ -191,7 +193,7 @@ export default function FiresPage() {
                   variant={days === d ? 'default' : 'outline'}
                   size="sm"
                 >
-                  {d} {d === 1 ? 'día' : 'días'}
+                  {d} {d === 1 ? t('period.day') : t('period.days')}
                 </Button>
               ))}
             </div>
@@ -205,13 +207,13 @@ export default function FiresPage() {
               <CardHeader className="pb-3">
                 <CardTitle className="text-sm font-medium flex items-center gap-2">
                   <Flame className="h-4 w-4 text-destructive" />
-                  Total Incendios
+                  {t('kpis.totalFires')}
                 </CardTitle>
               </CardHeader>
               <CardContent>
                 <div className="text-3xl font-bold">{stats.total_fires}</div>
                 <p className="text-xs text-muted-foreground mt-1">
-                  Detectados en el período
+                  {t('kpis.detected')}
                 </p>
               </CardContent>
             </Card>
@@ -220,13 +222,13 @@ export default function FiresPage() {
               <CardHeader className="pb-3">
                 <CardTitle className="text-sm font-medium flex items-center gap-2">
                   <AlertTriangle className="h-4 w-4 text-destructive" />
-                  Alta Confianza
+                  {t('kpis.highConfidence')}
                 </CardTitle>
               </CardHeader>
               <CardContent>
                 <div className="text-3xl font-bold">{stats.high_confidence_fires}</div>
                 <p className="text-xs text-muted-foreground mt-1">
-                  Incendios confirmados
+                  {t('kpis.confirmed')}
                 </p>
               </CardContent>
             </Card>
@@ -235,13 +237,13 @@ export default function FiresPage() {
               <CardHeader className="pb-3">
                 <CardTitle className="text-sm font-medium flex items-center gap-2">
                   <Activity className="h-4 w-4 text-primary" />
-                  Brillo Promedio
+                  {t('kpis.averageBrightness')}
                 </CardTitle>
               </CardHeader>
               <CardContent>
                 <div className="text-3xl font-bold">{stats.average_brightness}K</div>
                 <p className="text-xs text-muted-foreground mt-1">
-                  Temperatura detectada
+                  {t('kpis.temperature')}
                 </p>
               </CardContent>
             </Card>
@@ -250,13 +252,13 @@ export default function FiresPage() {
               <CardHeader className="pb-3">
                 <CardTitle className="text-sm font-medium flex items-center gap-2">
                   <TrendingUp className="h-4 w-4 text-accent" />
-                  Fuente de Datos
+                  {t('kpis.dataSource')}
                 </CardTitle>
               </CardHeader>
               <CardContent>
                 <div className="text-2xl font-bold">NASA VIIRS</div>
                 <p className="text-xs text-muted-foreground mt-1">
-                  Satélite de monitoreo
+                  {t('kpis.satellite')}
                 </p>
               </CardContent>
             </Card>
@@ -270,10 +272,10 @@ export default function FiresPage() {
               <AlertTriangle className="h-5 w-5 text-destructive" />
               <div className="flex-1">
                 <p className="font-semibold text-destructive">
-                  {stats.high_confidence_fires} incendios de alta confianza detectados
+                  {stats.high_confidence_fires} {t('alerts.highConfidence')}
                 </p>
                 <p className="text-xs text-muted-foreground">
-                  Requieren monitoreo inmediato
+                  {t('alerts.requireMonitoring')}
                 </p>
               </div>
             </CardContent>
@@ -285,15 +287,15 @@ export default function FiresPage() {
           <TabsList className="mb-4">
             <TabsTrigger value="alertas" className='cursor-pointer'>
               <List className="h-4 w-4 mr-2" />
-              Alertas Activas
+              {tDashboard('tabs.activeAlerts')}
             </TabsTrigger>
             <TabsTrigger value="analisis" className='cursor-pointer'>
               <Search className="h-4 w-4 mr-2" />
-              Análisis de Riesgo
+              {tDashboard('tabs.riskAnalysis')}
             </TabsTrigger>
             <TabsTrigger value="mapa" className='cursor-pointer'>
               <MapPin className="h-4 w-4 mr-2" />
-              Mapa
+              {tDashboard('tabs.map')}
             </TabsTrigger>
           </TabsList>
 
@@ -303,20 +305,20 @@ export default function FiresPage() {
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
                   <Flame className="h-5 w-5 text-destructive" />
-                  Incendios Activos en Perú ({fires.length})
+                  {t('alerts.activeFires')} ({fires.length})
                 </CardTitle>
-                <CardDescription>Detecciones satelitales en tiempo real</CardDescription>
+                <CardDescription>{t('alerts.realtime')}</CardDescription>
               </CardHeader>
               <CardContent>
                 {loading ? (
                   <div className="text-center py-12">
                     <RefreshCw className="h-12 w-12 animate-spin text-primary mx-auto mb-4" />
-                    <p className="text-muted-foreground">Cargando datos satelitales...</p>
+                    <p className="text-muted-foreground">{t('alerts.loading')}</p>
                   </div>
                 ) : fires.length === 0 ? (
                   <div className="text-center py-12">
                     <Flame className="h-16 w-16 text-muted-foreground mx-auto mb-4" />
-                    <p className="text-muted-foreground">No se detectaron incendios en el período seleccionado</p>
+                    <p className="text-muted-foreground">{t('alerts.noFires')}</p>
                   </div>
                 ) : (
                   <div className="space-y-4">
@@ -324,11 +326,11 @@ export default function FiresPage() {
                       <table className="w-full">
                         <thead>
                           <tr className="border-b">
-                            <th className="text-left py-3 px-4 text-sm font-semibold">Ubicación</th>
-                            <th className="text-left py-3 px-4 text-sm font-semibold">Brillo (K)</th>
-                            <th className="text-left py-3 px-4 text-sm font-semibold">Confianza</th>
-                            <th className="text-left py-3 px-4 text-sm font-semibold">Fecha</th>
-                            <th className="text-left py-3 px-4 text-sm font-semibold">Hora</th>
+                            <th className="text-left py-3 px-4 text-sm font-semibold">{t('table.location')}</th>
+                            <th className="text-left py-3 px-4 text-sm font-semibold">{t('table.brightness')}</th>
+                            <th className="text-left py-3 px-4 text-sm font-semibold">{t('table.confidence')}</th>
+                            <th className="text-left py-3 px-4 text-sm font-semibold">{t('table.date')}</th>
+                            <th className="text-left py-3 px-4 text-sm font-semibold">{t('table.time')}</th>
                           </tr>
                         </thead>
                         <tbody>
@@ -353,7 +355,7 @@ export default function FiresPage() {
                                       : 'outline'
                                   }
                                 >
-                                  {fire.confidence === 'h' ? 'Alta' : fire.confidence === 'n' ? 'Nominal' : fire.confidence === 'l' ? 'Baja' : fire.confidence}
+                                  {fire.confidence === 'h' ? t('table.high') : fire.confidence === 'n' ? t('table.nominal') : fire.confidence === 'l' ? t('table.low') : fire.confidence}
                                 </Badge>
                               </td>
                               <td className="py-3 px-4 text-sm text-muted-foreground">{fire.acquired_date}</td>
@@ -365,7 +367,7 @@ export default function FiresPage() {
                     </div>
                     {fires.length > 20 && (
                       <p className="text-center text-sm text-muted-foreground">
-                        Mostrando 20 de {fires.length} incendios totales
+                        {t('table.showing')} 20 {t('table.of')} {fires.length} {t('table.totalFires')}
                       </p>
                     )}
                   </div>
@@ -379,9 +381,9 @@ export default function FiresPage() {
                 <div className="flex items-start gap-3">
                   <Info className="w-5 h-5 text-primary flex-shrink-0 mt-0.5" />
                   <div className="text-sm">
-                    <p className="font-semibold mb-1">Fuente de datos:</p>
-                    <p className="text-muted-foreground">NASA FIRMS (Fire Information for Resource Management System) - Satélite VIIRS</p>
-                    <p className="text-muted-foreground mt-2">Los datos se actualizan cada 2-4 horas con información satelital en tiempo real.</p>
+                    <p className="font-semibold mb-1">{t('source.title')}</p>
+                    <p className="text-muted-foreground">{t('source.description')}</p>
+                    <p className="text-muted-foreground mt-2">{t('source.updateFrequency')}</p>
                   </div>
                 </div>
               </CardContent>
@@ -394,29 +396,29 @@ export default function FiresPage() {
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
                   <Search className="h-5 w-5 text-primary" />
-                  Analizar Ubicación Personalizada
+                  {t('analysis.title')}
                 </CardTitle>
-                <CardDescription>Busca incendios en coordenadas específicas</CardDescription>
+                <CardDescription>{t('analysis.description')}</CardDescription>
               </CardHeader>
               <CardContent className="space-y-4">
                 <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
                   <Input
                     type="number"
                     step="0.01"
-                    placeholder="Latitud (ej: -8.3)"
+                    placeholder={t('analysis.latitude')}
                     value={searchCoords.lat}
                     onChange={(e) => setSearchCoords({...searchCoords, lat: e.target.value})}
                   />
                   <Input
                     type="number"
                     step="0.01"
-                    placeholder="Longitud (ej: -75.6)"
+                    placeholder={t('analysis.longitude')}
                     value={searchCoords.lon}
                     onChange={(e) => setSearchCoords({...searchCoords, lon: e.target.value})}
                   />
                   <Input
                     type="number"
-                    placeholder="Radio (km)"
+                    placeholder={t('analysis.radius')}
                     value={searchCoords.radius}
                     onChange={(e) => setSearchCoords({...searchCoords, radius: e.target.value})}
                   />
@@ -424,12 +426,12 @@ export default function FiresPage() {
                     {analyzing ? (
                       <>
                         <RefreshCw className="h-4 w-4 mr-2 animate-spin" />
-                        Analizando...
+                        {t('analysis.analyzing')}
                       </>
                     ) : (
                       <>
                         <Search className="h-4 w-4 mr-2" />
-                        Analizar
+                        {t('analysis.analyze')}
                       </>
                     )}
                   </Button>
@@ -438,7 +440,7 @@ export default function FiresPage() {
                 <div>
                   <p className="text-sm text-muted-foreground mb-3 flex items-center gap-2">
                     <MapPin className="h-4 w-4" />
-                    Ubicaciones de prueba:
+                    {t('analysis.testLocations')}
                   </p>
                   <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3">
                     {testLocations.map((location, idx) => (
@@ -476,14 +478,14 @@ export default function FiresPage() {
                       </div>
                       <div>
                         <CardTitle className="text-2xl">
-                          Nivel: {riskAnalysis.risk_assessment.level}
+                          {t('analysis.level')} {riskAnalysis.risk_assessment.level}
                         </CardTitle>
                         <CardDescription>{riskAnalysis.risk_assessment.description}</CardDescription>
                       </div>
                     </div>
                     <div className="text-right">
                       <div className="text-3xl font-bold">{riskAnalysis.risk_assessment.fires_detected}</div>
-                      <p className="text-sm text-muted-foreground">incendios detectados</p>
+                      <p className="text-sm text-muted-foreground">{t('analysis.firesDetected')}</p>
                     </div>
                   </div>
                 </CardHeader>
@@ -491,7 +493,7 @@ export default function FiresPage() {
                   {riskAnalysis.risk_assessment.closest_fire_km && (
                     <Card className="bg-muted/50">
                       <CardContent className="pt-6">
-                        <p className="text-sm text-muted-foreground mb-1">Incendio más cercano:</p>
+                        <p className="text-sm text-muted-foreground mb-1">{t('analysis.closestFire')}</p>
                         <p className="text-2xl font-bold">
                           {riskAnalysis.risk_assessment.closest_fire_km.toFixed(2)} km
                         </p>
@@ -503,7 +505,7 @@ export default function FiresPage() {
                     <div className="space-y-2">
                       <p className="text-sm font-semibold flex items-center gap-2">
                         <Info className="w-4 h-4" />
-                        Recomendaciones:
+                        {t('analysis.recommendations')}
                       </p>
                       {riskAnalysis.recommendations.map((rec, idx) => (
                         <p key={idx} className="text-sm text-muted-foreground pl-6">
@@ -516,7 +518,7 @@ export default function FiresPage() {
                   {riskAnalysis.fires && riskAnalysis.fires.length > 0 && (
                     <div className="space-y-3">
                       <p className="text-sm font-semibold">
-                        Incendios en el área ({riskAnalysis.fires.length}):
+                        {t('analysis.firesInArea')} ({riskAnalysis.fires.length}):
                       </p>
                       <div className="max-h-48 overflow-y-auto space-y-2">
                         {riskAnalysis.fires.slice(0, 5).map((fire, idx) => (
@@ -524,13 +526,13 @@ export default function FiresPage() {
                             <CardContent className="pt-4">
                               <div className="flex justify-between items-center gap-4 text-sm">
                                 <span className="text-muted-foreground">
-                                  Distancia: <strong className="text-foreground">{fire.distance_km.toFixed(2)} km</strong>
+                                  {t('analysis.distance')} <strong className="text-foreground">{fire.distance_km.toFixed(2)} km</strong>
                                 </span>
                                 <span className="text-muted-foreground">
-                                  Brillo: <strong className="text-foreground">{fire.brightness}K</strong>
+                                  {t('analysis.brightness')} <strong className="text-foreground">{fire.brightness}K</strong>
                                 </span>
                                 <Badge variant={fire.confidence === 'high' || fire.confidence === 'h' ? 'destructive' : 'outline'}>
-                                  {fire.confidence === 'h' ? 'Alta' : fire.confidence}
+                                  {fire.confidence === 'h' ? t('table.high') : fire.confidence}
                                 </Badge>
                               </div>
                             </CardContent>
@@ -549,11 +551,6 @@ export default function FiresPage() {
             <Card className="h-[600px] flex items-center justify-center">
               <div className="h-full w-full">
                 <FireHeatmap fires={fires}/>
-                {/* <MapPin className="h-16 w-16 text-muted-foreground mx-auto mb-4" />
-                <h3 className="text-lg font-semibold mb-2">Mapa Interactivo de Incendios</h3>
-                <p className="text-sm text-muted-foreground">
-                  Próximamente: Visualización geoespacial de todos los incendios activos
-                </p> */}
               </div>
             </Card>
           </TabsContent>

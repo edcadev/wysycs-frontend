@@ -15,6 +15,7 @@ import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Heart, Shield, AlertTriangle, Loader2 } from 'lucide-react';
 import { adoptionApi } from '@/lib/api';
 import { AxiosError } from 'axios';
+import { useTranslations } from 'next-intl';
 
 interface ForestAdoptionDialogProps {
   open: boolean;
@@ -31,6 +32,7 @@ export default function ForestAdoptionDialog({
   forestName,
   onAdoptionSuccess,
 }: ForestAdoptionDialogProps) {
+  const t = useTranslations('adoption');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState(false);
@@ -44,7 +46,7 @@ export default function ForestAdoptionDialog({
     e.preventDefault();
 
     if (!adoptionForm.guardian_name || !adoptionForm.guardian_email) {
-      setError('Por favor completa todos los campos requeridos');
+      setError(t('form.required'));
       return;
     }
 
@@ -100,9 +102,9 @@ export default function ForestAdoptionDialog({
               <Heart className="text-green-600 h-6 w-6" />
             </div>
             <div>
-              <DialogTitle className="text-2xl">Adopta tu Bosque</DialogTitle>
+              <DialogTitle className="text-2xl">{t('title')}</DialogTitle>
               <DialogDescription>
-                Conviértete en guardián digital de la Amazonía
+                {t('subtitle')}
               </DialogDescription>
             </div>
           </div>
@@ -114,10 +116,10 @@ export default function ForestAdoptionDialog({
               <Heart className="text-green-600 h-10 w-10 fill-green-600" />
             </div>
             <h3 className="text-2xl font-bold text-gray-900 mb-2">
-              ¡Felicidades!
+              {t('congratulations')}
             </h3>
             <p className="text-gray-600">
-              Adoptaste {forestName}. Revisa tu email para más detalles.
+              {t('successMessage', { forestName })}
             </p>
           </div>
         ) : (
@@ -125,7 +127,7 @@ export default function ForestAdoptionDialog({
             <div className="bg-gradient-to-r from-green-50 to-emerald-50 p-4 rounded-lg mb-4 border-2 border-green-200">
               <h4 className="font-bold text-green-800 mb-2">{forestName}</h4>
               <p className="text-sm text-green-700">
-                Al adoptar este bosque, recibirás alertas en tiempo real y reportes de salud.
+                {t('info.title')}
               </p>
             </div>
 
@@ -139,7 +141,7 @@ export default function ForestAdoptionDialog({
             <form onSubmit={handleAdoptForest} className="space-y-4">
               <div className="space-y-2">
                 <Label htmlFor="guardian_name">
-                  Tu nombre completo <span className="text-red-500">*</span>
+                  {t('form.name')} <span className="text-red-500">*</span>
                 </Label>
                 <Input
                   id="guardian_name"
@@ -149,14 +151,14 @@ export default function ForestAdoptionDialog({
                   onChange={(e) =>
                     setAdoptionForm({ ...adoptionForm, guardian_name: e.target.value })
                   }
-                  placeholder="Ej: María López"
+                  placeholder={t('form.namePlaceholder')}
                   disabled={loading}
                 />
               </div>
 
               <div className="space-y-2">
                 <Label htmlFor="guardian_email">
-                  Email <span className="text-red-500">*</span>
+                  {t('form.email')} <span className="text-red-500">*</span>
                 </Label>
                 <Input
                   id="guardian_email"
@@ -166,16 +168,16 @@ export default function ForestAdoptionDialog({
                   onChange={(e) =>
                     setAdoptionForm({ ...adoptionForm, guardian_email: e.target.value })
                   }
-                  placeholder="tu@email.com"
+                  placeholder={t('form.emailPlaceholder')}
                   disabled={loading}
                 />
                 <p className="text-xs text-muted-foreground">
-                  Recibirás alertas de incendios y reportes de salud del bosque
+                  {t('form.emailHelp')}
                 </p>
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="telegram_chat_id">Telegram Chat ID (opcional)</Label>
+                <Label htmlFor="telegram_chat_id">{t('form.telegram')}</Label>
                 <Input
                   id="telegram_chat_id"
                   type="text"
@@ -183,24 +185,24 @@ export default function ForestAdoptionDialog({
                   onChange={(e) =>
                     setAdoptionForm({ ...adoptionForm, telegram_chat_id: e.target.value })
                   }
-                  placeholder="123456789"
+                  placeholder={t('form.telegramPlaceholder')}
                   disabled={loading}
                 />
                 <p className="text-xs text-muted-foreground">
-                  Para recibir alertas instantáneas por Telegram
+                  {t('form.telegramHelp')}
                 </p>
               </div>
 
               <div className="bg-blue-50 border border-blue-200 p-4 rounded-lg">
                 <h4 className="font-semibold text-blue-900 mb-2 flex items-center gap-2">
                   <Shield className="h-4 w-4" />
-                  ¿Qué obtienes como Guardián?
+                  {t('benefits.title')}
                 </h4>
                 <ul className="text-sm text-blue-800 space-y-1">
-                  <li>🔥 Alertas en tiempo real de incendios cercanos</li>
-                  <li>📊 Reportes mensuales de salud del bosque (NDVI)</li>
-                  <li>🏆 Puntos y niveles por proteger el bosque</li>
-                  <li>🌍 Impacto medible en conservación</li>
+                  <li>{t('benefits.fireAlerts')}</li>
+                  <li>{t('benefits.healthReports')}</li>
+                  <li>{t('benefits.gamification')}</li>
+                  <li>{t('benefits.impact')}</li>
                 </ul>
               </div>
 
@@ -212,7 +214,7 @@ export default function ForestAdoptionDialog({
                   disabled={loading}
                   className="flex-1"
                 >
-                  Cancelar
+                  {t('buttons.cancel')}
                 </Button>
                 <Button
                   type="submit"
@@ -222,12 +224,12 @@ export default function ForestAdoptionDialog({
                   {loading ? (
                     <>
                       <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                      Adoptando...
+                      {t('buttons.adopting')}
                     </>
                   ) : (
                     <>
                       <Heart className="mr-2 h-4 w-4" />
-                      Adoptar Bosque
+                      {t('buttons.adopt')}
                     </>
                   )}
                 </Button>

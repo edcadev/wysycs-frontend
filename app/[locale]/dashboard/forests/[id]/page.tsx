@@ -1,15 +1,52 @@
-'use client';
+"use client";
 
-import React, { useState, useEffect } from 'react';
-import { useParams, useRouter } from 'next/navigation';
-import { MapPin, Heart, Users, Leaf, Sprout, AlertTriangle, TrendingUp, Activity, Info, ArrowLeft } from 'lucide-react';
-import D3ForestMap from '@/components/d3-forest-map';
-import ForestAdoptionDialog from '@/components/forest-adoption-dialog';
-import { forestsApi, firesApi } from '@/lib/api';
-import { getHealthColor, getHealthBgColor, getHealthProgressColor, formatDateES } from '@/lib/forest-utils';
-import Map  from "@/components/Maps/Map";
-import { Forest } from "@/interfaces/Forest";
+import React, { useState, useEffect } from "react";
+import { useParams } from "next/navigation";
+import { useRouter } from "@/i18n/routing";
+import { useTranslations } from "next-intl";
+import {
+  MapPin,
+  Heart,
+  Users,
+  Leaf,
+  Sprout,
+  AlertTriangle,
+  TrendingUp,
+  Activity,
+  Info,
+  ArrowLeft,
+} from "lucide-react";
+import D3ForestMap from "@/components/d3-forest-map";
+import ForestAdoptionDialog from "@/components/forest-adoption-dialog";
+import { forestsApi, firesApi } from "@/lib/api";
+import {
+  getHealthColor,
+  getHealthBgColor,
+  formatDateES,
+} from "@/lib/forest-utils";
+import Map from "@/components/Maps/Map";
 
+interface Forest {
+  id: number;
+  name: string;
+  latitude: number;
+  longitude: number;
+  community: string;
+  health: number;
+  co2_capture: string;
+  species_count: number;
+  fun_facts: string[];
+  created_at: string;
+  health_nasa: {
+    ndvi_value: number;
+    health_percentage: number;
+    status: string;
+    color: string;
+    source: string;
+    is_real_data: boolean;
+    last_update: string;
+  };
+}
 
 interface FireRisk {
   level: string;
@@ -20,6 +57,7 @@ interface FireRisk {
 }
 
 const ForestDetailView = () => {
+  const t = useTranslations('forestDetail');
   const params = useParams();
   const router = useRouter();
   const forestId = params.id as string;
@@ -40,7 +78,7 @@ const ForestDetailView = () => {
       const data = await forestsApi.getById(forestId);
       setForest(data);
     } catch (error) {
-      console.error('Error al cargar el bosque:', error);
+      console.error("Error al cargar el bosque:", error);
     } finally {
       setLoading(false);
     }
@@ -59,19 +97,18 @@ const ForestDetailView = () => {
       });
       setFireRisk(data.risk_assessment);
     } catch (error) {
-      console.error('Error al analizar riesgo de incendio:', error);
+      console.error("Error al analizar riesgo de incendio:", error);
     } finally {
       setAnalyzing(false);
     }
   };
-
 
   if (loading) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-green-50 to-emerald-100 flex items-center justify-center">
         <div className="text-center">
           <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-green-600 mx-auto mb-4"></div>
-          <p className="text-gray-600">Cargando información del bosque...</p>
+          <p className="text-gray-600">{t('loading')}</p>
         </div>
       </div>
     );
@@ -82,7 +119,9 @@ const ForestDetailView = () => {
       <div className="min-h-screen bg-gradient-to-br from-green-50 to-emerald-100 flex items-center justify-center">
         <div className="text-center">
           <AlertTriangle className="h-16 w-16 text-red-500 mx-auto mb-4" />
-          <p className="text-xl text-gray-700">No se pudo cargar la información del bosque</p>
+          <p className="text-xl text-gray-700">
+            {t('error')}
+          </p>
         </div>
       </div>
     );
@@ -98,7 +137,7 @@ const ForestDetailView = () => {
             className="flex items-center gap-2 text-green-700 hover:text-green-900 transition-colors"
           >
             <ArrowLeft className="h-5 w-5" />
-            <span className="font-medium">Volver a bosques</span>
+            <span className="font-medium">{t('backToForests')}</span>
           </button>
         </div>
       </div>
@@ -114,7 +153,8 @@ const ForestDetailView = () => {
                   <div className="flex items-center gap-2">
                     <MapPin className="h-5 w-5" />
                     <span>
-                      {forest.latitude.toFixed(2)}°, {forest.longitude.toFixed(2)}°
+                      {forest.latitude.toFixed(2)}°,{" "}
+                      {forest.longitude.toFixed(2)}°
                     </span>
                   </div>
                   <div className="flex items-center gap-2">
@@ -125,12 +165,20 @@ const ForestDetailView = () => {
               </div>
 
               {/* Health Badge */}
-              <div className={`${getHealthBgColor(forest.health)} rounded-2xl px-6 py-4 text-center`}>
-                <div className={`text-4xl font-bold ${getHealthColor(forest.health)}`}>
-                  {forest.health}%
+              <div
+                className={`${getHealthBgColor(
+                  forest.health
+                )} rounded-2xl px-6 py-4 text-center`}
+              >
+                <div
+                  className={`text-4xl font-bold ${getHealthColor(
+                    forest.health_nasa.health_percentage
+                  )}`}
+                >
+                  {forest.health_nasa.health_percentage}%
                 </div>
                 <div className="text-sm text-gray-600 font-medium mt-1">
-                  Salud del Bosque
+                  {t('forestHealth')}
                 </div>
               </div>
             </div>
@@ -144,8 +192,10 @@ const ForestDetailView = () => {
                   <TrendingUp className="h-6 w-6 text-blue-600" />
                 </div>
                 <div>
-                  <p className="text-sm text-gray-500">Captura de CO₂</p>
-                  <p className="text-2xl font-bold text-gray-900">{forest.co2_capture}</p>
+                  <p className="text-sm text-gray-500">{t('co2Capture')}</p>
+                  <p className="text-2xl font-bold text-gray-900">
+                    {forest.co2_capture}
+                  </p>
                 </div>
               </div>
             </div>
@@ -156,8 +206,10 @@ const ForestDetailView = () => {
                   <Sprout className="h-6 w-6 text-purple-600" />
                 </div>
                 <div>
-                  <p className="text-sm text-gray-500">Especies</p>
-                  <p className="text-2xl font-bold text-gray-900">{forest.species_count}</p>
+                  <p className="text-sm text-gray-500">{t('species')}</p>
+                  <p className="text-2xl font-bold text-gray-900">
+                    {forest.species_count}
+                  </p>
                 </div>
               </div>
             </div>
@@ -168,8 +220,10 @@ const ForestDetailView = () => {
                   <Users className="h-6 w-6 text-green-600" />
                 </div>
                 <div>
-                  <p className="text-sm text-gray-500">Comunidad</p>
-                  <p className="text-lg font-bold text-gray-900">{forest.community}</p>
+                  <p className="text-sm text-gray-500">{t('community')}</p>
+                  <p className="text-lg font-bold text-gray-900">
+                    {forest.community}
+                  </p>
                 </div>
               </div>
             </div>
@@ -186,7 +240,7 @@ const ForestDetailView = () => {
                   <Info className="h-6 w-6 text-amber-600" />
                 </div>
                 <h2 className="text-2xl font-bold text-gray-900">
-                  Datos Curiosos e Importantes
+                  {t('funFacts.title')}
                 </h2>
               </div>
 
@@ -213,7 +267,7 @@ const ForestDetailView = () => {
                     <AlertTriangle className="h-6 w-6 text-red-600" />
                   </div>
                   <h2 className="text-2xl font-bold text-gray-900">
-                    Análisis de Riesgo de Incendio
+                    {t('fireRisk.title')}
                   </h2>
                 </div>
               </div>
@@ -221,7 +275,7 @@ const ForestDetailView = () => {
               {!fireRisk ? (
                 <div className="text-center py-8">
                   <p className="text-gray-600 mb-6">
-                    Analiza el riesgo de incendio en tiempo real usando datos satelitales de la NASA
+                    {t('fireRisk.description')}
                   </p>
                   <button
                     onClick={analyzeFireRisk}
@@ -231,10 +285,10 @@ const ForestDetailView = () => {
                     {analyzing ? (
                       <span className="flex items-center gap-2">
                         <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white"></div>
-                        Analizando...
+                        {t('fireRisk.analyzing')}
                       </span>
                     ) : (
-                      'Analizar Riesgo Ahora'
+                      t('fireRisk.analyzeNow')
                     )}
                   </button>
                 </div>
@@ -242,7 +296,10 @@ const ForestDetailView = () => {
                 <div>
                   <div
                     className="p-6 rounded-xl mb-4"
-                    style={{ backgroundColor: `${fireRisk.color}20`, borderLeft: `4px solid ${fireRisk.color}` }}
+                    style={{
+                      backgroundColor: `${fireRisk.color}20`,
+                      borderLeft: `4px solid ${fireRisk.color}`,
+                    }}
                   >
                     <div className="flex items-center gap-3 mb-2">
                       <span
@@ -252,13 +309,16 @@ const ForestDetailView = () => {
                         {fireRisk.level}
                       </span>
                       <span className="font-semibold text-gray-700">
-                        {fireRisk.fires_detected} incendio(s) detectado(s)
+                        {fireRisk.fires_detected} {t('fireRisk.firesDetected')}
                       </span>
                     </div>
-                    <p className="text-lg text-gray-800 mt-3">{fireRisk.description}</p>
+                    <p className="text-lg text-gray-800 mt-3">
+                      {fireRisk.description}
+                    </p>
                     {fireRisk.closest_fire_km && (
                       <p className="text-sm text-gray-600 mt-2">
-                        Incendio más cercano a {fireRisk.closest_fire_km.toFixed(2)} km
+                        {t('fireRisk.closestFire')}{" "}
+                        {fireRisk.closest_fire_km.toFixed(2)} km
                       </p>
                     )}
                   </div>
@@ -269,7 +329,7 @@ const ForestDetailView = () => {
                     className="text-red-600 hover:text-red-700 font-medium flex items-center gap-2 disabled:opacity-50"
                   >
                     <Activity className="h-4 w-4" />
-                    Actualizar análisis
+                    {t('fireRisk.updateAnalysis')}
                   </button>
                 </div>
               )}
@@ -282,34 +342,34 @@ const ForestDetailView = () => {
             <div className="bg-gradient-to-br from-green-500 to-emerald-600 rounded-2xl shadow-lg p-8 text-white">
               <div className="flex items-center gap-3 mb-6">
                 <Heart className="h-8 w-8" />
-                <h3 className="text-2xl font-bold">Conviértete en Guardián</h3>
+                <h3 className="text-2xl font-bold">{t('adoption.title')}</h3>
               </div>
 
               <p className="text-green-50 mb-6">
-                Adopta este bosque y contribuye directamente a su protección y conservación
+                {t('adoption.description')}
               </p>
 
               <button
                 onClick={() => setAdoptionDialogOpen(true)}
                 className="w-full bg-white text-green-700 py-3 px-6 rounded-lg font-semibold hover:bg-green-50 transition-all shadow-lg hover:shadow-xl"
               >
-                Adoptar Bosque
+                {t('adoption.adoptButton')}
               </button>
             </div>
 
-            <div className="bg-white rounded-2xl shadow-lg p-6" 
+            <div className="bg-white rounded-2xl shadow-lg p-6"
             style={{height: '500px', width: '100%', display:'grid', gridTemplateRows:'1fr 6fr 2fr'}}>
               <h3 className="text-xl font-bold text-gray-900 mb-4 flex items-center gap-2">
                 <MapPin className="h-6 w-6 text-green-600" />
-                Mapa Interactivo
+                {t('map.title')}
               </h3>
 
               <Map forests={[forest]}/>
-              
+
 
               <div className="mt-4 p-4 bg-gray-50 rounded-lg">
                 <p className="text-sm text-gray-600">
-                  <strong>Coordenadas:</strong>
+                  <strong>{t('map.coordinates')}</strong>
                 </p>
                 <p className="font-mono text-sm text-gray-800">
                   {forest.latitude.toFixed(4)}°, {forest.longitude.toFixed(4)}°
@@ -320,32 +380,43 @@ const ForestDetailView = () => {
             {/* Quick Stats */}
             <div className="bg-white rounded-2xl shadow-lg p-6">
               <h3 className="text-xl font-bold text-gray-900 mb-4">
-                Estado del Bosque
+                {t('status.title')}
               </h3>
 
               <div className="space-y-4">
                 <div>
                   <div className="flex justify-between text-sm mb-2">
-                    <span className="text-gray-600">Salud General</span>
-                    <span className={`font-bold ${getHealthColor(forest.health)}`}>
-                      {forest.health}%
+                    <span className="text-gray-600">{t('status.overallHealth')}</span>
+                    <span
+                      className={`font-bold ${getHealthColor(
+                        forest.health_nasa.health_percentage
+                      )}`}
+                    >
+                      {forest.health_nasa.health_percentage}%
                     </span>
                   </div>
                   <div className="w-full bg-gray-200 rounded-full h-3">
                     <div
                       className={`h-3 rounded-full transition-all ${
-                        forest.health >= 70 ? 'bg-green-500' :
-                        forest.health >= 40 ? 'bg-yellow-500' : 'bg-red-500'
+                        forest.health_nasa.health_percentage >= 70
+                          ? "bg-green-500"
+                          : forest.health_nasa.health_percentage >= 40
+                          ? "bg-yellow-500"
+                          : "bg-red-500"
                       }`}
-                      style={{ width: `${forest.health}%` }}
+                      style={{
+                        width: `${forest.health_nasa.health_percentage}%`,
+                      }}
                     ></div>
                   </div>
                 </div>
 
                 <div className="pt-4 border-t border-gray-200">
-                  <p className="text-sm text-gray-500 mb-2">Fecha de registro</p>
+                  <p className="text-sm text-gray-500 mb-2">
+                    {t('status.lastUpdate')}
+                  </p>
                   <p className="text-sm font-medium text-gray-900">
-                    {formatDateES(forest.created_at)}
+                    {formatDateES(forest.health_nasa.last_update)}
                   </p>
                 </div>
               </div>
@@ -362,7 +433,7 @@ const ForestDetailView = () => {
           forestId={String(forest.id)}
           forestName={forest.name}
           onAdoptionSuccess={(email) => {
-            console.log('Bosque adoptado exitosamente por:', email);
+            console.log("Bosque adoptado exitosamente por:", email);
             // Aquí podrías redirigir al perfil del guardián o mostrar un mensaje de éxito
           }}
         />

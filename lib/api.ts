@@ -150,6 +150,49 @@ export const adoptionApi = {
   },
 };
 
+// ========== GAMIFICATION ==========
+export const gamificationApi = {
+  /**
+   * Obtener el leaderboard de guardianes
+   * @param limit - Número de guardianes a mostrar (default: 10)
+   */
+  getLeaderboard: async (limit: number = 10) => {
+    const response = await api.get('/leaderboard', {
+      params: { limit },
+    });
+    return response.data;
+  },
+
+  /**
+   * Obtener estadísticas globales del sistema
+   */
+  getGlobalStats: async () => {
+    const response = await api.get('/stats');
+    return response.data;
+  },
+
+  /**
+   * Obtener progreso de un guardián específico
+   * @param email - Email del guardián
+   */
+  getGuardianProgress: async (email: string) => {
+    const response = await api.get(`/guardian/${encodeURIComponent(email)}/progress`);
+    return response.data;
+  },
+
+  /**
+   * Actualizar puntos de un guardián
+   * @param email - Email del guardián
+   * @param pointsToAdd - Puntos a agregar
+   */
+  updateGuardianPoints: async (email: string, pointsToAdd: number) => {
+    const response = await api.put(`/guardian/${encodeURIComponent(email)}/points`, null, {
+      params: { points_to_add: pointsToAdd },
+    });
+    return response.data;
+  },
+};
+
 /**
  * Export default de la instancia configurada de axios
  * Para casos de uso personalizados
