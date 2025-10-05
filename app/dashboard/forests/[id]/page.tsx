@@ -1,15 +1,50 @@
-'use client';
+"use client";
 
-import React, { useState, useEffect } from 'react';
-import { useParams, useRouter } from 'next/navigation';
-import { MapPin, Heart, Users, Leaf, Sprout, AlertTriangle, TrendingUp, Activity, Info, ArrowLeft } from 'lucide-react';
-import D3ForestMap from '@/components/d3-forest-map';
-import ForestAdoptionDialog from '@/components/forest-adoption-dialog';
-import { forestsApi, firesApi } from '@/lib/api';
-import { getHealthColor, getHealthBgColor, getHealthProgressColor, formatDateES } from '@/lib/forest-utils';
-import Map  from "@/components/Maps/Map";
-import { Forest } from "@/interfaces/Forest";
+import React, { useState, useEffect } from "react";
+import { useParams, useRouter } from "next/navigation";
+import {
+  MapPin,
+  Heart,
+  Users,
+  Leaf,
+  Sprout,
+  AlertTriangle,
+  TrendingUp,
+  Activity,
+  Info,
+  ArrowLeft,
+} from "lucide-react";
+import D3ForestMap from "@/components/d3-forest-map";
+import ForestAdoptionDialog from "@/components/forest-adoption-dialog";
+import { forestsApi, firesApi } from "@/lib/api";
+import {
+  getHealthColor,
+  getHealthBgColor,
+  formatDateES,
+} from "@/lib/forest-utils";
+import Map from "@/components/Maps/Map";
 
+interface Forest {
+  id: number;
+  name: string;
+  latitude: number;
+  longitude: number;
+  community: string;
+  health: number;
+  co2_capture: string;
+  species_count: number;
+  fun_facts: string[];
+  created_at: string;
+  health_nasa: {
+    ndvi_value: number;
+    health_percentage: number;
+    status: string;
+    color: string;
+    source: string;
+    is_real_data: boolean;
+    last_update: string;
+  };
+}
 
 interface FireRisk {
   level: string;
@@ -40,7 +75,7 @@ const ForestDetailView = () => {
       const data = await forestsApi.getById(forestId);
       setForest(data);
     } catch (error) {
-      console.error('Error al cargar el bosque:', error);
+      console.error("Error al cargar el bosque:", error);
     } finally {
       setLoading(false);
     }
@@ -59,12 +94,11 @@ const ForestDetailView = () => {
       });
       setFireRisk(data.risk_assessment);
     } catch (error) {
-      console.error('Error al analizar riesgo de incendio:', error);
+      console.error("Error al analizar riesgo de incendio:", error);
     } finally {
       setAnalyzing(false);
     }
   };
-
 
   if (loading) {
     return (
@@ -82,7 +116,9 @@ const ForestDetailView = () => {
       <div className="min-h-screen bg-gradient-to-br from-green-50 to-emerald-100 flex items-center justify-center">
         <div className="text-center">
           <AlertTriangle className="h-16 w-16 text-red-500 mx-auto mb-4" />
-          <p className="text-xl text-gray-700">No se pudo cargar la información del bosque</p>
+          <p className="text-xl text-gray-700">
+            No se pudo cargar la información del bosque
+          </p>
         </div>
       </div>
     );
@@ -114,7 +150,8 @@ const ForestDetailView = () => {
                   <div className="flex items-center gap-2">
                     <MapPin className="h-5 w-5" />
                     <span>
-                      {forest.latitude.toFixed(2)}°, {forest.longitude.toFixed(2)}°
+                      {forest.latitude.toFixed(2)}°,{" "}
+                      {forest.longitude.toFixed(2)}°
                     </span>
                   </div>
                   <div className="flex items-center gap-2">
@@ -125,9 +162,17 @@ const ForestDetailView = () => {
               </div>
 
               {/* Health Badge */}
-              <div className={`${getHealthBgColor(forest.health)} rounded-2xl px-6 py-4 text-center`}>
-                <div className={`text-4xl font-bold ${getHealthColor(forest.health)}`}>
-                  {forest.health}%
+              <div
+                className={`${getHealthBgColor(
+                  forest.health
+                )} rounded-2xl px-6 py-4 text-center`}
+              >
+                <div
+                  className={`text-4xl font-bold ${getHealthColor(
+                    forest.health_nasa.health_percentage
+                  )}`}
+                >
+                  {forest.health_nasa.health_percentage}%
                 </div>
                 <div className="text-sm text-gray-600 font-medium mt-1">
                   Salud del Bosque
@@ -145,7 +190,9 @@ const ForestDetailView = () => {
                 </div>
                 <div>
                   <p className="text-sm text-gray-500">Captura de CO₂</p>
-                  <p className="text-2xl font-bold text-gray-900">{forest.co2_capture}</p>
+                  <p className="text-2xl font-bold text-gray-900">
+                    {forest.co2_capture}
+                  </p>
                 </div>
               </div>
             </div>
@@ -157,7 +204,9 @@ const ForestDetailView = () => {
                 </div>
                 <div>
                   <p className="text-sm text-gray-500">Especies</p>
-                  <p className="text-2xl font-bold text-gray-900">{forest.species_count}</p>
+                  <p className="text-2xl font-bold text-gray-900">
+                    {forest.species_count}
+                  </p>
                 </div>
               </div>
             </div>
@@ -169,7 +218,9 @@ const ForestDetailView = () => {
                 </div>
                 <div>
                   <p className="text-sm text-gray-500">Comunidad</p>
-                  <p className="text-lg font-bold text-gray-900">{forest.community}</p>
+                  <p className="text-lg font-bold text-gray-900">
+                    {forest.community}
+                  </p>
                 </div>
               </div>
             </div>
@@ -221,7 +272,8 @@ const ForestDetailView = () => {
               {!fireRisk ? (
                 <div className="text-center py-8">
                   <p className="text-gray-600 mb-6">
-                    Analiza el riesgo de incendio en tiempo real usando datos satelitales de la NASA
+                    Analiza el riesgo de incendio en tiempo real usando datos
+                    satelitales de la NASA
                   </p>
                   <button
                     onClick={analyzeFireRisk}
@@ -234,7 +286,7 @@ const ForestDetailView = () => {
                         Analizando...
                       </span>
                     ) : (
-                      'Analizar Riesgo Ahora'
+                      "Analizar Riesgo Ahora"
                     )}
                   </button>
                 </div>
@@ -242,7 +294,10 @@ const ForestDetailView = () => {
                 <div>
                   <div
                     className="p-6 rounded-xl mb-4"
-                    style={{ backgroundColor: `${fireRisk.color}20`, borderLeft: `4px solid ${fireRisk.color}` }}
+                    style={{
+                      backgroundColor: `${fireRisk.color}20`,
+                      borderLeft: `4px solid ${fireRisk.color}`,
+                    }}
                   >
                     <div className="flex items-center gap-3 mb-2">
                       <span
@@ -255,10 +310,13 @@ const ForestDetailView = () => {
                         {fireRisk.fires_detected} incendio(s) detectado(s)
                       </span>
                     </div>
-                    <p className="text-lg text-gray-800 mt-3">{fireRisk.description}</p>
+                    <p className="text-lg text-gray-800 mt-3">
+                      {fireRisk.description}
+                    </p>
                     {fireRisk.closest_fire_km && (
                       <p className="text-sm text-gray-600 mt-2">
-                        Incendio más cercano a {fireRisk.closest_fire_km.toFixed(2)} km
+                        Incendio más cercano a{" "}
+                        {fireRisk.closest_fire_km.toFixed(2)} km
                       </p>
                     )}
                   </div>
@@ -286,7 +344,8 @@ const ForestDetailView = () => {
               </div>
 
               <p className="text-green-50 mb-6">
-                Adopta este bosque y contribuye directamente a su protección y conservación
+                Adopta este bosque y contribuye directamente a su protección y
+                conservación
               </p>
 
               <button
@@ -327,25 +386,36 @@ const ForestDetailView = () => {
                 <div>
                   <div className="flex justify-between text-sm mb-2">
                     <span className="text-gray-600">Salud General</span>
-                    <span className={`font-bold ${getHealthColor(forest.health)}`}>
-                      {forest.health}%
+                    <span
+                      className={`font-bold ${getHealthColor(
+                        forest.health_nasa.health_percentage
+                      )}`}
+                    >
+                      {forest.health_nasa.health_percentage}%
                     </span>
                   </div>
                   <div className="w-full bg-gray-200 rounded-full h-3">
                     <div
                       className={`h-3 rounded-full transition-all ${
-                        forest.health >= 70 ? 'bg-green-500' :
-                        forest.health >= 40 ? 'bg-yellow-500' : 'bg-red-500'
+                        forest.health_nasa.health_percentage >= 70
+                          ? "bg-green-500"
+                          : forest.health_nasa.health_percentage >= 40
+                          ? "bg-yellow-500"
+                          : "bg-red-500"
                       }`}
-                      style={{ width: `${forest.health}%` }}
+                      style={{
+                        width: `${forest.health_nasa.health_percentage}%`,
+                      }}
                     ></div>
                   </div>
                 </div>
 
                 <div className="pt-4 border-t border-gray-200">
-                  <p className="text-sm text-gray-500 mb-2">Fecha de registro</p>
+                  <p className="text-sm text-gray-500 mb-2">
+                    Fecha de actualización
+                  </p>
                   <p className="text-sm font-medium text-gray-900">
-                    {formatDateES(forest.created_at)}
+                    {formatDateES(forest.health_nasa.last_update)}
                   </p>
                 </div>
               </div>
@@ -362,7 +432,7 @@ const ForestDetailView = () => {
           forestId={String(forest.id)}
           forestName={forest.name}
           onAdoptionSuccess={(email) => {
-            console.log('Bosque adoptado exitosamente por:', email);
+            console.log("Bosque adoptado exitosamente por:", email);
             // Aquí podrías redirigir al perfil del guardián o mostrar un mensaje de éxito
           }}
         />
