@@ -217,25 +217,6 @@ export default function DashboardPage() {
             </Card>
           </div>
 
-          {/* Alerta de bosques críticos */}
-          {globalStats.criticalForests > 0 && (
-            <Card className="mt-4 border-destructive/50 bg-destructive/5">
-              <CardContent className="flex items-center gap-3 py-4">
-                <AlertTriangle className="h-5 w-5 text-destructive" />
-                <div className="flex-1">
-                  <p className="font-semibold text-destructive">
-                    {globalStats.criticalForests} {t('kpis.criticalAlert')}
-                  </p>
-                  <p className="text-xs text-muted-foreground">
-                    {t('kpis.requireAttention')}
-                  </p>
-                </div>
-                <Button variant="destructive" size="sm">
-                  {t('kpis.viewDetails')}
-                </Button>
-              </CardContent>
-            </Card>
-          )}
         </section>
       )}
 
