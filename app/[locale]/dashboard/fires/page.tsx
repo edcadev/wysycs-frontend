@@ -170,37 +170,38 @@ export default function FiresPage() {
         title={t('kpis.dataSource')}
         description={t('alerts.realtime')}
         actions={
-          <div className="flex items-center gap-2">
-            <Badge variant="outline" className="text-xs">
+          <>
+            <Badge variant="outline" className="text-xs whitespace-nowrap">
               <Activity className="h-3 w-3 mr-1" />
               NASA VIIRS
             </Badge>
-            <Button onClick={fetchFiresData} variant="outline" size="sm" disabled={loading}>
-              <RefreshCw className={`h-4 w-4 mr-2 ${loading ? 'animate-spin' : ''}`} />
-              {t('analysis.updateAnalysis')}
+            <Button onClick={fetchFiresData} variant="outline" size="sm" disabled={loading} className="whitespace-nowrap">
+              <RefreshCw className={`h-4 w-4 ${loading ? 'animate-spin' : ''}`} />
+              <span className="hidden sm:inline ml-2">{t('analysis.updateAnalysis')}</span>
             </Button>
-          </div>
+          </>
         }
       />
 
-      <section className="container mx-auto px-6 py-6">
+      <section className="container mx-auto px-4 sm:px-6 py-4 sm:py-6">
         {/* Selector de período */}
-        <Card className="mb-6">
+        <Card className="mb-4 sm:mb-6">
           <CardHeader>
-            <CardTitle className="flex items-center gap-2 text-lg">
-              <Calendar className="h-5 w-5 text-primary" />
+            <CardTitle className="flex items-center gap-2 text-base sm:text-lg">
+              <Calendar className="h-4 w-4 sm:h-5 sm:w-5 text-primary" />
               {t('period.title')}
             </CardTitle>
-            <CardDescription>{t('period.description')}</CardDescription>
+            <CardDescription className="text-xs sm:text-sm">{t('period.description')}</CardDescription>
           </CardHeader>
           <CardContent>
-            <div className="flex gap-2">
+            <div className="flex flex-wrap gap-2">
               {[1, 2, 3, 7, 10].map((d) => (
                 <Button
                   key={d}
                   onClick={() => setDays(d)}
                   variant={days === d ? 'default' : 'outline'}
                   size="sm"
+                  className="flex-shrink-0"
                 >
                   {d} {d === 1 ? t('period.day') : t('period.days')}
                 </Button>
@@ -211,7 +212,7 @@ export default function FiresPage() {
 
         {/* KPIs Globales */}
         {stats && (
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 mb-4 sm:mb-6">
             <Card className="hover:shadow-lg transition-shadow">
               <CardHeader className="pb-3">
                 <CardTitle className="text-sm font-medium flex items-center gap-2">
@@ -293,20 +294,22 @@ export default function FiresPage() {
 
         {/* Tabs de contenido */}
         <Tabs defaultValue="alertas" className="w-full">
-          <TabsList className="mb-4">
-            <TabsTrigger value="alertas" className='cursor-pointer'>
-              <List className="h-4 w-4 mr-2" />
-              {tDashboard('tabs.activeAlerts')}
-            </TabsTrigger>
-            <TabsTrigger value="analisis" className='cursor-pointer'>
-              <Search className="h-4 w-4 mr-2" />
-              {tDashboard('tabs.riskAnalysis')}
-            </TabsTrigger>
-            <TabsTrigger value="mapa" className='cursor-pointer'>
-              <MapPin className="h-4 w-4 mr-2" />
-              {tDashboard('tabs.map')}
-            </TabsTrigger>
-          </TabsList>
+          <div className="overflow-x-auto -mx-4 sm:mx-0 mb-4">
+            <TabsList className="w-full sm:w-auto inline-flex min-w-full sm:min-w-0 px-4 sm:px-0">
+              <TabsTrigger value="alertas" className='cursor-pointer flex-1 sm:flex-none'>
+                <List className="h-4 w-4 sm:mr-2" />
+                <span className="hidden sm:inline">{tDashboard('tabs.activeAlerts')}</span>
+              </TabsTrigger>
+              <TabsTrigger value="analisis" className='cursor-pointer flex-1 sm:flex-none'>
+                <Search className="h-4 w-4 sm:mr-2" />
+                <span className="hidden sm:inline">{tDashboard('tabs.riskAnalysis')}</span>
+              </TabsTrigger>
+              <TabsTrigger value="mapa" className='cursor-pointer flex-1 sm:flex-none'>
+                <MapPin className="h-4 w-4 sm:mr-2" />
+                <span className="hidden sm:inline">{tDashboard('tabs.map')}</span>
+              </TabsTrigger>
+            </TabsList>
+          </div>
 
           {/* Tab: Alertas Activas */}
           <TabsContent value="alertas" className="space-y-4">
@@ -331,51 +334,54 @@ export default function FiresPage() {
                   </div>
                 ) : (
                   <div className="space-y-4">
-                    <div className="overflow-x-auto">
-                      <table className="w-full">
-                        <thead>
-                          <tr className="border-b">
-                            <th className="text-left py-3 px-4 text-sm font-semibold">{t('table.location')}</th>
-                            <th className="text-left py-3 px-4 text-sm font-semibold">{t('table.brightness')}</th>
-                            <th className="text-left py-3 px-4 text-sm font-semibold">{t('table.confidence')}</th>
-                            <th className="text-left py-3 px-4 text-sm font-semibold">{t('table.date')}</th>
-                            <th className="text-left py-3 px-4 text-sm font-semibold">{t('table.time')}</th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          {fires.slice(0, 20).map((fire, idx) => (
-                            <tr key={idx} className="border-b hover:bg-muted/50 transition-colors">
-                              <td className="py-3 px-4 text-sm">
-                                <div className="flex items-center gap-2">
-                                  <MapPin className="w-4 h-4 text-destructive" />
-                                  <span>
-                                    {fire.latitude.toFixed(3)}, {fire.longitude.toFixed(3)}
-                                  </span>
-                                </div>
-                              </td>
-                              <td className="py-3 px-4 text-sm">
-                                <span className="font-semibold">{fire.brightness}</span>
-                              </td>
-                              <td className="py-3 px-4 text-sm">
-                                <Badge
-                                  variant={
-                                    fire.confidence === 'high' || fire.confidence === 'h'
-                                      ? 'destructive'
-                                      : 'outline'
-                                  }
-                                >
-                                  {fire.confidence === 'h' ? t('table.high') : fire.confidence === 'n' ? t('table.nominal') : fire.confidence === 'l' ? t('table.low') : fire.confidence}
-                                </Badge>
-                              </td>
-                              <td className="py-3 px-4 text-sm text-muted-foreground">{fire.acquired_date}</td>
-                              <td className="py-3 px-4 text-sm text-muted-foreground">{fire.acquired_time}</td>
+                    <div className="overflow-x-auto -mx-4 sm:mx-0">
+                      <div className="inline-block min-w-full align-middle">
+                        <table className="min-w-full divide-y divide-border">
+                          <thead>
+                            <tr className="border-b">
+                              <th className="text-left py-3 px-2 sm:px-4 text-xs sm:text-sm font-semibold whitespace-nowrap">{t('table.location')}</th>
+                              <th className="text-left py-3 px-2 sm:px-4 text-xs sm:text-sm font-semibold whitespace-nowrap">{t('table.brightness')}</th>
+                              <th className="text-left py-3 px-2 sm:px-4 text-xs sm:text-sm font-semibold whitespace-nowrap">{t('table.confidence')}</th>
+                              <th className="text-left py-3 px-2 sm:px-4 text-xs sm:text-sm font-semibold whitespace-nowrap hidden sm:table-cell">{t('table.date')}</th>
+                              <th className="text-left py-3 px-2 sm:px-4 text-xs sm:text-sm font-semibold whitespace-nowrap hidden md:table-cell">{t('table.time')}</th>
                             </tr>
-                          ))}
-                        </tbody>
-                      </table>
+                          </thead>
+                          <tbody className="divide-y divide-border">
+                            {fires.slice(0, 20).map((fire, idx) => (
+                              <tr key={idx} className="hover:bg-muted/50 transition-colors">
+                                <td className="py-3 px-2 sm:px-4 text-xs sm:text-sm">
+                                  <div className="flex items-center gap-1 sm:gap-2">
+                                    <MapPin className="w-3 h-3 sm:w-4 sm:h-4 text-destructive flex-shrink-0" />
+                                    <span className="truncate max-w-[100px] sm:max-w-none">
+                                      {fire.latitude.toFixed(3)}, {fire.longitude.toFixed(3)}
+                                    </span>
+                                  </div>
+                                </td>
+                                <td className="py-3 px-2 sm:px-4 text-xs sm:text-sm">
+                                  <span className="font-semibold">{fire.brightness}</span>
+                                </td>
+                                <td className="py-3 px-2 sm:px-4 text-xs sm:text-sm">
+                                  <Badge
+                                    variant={
+                                      fire.confidence === 'high' || fire.confidence === 'h'
+                                        ? 'destructive'
+                                        : 'outline'
+                                    }
+                                    className="text-xs"
+                                  >
+                                    {fire.confidence === 'h' ? t('table.high') : fire.confidence === 'n' ? t('table.nominal') : fire.confidence === 'l' ? t('table.low') : fire.confidence}
+                                  </Badge>
+                                </td>
+                                <td className="py-3 px-2 sm:px-4 text-xs sm:text-sm text-muted-foreground hidden sm:table-cell whitespace-nowrap">{fire.acquired_date}</td>
+                                <td className="py-3 px-2 sm:px-4 text-xs sm:text-sm text-muted-foreground hidden md:table-cell whitespace-nowrap">{fire.acquired_time}</td>
+                              </tr>
+                            ))}
+                          </tbody>
+                        </table>
+                      </div>
                     </div>
                     {fires.length > 20 && (
-                      <p className="text-center text-sm text-muted-foreground">
+                      <p className="text-center text-xs sm:text-sm text-muted-foreground">
                         {t('table.showing')} 20 {t('table.of')} {fires.length} {t('table.totalFires')}
                       </p>
                     )}
@@ -410,13 +416,14 @@ export default function FiresPage() {
                 <CardDescription>{t('analysis.description')}</CardDescription>
               </CardHeader>
               <CardContent className="space-y-4">
-                <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
                   <Input
                     type="number"
                     step="0.01"
                     placeholder={t('analysis.latitude')}
                     value={searchCoords.lat}
                     onChange={(e) => setSearchCoords({...searchCoords, lat: e.target.value})}
+                    className="text-sm"
                   />
                   <Input
                     type="number"
@@ -424,23 +431,25 @@ export default function FiresPage() {
                     placeholder={t('analysis.longitude')}
                     value={searchCoords.lon}
                     onChange={(e) => setSearchCoords({...searchCoords, lon: e.target.value})}
+                    className="text-sm"
                   />
                   <Input
                     type="number"
                     placeholder={t('analysis.radius')}
                     value={searchCoords.radius}
                     onChange={(e) => setSearchCoords({...searchCoords, radius: e.target.value})}
+                    className="text-sm"
                   />
-                  <Button onClick={handleCustomSearch} disabled={analyzing}>
+                  <Button onClick={handleCustomSearch} disabled={analyzing} className="w-full sm:w-auto">
                     {analyzing ? (
                       <>
                         <RefreshCw className="h-4 w-4 mr-2 animate-spin" />
-                        {t('analysis.analyzing')}
+                        <span className="hidden sm:inline">{t('analysis.analyzing')}</span>
                       </>
                     ) : (
                       <>
                         <Search className="h-4 w-4 mr-2" />
-                        {t('analysis.analyze')}
+                        <span className="hidden sm:inline">{t('analysis.analyze')}</span>
                       </>
                     )}
                   </Button>

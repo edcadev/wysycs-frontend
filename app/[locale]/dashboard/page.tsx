@@ -145,8 +145,8 @@ export default function DashboardPage() {
     <>
       {/* KPIs Globales */}
       {globalStats && (
-        <section className="container mx-auto px-6 py-6">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+        <section className="container mx-auto px-4 sm:px-6 py-4 sm:py-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
             <Card className="hover:shadow-lg transition-shadow">
               <CardHeader className="pb-3">
                 <CardTitle className="text-sm font-medium flex items-center gap-2">
@@ -240,43 +240,39 @@ export default function DashboardPage() {
       )}
 
       {/* Tabs de contenido */}
-      <section className="container mx-auto px-6 pb-6">
+      <section className="container mx-auto px-4 sm:px-6 pb-4 sm:pb-6">
         <Tabs defaultValue="lista" className="w-full">
-          <div className="flex items-center justify-between mb-4">
-            <TabsList>
-              <TabsTrigger value="lista" className="cursor-pointer">
-                <List className="h-4 w-4 mr-2" />
-                {t('tabs.forestList')}
+          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 sm:gap-0 mb-4">
+            <TabsList className="w-full sm:w-auto">
+              <TabsTrigger value="lista" className="cursor-pointer flex-1 sm:flex-none">
+                <List className="h-4 w-4 sm:mr-2" />
+                <span className="hidden sm:inline">{t('tabs.forestList')}</span>
               </TabsTrigger>
-              <TabsTrigger value="mapa" className="cursor-pointer">
-                <MapPin className="h-4 w-4 mr-2" />
-                {t('tabs.map')}
+              <TabsTrigger value="mapa" className="cursor-pointer flex-1 sm:flex-none">
+                <MapPin className="h-4 w-4 sm:mr-2" />
+                <span className="hidden sm:inline">{t('tabs.map')}</span>
               </TabsTrigger>
-              {/* <TabsTrigger value="stats">
-                <BarChart3 className="h-4 w-4 mr-2" />
-                {t('tabs.statistics')}
-              </TabsTrigger> */}
             </TabsList>
 
             {/* Filtros */}
-            <div className="flex items-center gap-2">
+            <div className="flex flex-wrap items-center gap-2 w-full sm:w-auto">
               <Badge
                 variant={filter === "all" ? "default" : "outline"}
-                className="cursor-pointer"
+                className="cursor-pointer text-xs whitespace-nowrap"
                 onClick={() => {setFilter("all"); setForestsMap(forests)}}
               >
                 {t('tabs.all')} ({forests.length})
               </Badge>
               <Badge
                 variant={filter === "critical" ? "default" : "outline"}
-                className="cursor-pointer text-red-600 border-red-200"
+                className="cursor-pointer text-red-600 border-red-200 text-xs whitespace-nowrap"
                 onClick={() => {setFilter("critical"); setForestsMap(forests.filter((f) => f.health < 50))}}
               >
                 {t('tabs.critical')} ({forests.filter((f) => f.health < 50).length})
               </Badge>
               <Badge
                 variant={filter === "moderate" ? "default" : "outline"}
-                className="cursor-pointer text-yellow-600 border-yellow-200"
+                className="cursor-pointer text-yellow-600 border-yellow-200 text-xs whitespace-nowrap"
                 onClick={() => {setFilter("moderate"); setForestsMap(forests.filter((f) => f.health >= 50 && f.health < 70))}}
               >
                 {t('tabs.moderate')} (
@@ -284,7 +280,7 @@ export default function DashboardPage() {
               </Badge>
               <Badge
                 variant={filter === "healthy" ? "default" : "outline"}
-                className="cursor-pointer text-green-600 border-green-200"
+                className="cursor-pointer text-green-600 border-green-200 text-xs whitespace-nowrap"
                 onClick={() => {setFilter("healthy"); setForestsMap(forests.filter((f) => f.health >= 70))}}
               >
                 {t('tabs.healthy')} ({forests.filter((f) => f.health >= 70).length})

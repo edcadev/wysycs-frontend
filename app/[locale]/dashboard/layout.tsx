@@ -1,11 +1,12 @@
 "use client"
 
-import { ReactNode } from 'react'
+import { ReactNode, useState } from 'react'
 import { useRouter, usePathname } from '@/i18n/routing'
 import Image from 'next/image'
 import { useTranslations } from 'next-intl'
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
+import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet"
 import { DashboardHeader } from "@/components/dashboard-header"
 import { LanguageSwitcher } from "@/components/language-switcher"
 import {
@@ -20,6 +21,7 @@ import {
   RefreshCw,
   Shield,
   LucideIcon,
+  Menu,
 } from "lucide-react"
 
 interface DashboardLayoutProps {
@@ -105,16 +107,45 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
   const tPages = useTranslations()
   const router = useRouter()
   const pathname = usePathname()
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
 
   const handleRefresh = () => {
     window.location.reload()
   }
 
+  const handleNavigation = (href: string) => {
+    router.push(href as any)
+    setMobileMenuOpen(false)
+  }
+
   const currentPageConfig = PAGE_CONFIG[pathname] || PAGE_CONFIG['/dashboard']
+
+  // Componente de navegación reutilizable
+  const NavigationItems = () => (
+    <>
+      {NAV_ITEMS.map((item) => {
+        const Icon = item.icon
+        const isActive = pathname === item.href
+
+        return (
+          <Button
+            key={item.href}
+            variant={isActive ? 'default' : 'ghost'}
+            className="w-full justify-start gap-2"
+            onClick={() => item.enabled && handleNavigation(item.href)}
+            disabled={!item.enabled}
+          >
+            <Icon className="h-4 w-4" />
+            {t(item.key)}
+          </Button>
+        )
+      })}
+    </>
+  )
 
   return (
     <div className="flex min-h-screen bg-gradient-to-br from-primary/5 via-background to-accent/5">
-      {/* Sidebar */}
+      {/* Sidebar Desktop */}
       <aside className="hidden lg:flex w-64 flex-col border-r bg-card/50 backdrop-blur sticky top-0 h-screen flex-shrink-0">
         <div className="p-6 border-b">
           <div className="flex items-center space-x-3">
@@ -135,23 +166,7 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
         </div>
 
         <nav className="flex-1 p-4 space-y-2">
-          {NAV_ITEMS.map((item) => {
-            const Icon = item.icon
-            const isActive = pathname === item.href
-
-            return (
-              <Button
-                key={item.href}
-                variant={isActive ? 'default' : 'ghost'}
-                className="w-full justify-start gap-2"
-                onClick={() => item.enabled && router.push(item.href as any)}
-                disabled={!item.enabled}
-              >
-                <Icon className="h-4 w-4" />
-                {t(item.key)}
-              </Button>
-            )
-          })}
+          <NavigationItems />
         </nav>
 
         <div className="p-4 border-t">
@@ -169,27 +184,80 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
         </div>
       </aside>
 
+      {/* Menú Móvil */}
+      <Sheet open={mobileMenuOpen} onOpenChange={setMobileMenuOpen}>
+        <SheetContent side="left" className="w-64 p-0">
+          <div className="flex flex-col h-full">
+            <div className="p-6 border-b">
+              <div className="flex items-center space-x-3">
+                <Image
+                  src="/wysycs-logo.SVG"
+                  alt="WYSYCS Logo"
+                  width={40}
+                  height={40}
+                  className="w-10 h-10"
+                />
+                <span className="text-xl font-bold bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
+                  {t('title')}
+                </span>
+              </div>
+              <p className="text-xs text-muted-foreground mt-2">
+                {t('subtitle')}
+              </p>
+            </div>
+
+            <nav className="flex-1 p-4 space-y-2">
+              <NavigationItems />
+            </nav>
+
+            <div className="p-4 border-t">
+              <Card className="bg-gradient-to-br from-accent/10 to-primary/10">
+                <CardHeader className="pb-3">
+                  <CardTitle className="text-sm">{t('systemStatus')}</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="flex items-center gap-2 text-xs text-muted-foreground">
+                    <div className="h-2 w-2 rounded-full bg-green-500 animate-pulse" />
+                    {t('dataUpdated')}
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
+          </div>
+        </SheetContent>
+      </Sheet>
+
       {/* Contenido Principal */}
-      <main className="flex-1 overflow-y-auto">
+      <main className="flex-1 overflow-y-auto w-full">
         <DashboardHeader
           title={tPages(currentPageConfig.titleKey)}
           description={tPages(currentPageConfig.descriptionKey)}
           actions={
-            <>
-              <LanguageSwitcher />
-              <Button variant="outline" size="sm" onClick={handleRefresh}>
-                <RefreshCw className="h-4 w-4 mr-2" />
-                {tPages('dashboard.header.refresh')}
+            <div className="flex flex-wrap items-center gap-2">
+              {/* Botón menú móvil */}
+              <Button
+                variant="outline"
+                size="sm"
+                className="lg:hidden"
+                onClick={() => setMobileMenuOpen(true)}
+              >
+                <Menu className="h-4 w-4" />
               </Button>
-              <Button variant="outline" size="sm">
+
+              <LanguageSwitcher />
+              <Button variant="outline" size="sm" onClick={handleRefresh} className="whitespace-nowrap">
+                <RefreshCw className="h-4 w-4 mr-2" />
+                <span className="hidden sm:inline">{tPages('dashboard.header.refresh')}</span>
+              </Button>
+              <Button variant="outline" size="sm" className="hidden md:flex whitespace-nowrap">
                 <Download className="h-4 w-4 mr-2" />
                 {tPages('dashboard.header.export')}
               </Button>
-              <Button size="sm">
+              <Button size="sm" className="whitespace-nowrap">
                 <Bell className="h-4 w-4 mr-2" />
-                {tPages('dashboard.header.alerts')} (3)
+                <span className="hidden sm:inline">{tPages('dashboard.header.alerts')}</span> (3)
               </Button>
-            </>
+            </div>
           }
         />
         {children}
