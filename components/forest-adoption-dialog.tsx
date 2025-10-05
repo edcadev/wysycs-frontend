@@ -1,21 +1,21 @@
-'use client';
+"use client";
 
-import React, { useState } from 'react';
+import React, { useState } from "react";
 import {
   Dialog,
   DialogContent,
   DialogDescription,
   DialogHeader,
   DialogTitle,
-} from '@/components/ui/dialog';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Alert, AlertDescription } from '@/components/ui/alert';
-import { Heart, Shield, AlertTriangle, Loader2 } from 'lucide-react';
-import { adoptionApi } from '@/lib/api';
-import { AxiosError } from 'axios';
-import { useTranslations } from 'next-intl';
+} from "@/components/ui/dialog";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Alert, AlertDescription } from "@/components/ui/alert";
+import { Heart, Shield, AlertTriangle, Loader2 } from "lucide-react";
+import { adoptionApi } from "@/lib/api";
+import { AxiosError } from "axios";
+import { useTranslations } from "next-intl";
 
 interface ForestAdoptionDialogProps {
   open: boolean;
@@ -32,21 +32,20 @@ export default function ForestAdoptionDialog({
   forestName,
   onAdoptionSuccess,
 }: ForestAdoptionDialogProps) {
-  const t = useTranslations('adoption');
+  const t = useTranslations("adoption");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState(false);
   const [adoptionForm, setAdoptionForm] = useState({
-    guardian_name: '',
-    guardian_email: '',
-    telegram_chat_id: '',
+    guardian_name: "",
+    guardian_email: "",
   });
 
   const handleAdoptForest = async (e: React.FormEvent) => {
     e.preventDefault();
 
     if (!adoptionForm.guardian_name || !adoptionForm.guardian_email) {
-      setError(t('form.required'));
+      setError(t("form.required"));
       return;
     }
 
@@ -58,7 +57,7 @@ export default function ForestAdoptionDialog({
         forest_id: forestId,
         guardian_name: adoptionForm.guardian_name,
         guardian_email: adoptionForm.guardian_email,
-        telegram_chat_id: adoptionForm.telegram_chat_id || null,
+        telegram_chat_id: null,
       });
 
       setSuccess(true);
@@ -70,7 +69,7 @@ export default function ForestAdoptionDialog({
 
       // Limpiar formulario después de 2 segundos
       setTimeout(() => {
-        setAdoptionForm({ guardian_name: '', guardian_email: '', telegram_chat_id: '' });
+        setAdoptionForm({ guardian_name: "", guardian_email: "" });
         setSuccess(false);
         onOpenChange(false);
       }, 2000);
@@ -78,7 +77,7 @@ export default function ForestAdoptionDialog({
       if (err instanceof AxiosError && err.response?.data?.detail) {
         setError(err.response.data.detail);
       } else {
-        setError(err instanceof Error ? err.message : 'Error desconocido');
+        setError(err instanceof Error ? err.message : "Error desconocido");
       }
     } finally {
       setLoading(false);
@@ -95,17 +94,15 @@ export default function ForestAdoptionDialog({
 
   return (
     <Dialog open={open} onOpenChange={handleClose}>
-      <DialogContent className="sm:max-w-[500px]">
+      <DialogContent className="sm:max-w-[500px] max-h-[90vh] overflow-y-auto">
         <DialogHeader>
           <div className="flex items-center gap-3 mb-2">
             <div className="bg-green-100 w-12 h-12 rounded-full flex items-center justify-center">
               <Heart className="text-green-600 h-6 w-6" />
             </div>
             <div>
-              <DialogTitle className="text-2xl">{t('title')}</DialogTitle>
-              <DialogDescription>
-                {t('subtitle')}
-              </DialogDescription>
+              <DialogTitle className="text-2xl">{t("title")}</DialogTitle>
+              <DialogDescription>{t("subtitle")}</DialogDescription>
             </div>
           </div>
         </DialogHeader>
@@ -116,19 +113,17 @@ export default function ForestAdoptionDialog({
               <Heart className="text-green-600 h-10 w-10 fill-green-600" />
             </div>
             <h3 className="text-2xl font-bold text-gray-900 mb-2">
-              {t('congratulations')}
+              {t("congratulations")}
             </h3>
             <p className="text-gray-600">
-              {t('successMessage', { forestName })}
+              {t("successMessage", { forestName })}
             </p>
           </div>
         ) : (
           <>
             <div className="bg-gradient-to-r from-green-50 to-emerald-50 p-4 rounded-lg mb-4 border-2 border-green-200">
               <h4 className="font-bold text-green-800 mb-2">{forestName}</h4>
-              <p className="text-sm text-green-700">
-                {t('info.title')}
-              </p>
+              <p className="text-sm text-green-700">{t("info.title")}</p>
             </div>
 
             {error && (
@@ -141,7 +136,7 @@ export default function ForestAdoptionDialog({
             <form onSubmit={handleAdoptForest} className="space-y-4">
               <div className="space-y-2">
                 <Label htmlFor="guardian_name">
-                  {t('form.name')} <span className="text-red-500">*</span>
+                  {t("form.name")} <span className="text-red-500">*</span>
                 </Label>
                 <Input
                   id="guardian_name"
@@ -149,16 +144,19 @@ export default function ForestAdoptionDialog({
                   required
                   value={adoptionForm.guardian_name}
                   onChange={(e) =>
-                    setAdoptionForm({ ...adoptionForm, guardian_name: e.target.value })
+                    setAdoptionForm({
+                      ...adoptionForm,
+                      guardian_name: e.target.value,
+                    })
                   }
-                  placeholder={t('form.namePlaceholder')}
+                  placeholder={t("form.namePlaceholder")}
                   disabled={loading}
                 />
               </div>
 
               <div className="space-y-2">
                 <Label htmlFor="guardian_email">
-                  {t('form.email')} <span className="text-red-500">*</span>
+                  {t("form.email")} <span className="text-red-500">*</span>
                 </Label>
                 <Input
                   id="guardian_email"
@@ -166,43 +164,29 @@ export default function ForestAdoptionDialog({
                   required
                   value={adoptionForm.guardian_email}
                   onChange={(e) =>
-                    setAdoptionForm({ ...adoptionForm, guardian_email: e.target.value })
+                    setAdoptionForm({
+                      ...adoptionForm,
+                      guardian_email: e.target.value,
+                    })
                   }
-                  placeholder={t('form.emailPlaceholder')}
+                  placeholder={t("form.emailPlaceholder")}
                   disabled={loading}
                 />
                 <p className="text-xs text-muted-foreground">
-                  {t('form.emailHelp')}
-                </p>
-              </div>
-
-              <div className="space-y-2">
-                <Label htmlFor="telegram_chat_id">{t('form.telegram')}</Label>
-                <Input
-                  id="telegram_chat_id"
-                  type="text"
-                  value={adoptionForm.telegram_chat_id}
-                  onChange={(e) =>
-                    setAdoptionForm({ ...adoptionForm, telegram_chat_id: e.target.value })
-                  }
-                  placeholder={t('form.telegramPlaceholder')}
-                  disabled={loading}
-                />
-                <p className="text-xs text-muted-foreground">
-                  {t('form.telegramHelp')}
+                  {t("form.emailHelp")}
                 </p>
               </div>
 
               <div className="bg-blue-50 border border-blue-200 p-4 rounded-lg">
                 <h4 className="font-semibold text-blue-900 mb-2 flex items-center gap-2">
                   <Shield className="h-4 w-4" />
-                  {t('benefits.title')}
+                  {t("benefits.title")}
                 </h4>
                 <ul className="text-sm text-blue-800 space-y-1">
-                  <li>{t('benefits.fireAlerts')}</li>
-                  <li>{t('benefits.healthReports')}</li>
-                  <li>{t('benefits.gamification')}</li>
-                  <li>{t('benefits.impact')}</li>
+                  <li>{t("benefits.fireAlerts")}</li>
+                  <li>{t("benefits.healthReports")}</li>
+                  <li>{t("benefits.gamification")}</li>
+                  <li>{t("benefits.impact")}</li>
                 </ul>
               </div>
 
@@ -214,7 +198,7 @@ export default function ForestAdoptionDialog({
                   disabled={loading}
                   className="flex-1"
                 >
-                  {t('buttons.cancel')}
+                  {t("buttons.cancel")}
                 </Button>
                 <Button
                   type="submit"
@@ -224,12 +208,12 @@ export default function ForestAdoptionDialog({
                   {loading ? (
                     <>
                       <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                      {t('buttons.adopting')}
+                      {t("buttons.adopting")}
                     </>
                   ) : (
                     <>
                       <Heart className="mr-2 h-4 w-4" />
-                      {t('buttons.adopt')}
+                      {t("buttons.adopt")}
                     </>
                   )}
                 </Button>
