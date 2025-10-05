@@ -16,8 +16,6 @@ import {
   BarChart3,
   Settings,
   Flame,
-  Bell,
-  Download,
   RefreshCw,
   Shield,
   LucideIcon,
@@ -248,14 +246,6 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
               <Button variant="outline" size="sm" onClick={handleRefresh} className="whitespace-nowrap">
                 <RefreshCw className="h-4 w-4 mr-2" />
                 <span className="hidden sm:inline">{tPages('dashboard.header.refresh')}</span>
-              </Button>
-              <Button variant="outline" size="sm" className="hidden md:flex whitespace-nowrap">
-                <Download className="h-4 w-4 mr-2" />
-                {tPages('dashboard.header.export')}
-              </Button>
-              <Button size="sm" className="whitespace-nowrap">
-                <Bell className="h-4 w-4 mr-2" />
-                <span className="hidden sm:inline">{tPages('dashboard.header.alerts')}</span> (3)
               </Button>
             </div>
           }

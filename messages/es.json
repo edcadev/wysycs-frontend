@@ -138,9 +138,7 @@
       "dataUpdated": "Datos actualizados hace 2h"
     },
     "header": {
-      "refresh": "Actualizar",
-      "export": "Exportar",
-      "alerts": "Alertas"
+      "refresh": "Actualizar"
     },
     "pages": {
       "dashboard": {
