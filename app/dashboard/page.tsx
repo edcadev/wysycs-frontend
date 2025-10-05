@@ -50,6 +50,7 @@ interface GlobalStats {
 export default function DashboardPage() {
   const router = useRouter()
   const [forests, setForests] = useState<Forest[]>([])
+  const [forestsMap, setForestsMap] = useState<Forest[]>([])
   const [selectedForest, setSelectedForest] = useState<Forest | null>(null)
   const [loading, setLoading] = useState(true)
   const [globalStats, setGlobalStats] = useState<GlobalStats | null>(null)
@@ -65,6 +66,7 @@ export default function DashboardPage() {
       setLoading(true)
       const data = await forestsApi.getAll()
       setForests(data)
+      setForestsMap(data)
       calculateGlobalStats(data)
     } catch (error) {
       console.error('Error al cargar bosques:', error)
@@ -222,10 +224,10 @@ export default function DashboardPage() {
                   <MapPin className="h-4 w-4 mr-2" />
                   Mapa
                 </TabsTrigger>
-                <TabsTrigger value="stats">
+                {/* <TabsTrigger value="stats">
                   <BarChart3 className="h-4 w-4 mr-2" />
                   Estadísticas
-                </TabsTrigger>
+                </TabsTrigger> */}
               </TabsList>
 
               {/* Filtros */}
@@ -233,28 +235,28 @@ export default function DashboardPage() {
                 <Badge 
                   variant={filter === 'all' ? 'default' : 'outline'}
                   className="cursor-pointer"
-                  onClick={() => setFilter('all')}
+                  onClick={() => {setFilter('all'); setForestsMap(forests)}}
                 >
                   Todos ({forests.length})
                 </Badge>
                 <Badge 
                   variant={filter === 'critical' ? 'default' : 'outline'}
                   className="cursor-pointer text-red-600 border-red-200"
-                  onClick={() => setFilter('critical')}
+                  onClick={() => {setFilter('critical'); setForestsMap(forests.filter(f => f.health < 50))}}
                 >
                   Críticos ({forests.filter(f => f.health < 50).length})
                 </Badge>
                 <Badge 
                   variant={filter === 'moderate' ? 'default' : 'outline'}
                   className="cursor-pointer text-yellow-600 border-yellow-200"
-                  onClick={() => setFilter('moderate')}
+                  onClick={() => {setFilter('moderate'); setForestsMap(forests.filter(f => f.health >= 50 && f.health < 70))}}
                 >
                   Moderados ({forests.filter(f => f.health >= 50 && f.health < 70).length})
                 </Badge>
                 <Badge 
                   variant={filter === 'healthy' ? 'default' : 'outline'}
                   className="cursor-pointer text-green-600 border-green-200"
-                  onClick={() => setFilter('healthy')}
+                  onClick={() => {setFilter('healthy'); setForestsMap(forests.filter(f => f.health >= 70))}}
                 >
                   Saludables ({forests.filter(f => f.health >= 70).length})
                 </Badge>
@@ -338,13 +340,13 @@ export default function DashboardPage() {
             <TabsContent value="mapa">
               <Card className="h-[600px] flex items-center justify-center">
                 <div className="h-full w-full">
-                  <Map zoom={5} forests={forests}/>
+                  <Map zoom={5} forests={forestsMap}/>
                 </div>
               </Card>
             </TabsContent>
 
             {/* Estadísticas - Placeholder */}
-            <TabsContent value="stats">
+            {/* <TabsContent value="stats">
               <Card className="h-[600px] flex items-center justify-center">
                 <div className="text-center">
                   <BarChart3 className="h-16 w-16 text-muted-foreground mx-auto mb-4" />
@@ -354,7 +356,7 @@ export default function DashboardPage() {
                   </p>
                 </div>
               </Card>
-            </TabsContent>
+            </TabsContent> */}
           </Tabs>
         </section>
     </>

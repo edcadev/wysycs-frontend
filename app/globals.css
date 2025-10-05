@@ -130,3 +130,10 @@
     scroll-padding-top: 4rem;
   }
 }
+
+
+.leaflet-popup-content p {
+    margin: 2px !important;
+}
+
+

@@ -21,6 +21,7 @@ import {
 } from "lucide-react"
 import { DashboardHeader } from '@/components/dashboard-header'
 import { firesApi } from '@/lib/api'
+import FireHeatmap from '@/components/Maps/Heatmap'
 
 interface Fire {
   latitude: number
@@ -72,8 +73,9 @@ export default function FiresPage() {
     try {
       setLoading(true)
       const data = await firesApi.getPeruFires(days)
-
-      const firesData = Array.isArray(data) ? data : []
+      
+      // const firesData = Array.isArray(data.fires) ? data.fires : []
+      const firesData = data.fires
       setFires(firesData)
       calculateStats(firesData)
     } catch (error) {
@@ -281,15 +283,15 @@ export default function FiresPage() {
         {/* Tabs de contenido */}
         <Tabs defaultValue="alertas" className="w-full">
           <TabsList className="mb-4">
-            <TabsTrigger value="alertas">
+            <TabsTrigger value="alertas" className='cursor-pointer'>
               <List className="h-4 w-4 mr-2" />
               Alertas Activas
             </TabsTrigger>
-            <TabsTrigger value="analisis">
+            <TabsTrigger value="analisis" className='cursor-pointer'>
               <Search className="h-4 w-4 mr-2" />
               Análisis de Riesgo
             </TabsTrigger>
-            <TabsTrigger value="mapa">
+            <TabsTrigger value="mapa" className='cursor-pointer'>
               <MapPin className="h-4 w-4 mr-2" />
               Mapa
             </TabsTrigger>
@@ -545,12 +547,13 @@ export default function FiresPage() {
           {/* Tab: Mapa - Placeholder */}
           <TabsContent value="mapa">
             <Card className="h-[600px] flex items-center justify-center">
-              <div className="text-center">
-                <MapPin className="h-16 w-16 text-muted-foreground mx-auto mb-4" />
+              <div className="h-full w-full">
+                <FireHeatmap fires={fires}/>
+                {/* <MapPin className="h-16 w-16 text-muted-foreground mx-auto mb-4" />
                 <h3 className="text-lg font-semibold mb-2">Mapa Interactivo de Incendios</h3>
                 <p className="text-sm text-muted-foreground">
                   Próximamente: Visualización geoespacial de todos los incendios activos
-                </p>
+                </p> */}
               </div>
             </Card>
           </TabsContent>

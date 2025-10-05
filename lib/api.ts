@@ -108,6 +108,19 @@ export const firesApi = {
     });
     return response.data;
   },
+
+  firePrediction: async (params: {
+    lat: number;
+    lng: number;
+  }) => {
+    const response = await api.get('/fire/predict-spread', {
+      params: {
+        latitude: params.lat,
+        longitude: params.lng
+      },
+    });
+    return response.data
+  }
 };
 
 // ========== GUARDIAN ==========
