@@ -1,0 +1,395 @@
+{
+  "landing": {
+    "nav": {
+      "home": "Home",
+      "problem": "Problem",
+      "solution": "Solution",
+      "technologies": "Technologies",
+      "team": "Team",
+      "impact": "Impact",
+      "demo": "Demo",
+      "openMenu": "Open menu",
+      "accessDemo": "Access Demo"
+    },
+    "hero": {
+      "badge": "🌍 Hackathon Project 2025",
+      "title": "Global Deforestation and Forest Fire Monitoring System",
+      "subtitle": "Advanced platform using NASA satellite data to detect, monitor, and visualize deforestation and forest fire events in real-time on a global scale.",
+      "liveDemoButton": "View Live Demo",
+      "exploreDataButton": "Explore Data"
+    },
+    "problem": {
+      "title": "The Global Challenge",
+      "subtitle": "The world's forests face unprecedented threats. We need advanced tools to monitor and respond to these critical environmental challenges.",
+      "deforestation": {
+        "title": "Accelerated Deforestation",
+        "description": "Loss of 10 million hectares of forest annually worldwide"
+      },
+      "fires": {
+        "title": "Forest Fires",
+        "description": "75% increase in forest fires over the past two decades"
+      },
+      "monitoring": {
+        "title": "Lack of Monitoring",
+        "description": "Late detection of critical events due to lack of integrated systems"
+      }
+    },
+    "solution": {
+      "title": "Our Solution",
+      "subtitle": "A comprehensive platform that combines NASA satellite data with advanced technology to provide real-time monitoring and predictive analysis.",
+      "screenshotPlaceholder": "System Screenshot",
+      "dashboardPlaceholder": "Main dashboard with interactive maps",
+      "satellite": {
+        "title": "NASA Satellite Data",
+        "description": "Direct integration with NASA APIs for data updated every 2 hours"
+      },
+      "maps": {
+        "title": "Interactive Maps",
+        "description": "Advanced geospatial visualization with zoom and filtering capabilities"
+      },
+      "realtime": {
+        "title": "Real Time",
+        "description": "Automatic updates following satellite capture cycles"
+      },
+      "analysis": {
+        "title": "Temporal Analysis",
+        "description": "Tracking of deforestation trends and historical patterns"
+      },
+      "gallery": {
+        "title": "Project Gallery",
+        "dataAnalysis": "Data Analysis",
+        "fireDetection": "Fire Detection",
+        "globalView": "Global View"
+      }
+    },
+    "technologies": {
+      "title": "Technologies Used",
+      "subtitle": "Modern and robust technology stack to ensure performance, scalability, and reliability.",
+      "architecturePlaceholder": "Architecture Diagram",
+      "architectureDesc": "System data flow and components",
+      "frontend": "Frontend",
+      "backend": "Backend & APIs",
+      "infrastructure": "Infrastructure"
+    },
+    "team": {
+      "title": "Our Team",
+      "subtitle": "A multidisciplinary team of developers, data scientists, and environmental science specialists committed to forest conservation.",
+      "photoPlaceholder": "Team Photo",
+      "photoDesc": "Team working at the hackathon",
+      "ana": {
+        "role": "Full Stack Developer",
+        "description": "Specialist in React and Node.js with experience in geospatial applications"
+      },
+      "carlos": {
+        "role": "Data Scientist",
+        "description": "Expert in satellite data analysis and pattern detection algorithms"
+      },
+      "laura": {
+        "role": "Environmental Scientist",
+        "description": "PhD in Forest Sciences with 10 years of experience in conservation"
+      },
+      "miguel": {
+        "role": "UI/UX Designer",
+        "description": "Designer specialized in interfaces for scientific and environmental applications"
+      }
+    },
+    "impact": {
+      "title": "Expected Impact",
+      "subtitle": "Our goal is to democratize access to critical information about the state of the world's forests and facilitate informed decision-making.",
+      "researchers": {
+        "title": "For Researchers",
+        "description": "Access to updated data for studies in environmental and climate sciences"
+      },
+      "governments": {
+        "title": "For Governments",
+        "description": "Tools for environmental protection policies and emergency response"
+      },
+      "public": {
+        "title": "For the Public",
+        "description": "Awareness about the current state of forests and environmental challenges"
+      }
+    },
+    "cta": {
+      "title": "Join the Global Conservation Mission",
+      "subtitle": "Explore our platform and discover how technology can help protect the world's forests for future generations.",
+      "platformButton": "Access the Platform",
+      "contactButton": "Contact the Team"
+    },
+    "footer": {
+      "title": "Global Forest Monitoring System",
+      "subtitle": "Developed for Hackathon 2025 • Powered by NASA Satellite Data",
+      "copyright": "© 2025 ForestWatch Team",
+      "nasa": "Data provided by NASA",
+      "openSource": "Open Source Project"
+    }
+  },
+  "dashboard": {
+    "sidebar": {
+      "title": "WYSYCS",
+      "subtitle": "Forest Monitoring System",
+      "dashboard": "Dashboard",
+      "interactiveMap": "Interactive Map",
+      "forestList": "Forest List",
+      "guardianProfile": "Guardian Profile",
+      "statistics": "Statistics",
+      "fireAlerts": "Fire Alerts",
+      "settings": "Settings",
+      "systemStatus": "System Status",
+      "dataUpdated": "Data updated 2h ago"
+    },
+    "header": {
+      "refresh": "Refresh",
+      "export": "Export",
+      "alerts": "Alerts"
+    },
+    "pages": {
+      "dashboard": {
+        "title": "Monitoring Dashboard",
+        "description": "Real-time visualization of Peruvian forests"
+      },
+      "fires": {
+        "title": "Fire Monitoring",
+        "description": "Real-time satellite data from NASA FIRMS"
+      },
+      "guardian": {
+        "title": "Guardian Profile",
+        "description": "Manage your adopted forests"
+      }
+    },
+    "kpis": {
+      "totalForests": "Total Forests",
+      "monitored": "Actively monitored",
+      "averageHealth": "Average Health",
+      "co2Captured": "CO₂ Captured",
+      "annualCapture": "Total annual capture",
+      "totalSpecies": "Total Species",
+      "biodiversity": "Registered biodiversity",
+      "criticalAlert": "forests in critical state",
+      "requireAttention": "Require immediate attention",
+      "viewDetails": "View Details"
+    },
+    "tabs": {
+      "forestList": "Forest List",
+      "map": "Map",
+      "statistics": "Statistics",
+      "activeAlerts": "Active Alerts",
+      "riskAnalysis": "Risk Analysis",
+      "all": "All",
+      "critical": "Critical",
+      "moderate": "Moderate",
+      "healthy": "Healthy"
+    },
+    "forest": {
+      "health": "Forest Health",
+      "annualCO2": "Annual CO₂",
+      "species": "Species",
+      "viewDetails": "View Details",
+      "statisticalAnalysis": "Statistical Analysis",
+      "comingSoon": "Coming soon: Charts and temporal analysis"
+    }
+  },
+  "fires": {
+    "period": {
+      "title": "Analysis Period",
+      "description": "Select the day range to visualize fires",
+      "day": "day",
+      "days": "days"
+    },
+    "kpis": {
+      "totalFires": "Total Fires",
+      "detected": "Detected in period",
+      "highConfidence": "High Confidence",
+      "confirmed": "Confirmed fires",
+      "averageBrightness": "Average Brightness",
+      "temperature": "Detected temperature",
+      "dataSource": "Data Source",
+      "satellite": "Monitoring satellite"
+    },
+    "alerts": {
+      "highConfidence": "high confidence fires detected",
+      "requireMonitoring": "Require immediate monitoring",
+      "activeFires": "Active Fires in Peru",
+      "realtime": "Real-time satellite detections",
+      "loading": "Loading satellite data...",
+      "noFires": "No fires detected in the selected period"
+    },
+    "table": {
+      "location": "Location",
+      "brightness": "Brightness (K)",
+      "confidence": "Confidence",
+      "date": "Date",
+      "time": "Time",
+      "high": "High",
+      "nominal": "Nominal",
+      "low": "Low",
+      "showing": "Showing",
+      "of": "of",
+      "totalFires": "total fires"
+    },
+    "source": {
+      "title": "Data source:",
+      "description": "NASA FIRMS (Fire Information for Resource Management System) - VIIRS Satellite",
+      "updateFrequency": "Data is updated every 2-4 hours with real-time satellite information."
+    },
+    "analysis": {
+      "title": "Analyze Custom Location",
+      "description": "Search for fires at specific coordinates",
+      "latitude": "Latitude (e.g: -8.3)",
+      "longitude": "Longitude (e.g: -75.6)",
+      "radius": "Radius (km)",
+      "analyze": "Analyze",
+      "analyzing": "Analyzing...",
+      "testLocations": "Test locations:",
+      "level": "Level:",
+      "firesDetected": "fires detected",
+      "closestFire": "Closest fire:",
+      "recommendations": "Recommendations:",
+      "firesInArea": "Fires in the area",
+      "distance": "Distance:",
+      "brightness": "Brightness:",
+      "updateAnalysis": "Update analysis"
+    },
+    "map": {
+      "title": "Interactive Fire Map",
+      "description": "Coming soon: Geospatial visualization of all active fires"
+    }
+  },
+  "guardian": {
+    "profile": {
+      "title": "Guardian Profile",
+      "description": "Enter your email to view your adopted forests",
+      "emailLabel": "Guardian email",
+      "emailPlaceholder": "your@email.com",
+      "viewProfile": "View my profile",
+      "searching": "Searching...",
+      "changeGuardian": "Change guardian",
+      "backToDashboard": "Back to dashboard",
+      "error": {
+        "required": "Please enter your email",
+        "notFound": "No guardian information found with that email"
+      }
+    },
+    "stats": {
+      "adoptedForests": "Adopted Forests",
+      "totalPoints": "Total Points",
+      "level": "Level"
+    },
+    "progress": {
+      "title": "Your Level Progress",
+      "currentLevel": "Current Level",
+      "points": "points",
+      "nextLevel": "Next Level",
+      "missing": "Missing",
+      "progress": "Progress:",
+      "maxLevel": "You've reached the maximum level!"
+    },
+    "community": {
+      "title": "Community Statistics",
+      "totalAdoptions": "Total Adoptions",
+      "activeGuardians": "Active Guardians",
+      "alertsSent": "Alerts Sent",
+      "distribution": "Distribution"
+    },
+    "forests": {
+      "title": "My Protected Forests",
+      "noForests": "You haven't adopted any forests yet",
+      "explore": "Explore forests",
+      "adoptionDate": "Adoption date:",
+      "daysProtecting": "Days protecting:",
+      "days": "days",
+      "forestStatus": "Forest status:",
+      "viewDetails": "View details →"
+    },
+    "leaderboard": {
+      "title": "Leaderboard",
+      "topGuardians": "Top Guardians",
+      "totalGuardians": "total guardians",
+      "you": "You"
+    }
+  },
+  "forestDetail": {
+    "loading": "Loading forest information...",
+    "error": "Could not load forest information",
+    "backToForests": "Back to forests",
+    "forestHealth": "Forest Health",
+    "co2Capture": "CO₂ Capture",
+    "species": "Species",
+    "community": "Community",
+    "funFacts": {
+      "title": "Curious and Important Facts"
+    },
+    "fireRisk": {
+      "title": "Fire Risk Analysis",
+      "description": "Analyze fire risk in real-time using NASA satellite data",
+      "analyzeNow": "Analyze Risk Now",
+      "analyzing": "Analyzing...",
+      "firesDetected": "fire(s) detected",
+      "closestFire": "Closest fire at",
+      "updateAnalysis": "Update analysis"
+    },
+    "adoption": {
+      "title": "Become a Guardian",
+      "description": "Adopt this forest and contribute directly to its protection and conservation",
+      "adoptButton": "Adopt Forest"
+    },
+    "map": {
+      "title": "Interactive Map",
+      "coordinates": "Coordinates:"
+    },
+    "status": {
+      "title": "Forest Status",
+      "overallHealth": "Overall Health",
+      "lastUpdate": "Update date"
+    }
+  },
+  "adoption": {
+    "title": "Adopt Your Forest",
+    "subtitle": "Become a digital guardian of the Amazon",
+    "congratulations": "Congratulations!",
+    "successMessage": "You adopted {forestName}. Check your email for more details.",
+    "form": {
+      "name": "Your full name",
+      "namePlaceholder": "E.g: Maria Lopez",
+      "email": "Email",
+      "emailPlaceholder": "your@email.com",
+      "emailHelp": "You will receive fire alerts and forest health reports",
+      "telegram": "Telegram Chat ID (optional)",
+      "telegramPlaceholder": "123456789",
+      "telegramHelp": "To receive instant alerts via Telegram",
+      "required": "Please complete all required fields"
+    },
+    "benefits": {
+      "title": "What do you get as a Guardian?",
+      "fireAlerts": "🔥 Real-time alerts of nearby fires",
+      "healthReports": "📊 Monthly forest health reports (NDVI)",
+      "gamification": "🏆 Points and levels for protecting the forest",
+      "impact": "🌍 Measurable impact on conservation"
+    },
+    "buttons": {
+      "cancel": "Cancel",
+      "adopt": "Adopt Forest",
+      "adopting": "Adopting..."
+    },
+    "info": {
+      "title": "By adopting this forest, you will receive real-time alerts and health reports."
+    }
+  },
+  "common": {
+    "loading": "Loading...",
+    "error": "Error",
+    "success": "Success",
+    "close": "Close",
+    "save": "Save",
+    "cancel": "Cancel",
+    "confirm": "Confirm",
+    "delete": "Delete",
+    "edit": "Edit",
+    "search": "Search",
+    "filter": "Filter",
+    "sort": "Sort",
+    "next": "Next",
+    "previous": "Previous",
+    "viewMore": "View more",
+    "viewLess": "View less"
+  }
+}

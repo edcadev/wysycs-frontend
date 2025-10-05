@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-WYSCYS is a global forest monitoring platform for a 2025 hackathon project that uses NASA satellite data to detect and visualize deforestation and wildfires in real-time. The project is a Next.js 14 frontend application built with TypeScript, React 18, and Tailwind CSS.
+WYSCYS (What You See Can You Save) is a global forest monitoring platform for a 2025 hackathon project that uses NASA satellite data to detect and visualize deforestation and wildfires in real-time. The project is a Next.js 14 frontend application built with TypeScript, React 18, and Tailwind CSS.
 
 ## Tech Stack
 
@@ -17,10 +17,13 @@ WYSCYS is a global forest monitoring platform for a 2025 hackathon project that 
 - **Forms**: React Hook Form with Zod validation
 - **Analytics**: Vercel Analytics
 - **Package Manager**: pnpm
+- **Internationalization**: next-intl
+- **Maps**: Leaflet with heatmap support
+- **Charts**: Recharts
 
 ## Common Commands
 
-- `pnpm dev` - Start development server
+- `pnpm dev` - Start development server (runs on http://localhost:3000)
 - `pnpm build` - Build for production
 - `pnpm start` - Start production server
 - `pnpm lint` - Run ESLint
@@ -29,29 +32,39 @@ WYSCYS is a global forest monitoring platform for a 2025 hackathon project that 
 
 ### Directory Structure
 
-- `app/` - Next.js App Router pages and layouts
-  - `layout.tsx` - Root layout with Geist fonts and Analytics
-  - `page.tsx` - Landing page showcasing the hackathon project
+- `app/` - Next.js App Router
+  - `[locale]/` - Internationalized routes (es/en)
+    - `layout.tsx` - Locale-specific layout with NextIntlClientProvider
+    - `page.tsx` - Landing page
+    - `dashboard/` - Dashboard application
+      - `layout.tsx` - Dashboard layout with sidebar navigation
+      - `page.tsx` - Main dashboard overview
+      - `fires/page.tsx` - Fire monitoring and alerts
+      - `guardian/page.tsx` - Guardian profile management
+      - `forests/[id]/page.tsx` - Individual forest detail pages
+  - `layout.tsx` - Root layout with dynamic lang attribute
   - `globals.css` - Global styles with custom Tailwind theme
-  - `dashboard/` - Dashboard application pages
-    - `layout.tsx` - Dashboard layout with sidebar navigation
-    - `page.tsx` - Main dashboard overview
-    - `fires/page.tsx` - Fire monitoring and alerts
-    - `guardian/page.tsx` - Guardian profile management
-    - `forests/[id]/page.tsx` - Individual forest detail pages
 - `components/` - React components
   - `ui/` - shadcn/ui components (auto-generated, do not manually edit)
   - `theme-provider.tsx` - Theme management component
   - `dashboard-header.tsx` - Reusable dashboard header
   - `d3-forest-map.tsx` - D3.js interactive forest map
   - `forest-adoption-dialog.tsx` - Forest adoption form dialog
+  - `language-switcher.tsx` - Language selection dropdown
+- `i18n/` - Internationalization configuration
+  - `request.ts` - next-intl configuration
+  - `routing.ts` - Locale routing and navigation helpers
+- `messages/` - Translation files
+  - `es.json` - Spanish translations (default)
+  - `en.json` - English translations
 - `lib/` - Utility functions
   - `utils.ts` - cn() function for className merging
 - `hooks/` - Custom React hooks
   - `use-toast.ts` - Toast notifications
   - `use-mobile.ts` - Mobile detection
 - `public/` - Static assets
-- `API_FRONTEND.md` - Comprehensive backend API documentation
+- `middleware.ts` - next-intl middleware for locale detection
+- `I18N.md` - Comprehensive internationalization documentation
 
 ### Import Aliases
 
@@ -80,11 +93,38 @@ This project uses shadcn/ui components configured in `components.json`:
 ### Build Configuration
 
 Next.js is configured in `next.config.mjs` with:
+- **next-intl plugin**: Integrated via `createNextIntlPlugin('./i18n/request.ts')`
 - ESLint disabled during builds (`ignoreDuringBuilds: true`)
 - TypeScript errors ignored during builds (`ignoreBuildErrors: true`)
 - Image optimization disabled (`unoptimized: true`)
 
 These settings suggest rapid prototyping for the hackathon context.
+
+### Internationalization (i18n)
+
+The application is fully internationalized using `next-intl`:
+
+**Supported Locales:**
+- Spanish (`es`) - Default locale
+- English (`en`)
+
+**Key Patterns:**
+- All routes are prefixed with locale: `/es/dashboard`, `/en/dashboard`
+- Use `useTranslations()` hook in client components to access translations
+- Import navigation helpers from `@/i18n/routing` instead of `next/navigation`
+- Translations are organized by section in `messages/es.json` and `messages/en.json`
+
+**Example usage:**
+```tsx
+import { useTranslations } from 'next-intl';
+import { Link, useRouter } from '@/i18n/routing';
+
+const t = useTranslations('dashboard');
+<h1>{t('title')}</h1>
+<Link href="/fires">{t('nav.fires')}</Link>
+```
+
+For comprehensive i18n documentation, see `I18N.md`.
 
 ## Backend Integration
 
@@ -92,7 +132,6 @@ These settings suggest rapid prototyping for the hackathon context.
 
 The project integrates with a FastAPI backend deployed on Railway:
 - **Production API**: `https://web-production-7dae.up.railway.app/api/v1`
-- **Documentation**: See `API_FRONTEND.md` for complete endpoint reference
 - **Key Endpoints**:
   - `/fires/peru` - NASA FIRMS fire data for Peru
   - `/fires/analyze` - Risk analysis for specific coordinates
@@ -110,17 +149,48 @@ All visualization components fetch real-time data from NASA satellite APIs:
 
 Dashboard components are client-side (`"use client"`) for:
 - Real-time data fetching with `useEffect`
-- Interactive maps and visualizations
+- Interactive maps (Leaflet with heatmap layers)
 - User interactions (adoption, alerts)
+- Internationalization hooks (`useTranslations`, `useLocale`)
 
 ## Development Notes
 
-- The landing page (`app/page.tsx`) is a comprehensive single-page application showcasing the project features, team, tech stack, and expected impact
-- Dashboard (`app/dashboard/`) is a multi-page application with sidebar navigation
-- All dashboard pages use client-side rendering for real-time data updates
-- API calls should use the constant `API_BASE` defined in components
-- The project is designed for hackathon presentation
+- All user-facing pages are under `app/[locale]/` for internationalization
+- Use `Link` and `useRouter` from `@/i18n/routing` for navigation (not from `next/navigation`)
+- Dashboard uses sidebar navigation with real-time data updates
+- API calls should use the `API_BASE` constant defined in components
+- The project is designed for hackathon presentation with rapid iteration
 - Uses Vercel Analytics for tracking
+
+## Working with Translations
+
+When adding new features or updating text:
+
+1. **Add translation keys to both locale files:**
+   - `messages/es.json` - Spanish version
+   - `messages/en.json` - English version
+
+2. **Keep the same structure in both files:**
+   ```json
+   {
+     "newSection": {
+       "title": "Título",
+       "description": "Descripción"
+     }
+   }
+   ```
+
+3. **Use in components:**
+   ```tsx
+   const t = useTranslations('newSection');
+   <h1>{t('title')}</h1>
+   ```
+
+4. **For dynamic values, use interpolation:**
+   ```tsx
+   // In messages: "greeting": "Hello {name}"
+   t('greeting', { name: userName })
+   ```
 
 ## TypeScript Type Safety
 

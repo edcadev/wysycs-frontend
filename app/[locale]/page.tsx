@@ -2,6 +2,8 @@
 
 import { useState } from "react"
 import Image from "next/image"
+import { useTranslations } from "next-intl"
+import { Link } from "@/i18n/routing"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
@@ -24,17 +26,19 @@ import {
   AlertTriangle,
   Menu,
 } from "lucide-react"
+import { LanguageSwitcher } from "@/components/language-switcher"
 
 export default function HomePage() {
+  const t = useTranslations('landing');
   const [isMenuOpen, setIsMenuOpen] = useState(false)
 
   const menuItems = [
-    { href: "#inicio", label: "Inicio" },
-    { href: "#problema", label: "Problema" },
-    { href: "#solucion", label: "Solución" },
-    { href: "#tecnologias", label: "Tecnologías" },
-    { href: "#equipo", label: "Equipo" },
-    { href: "#impacto", label: "Impacto" },
+    { href: "#inicio", label: t('nav.home') },
+    { href: "#problema", label: t('nav.problem') },
+    { href: "#solucion", label: t('nav.solution') },
+    { href: "#tecnologias", label: t('nav.technologies') },
+    { href: "#equipo", label: t('nav.team') },
+    { href: "#impacto", label: t('nav.impact') },
   ]
 
   const closeMenu = () => setIsMenuOpen(false)
@@ -65,31 +69,32 @@ export default function HomePage() {
 
             <nav className="hidden md:flex items-center space-x-6">
               <a href="#inicio" className="text-sm font-medium hover:text-primary transition-colors">
-                Inicio
+                {t('nav.home')}
               </a>
               <a href="#problema" className="text-sm font-medium hover:text-primary transition-colors">
-                Problema
+                {t('nav.problem')}
               </a>
               <a href="#solucion" className="text-sm font-medium hover:text-primary transition-colors">
-                Solución
+                {t('nav.solution')}
               </a>
               <a href="#tecnologias" className="text-sm font-medium hover:text-primary transition-colors">
-                Tecnologías
+                {t('nav.technologies')}
               </a>
               <a href="#equipo" className="text-sm font-medium hover:text-primary transition-colors">
-                Equipo
+                {t('nav.team')}
               </a>
               <a href="#impacto" className="text-sm font-medium hover:text-primary transition-colors">
-                Impacto
+                {t('nav.impact')}
               </a>
             </nav>
 
             <div className="flex items-center space-x-4">
+              <LanguageSwitcher />
               <Button asChild variant="outline" size="sm" className="hidden sm:inline-flex bg-transparent">
-                <a href="/dashboard" target="_blank" rel="noopener noreferrer">
+                <Link href="/dashboard">
                   <Satellite className="mr-2 h-4 w-4" />
-                  Demo
-                </a>
+                  {t('nav.demo')}
+                </Link>
               </Button>
 
               {/* Mobile Menu */}
@@ -97,7 +102,7 @@ export default function HomePage() {
                 <SheetTrigger asChild>
                   <Button variant="ghost" size="sm" className="md:hidden">
                     <Menu className="h-5 w-5" />
-                    <span className="sr-only">Abrir menú</span>
+                    <span className="sr-only">{t('nav.openMenu')}</span>
                   </Button>
                 </SheetTrigger>
                 <SheetContent side="top" className="w-full p-6">
@@ -126,10 +131,10 @@ export default function HomePage() {
 
                     <div className="pt-4 px-4">
                       <Button asChild className="w-full" size="default">
-                        <a href="/dashboard" target="_blank" rel="noopener noreferrer" onClick={closeMenu}>
+                        <Link href="/dashboard" onClick={closeMenu}>
                           <Satellite className="mr-2 h-4 w-4" />
-                          Acceder al Demo
-                        </a>
+                          {t('nav.accessDemo')}
+                        </Link>
                       </Button>
                     </div>
                   </nav>
@@ -148,27 +153,26 @@ export default function HomePage() {
         <div className="absolute inset-0 bg-[url('/aerial-view-of-dense-forest-canopy.jpg')] bg-cover bg-center opacity-10"></div>
         <div className="relative container mx-auto px-4 py-24 text-center">
           <Badge variant="secondary" className="mb-6 text-sm font-medium">
-            🌍 Hackathon Project 2025
+            {t('hero.badge')}
           </Badge>
           <h1 className="text-4xl md:text-6xl font-bold text-balance mb-6 bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
-            Sistema de Monitoreo Global de Deforestación e Incendios Forestales
+            {t('hero.title')}
           </h1>
           <p className="text-xl md:text-2xl text-muted-foreground text-pretty mb-8 max-w-4xl mx-auto">
-            Plataforma avanzada que utiliza datos satelitales de la NASA para detectar, monitorear y visualizar eventos
-            de deforestación e incendios forestales en tiempo real a escala global.
+            {t('hero.subtitle')}
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Button asChild size="lg" className="text-lg px-8 py-6">
-              <a href="/dashboard" target="_blank" rel="noopener noreferrer">
+              <Link href="/dashboard">
                 <Globe className="mr-2 h-5 w-5" />
-                Ver Demo en Vivo
-              </a>
+                {t('hero.liveDemoButton')}
+              </Link>
             </Button>
             <Button asChild variant="outline" size="lg" className="text-lg px-8 py-6 bg-transparent">
-              <a href="/dashboard" target="_blank" rel="noopener noreferrer">
+              <Link href="/dashboard">
                 <BarChart3 className="mr-2 h-5 w-5" />
-                Explorar Datos
-              </a>
+                {t('hero.exploreDataButton')}
+              </Link>
             </Button>
           </div>
         </div>
@@ -178,43 +182,42 @@ export default function HomePage() {
       <section id="problema" className="py-20 bg-card/50">
         <div className="container mx-auto px-4">
           <div className="text-center mb-16">
-            <h2 className="text-3xl md:text-4xl font-bold mb-6">El Desafío Global</h2>
+            <h2 className="text-3xl md:text-4xl font-bold mb-6">{t('problem.title')}</h2>
             <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
-              Los bosques del mundo enfrentan amenazas sin precedentes. Necesitamos herramientas avanzadas para
-              monitorear y responder a estos desafíos ambientales críticos.
+              {t('problem.subtitle')}
             </p>
           </div>
           <div className="grid md:grid-cols-3 gap-8">
             <Card className="text-center border-destructive/20">
               <CardHeader>
                 <AlertTriangle className="h-12 w-12 text-destructive mx-auto mb-4" />
-                <CardTitle className="text-destructive">Deforestación Acelerada</CardTitle>
+                <CardTitle className="text-destructive">{t('problem.deforestation.title')}</CardTitle>
               </CardHeader>
               <CardContent>
                 <p className="text-muted-foreground">
-                  Pérdida de 10 millones de hectáreas de bosque anualmente a nivel mundial
+                  {t('problem.deforestation.description')}
                 </p>
               </CardContent>
             </Card>
             <Card className="text-center border-destructive/20">
               <CardHeader>
                 <AlertTriangle className="h-12 w-12 text-destructive mx-auto mb-4" />
-                <CardTitle className="text-destructive">Incendios Forestales</CardTitle>
+                <CardTitle className="text-destructive">{t('problem.fires.title')}</CardTitle>
               </CardHeader>
               <CardContent>
                 <p className="text-muted-foreground">
-                  Aumento del 75% en incendios forestales en las últimas dos décadas
+                  {t('problem.fires.description')}
                 </p>
               </CardContent>
             </Card>
             <Card className="text-center border-destructive/20">
               <CardHeader>
                 <AlertTriangle className="h-12 w-12 text-destructive mx-auto mb-4" />
-                <CardTitle className="text-destructive">Falta de Monitoreo</CardTitle>
+                <CardTitle className="text-destructive">{t('problem.monitoring.title')}</CardTitle>
               </CardHeader>
               <CardContent>
                 <p className="text-muted-foreground">
-                  Detección tardía de eventos críticos por falta de sistemas integrados
+                  {t('problem.monitoring.description')}
                 </p>
               </CardContent>
             </Card>
@@ -226,10 +229,9 @@ export default function HomePage() {
       <section id="solucion" className="py-20">
         <div className="container mx-auto px-4">
           <div className="text-center mb-16">
-            <h2 className="text-3xl md:text-4xl font-bold mb-6">Nuestra Solución</h2>
+            <h2 className="text-3xl md:text-4xl font-bold mb-6">{t('solution.title')}</h2>
             <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
-              Una plataforma integral que combina datos satelitales de la NASA con tecnología avanzada para proporcionar
-              monitoreo en tiempo real y análisis predictivo.
+              {t('solution.subtitle')}
             </p>
           </div>
 
@@ -238,8 +240,8 @@ export default function HomePage() {
               <div className="aspect-video bg-gradient-to-br from-primary/10 to-accent/10 flex items-center justify-center border-2 border-dashed border-muted-foreground/20">
                 <div className="text-center">
                   <Map className="h-16 w-16 text-muted-foreground/40 mx-auto mb-4" />
-                  <p className="text-lg font-medium text-muted-foreground">Captura de Pantalla del Sistema</p>
-                  <p className="text-sm text-muted-foreground/70">Dashboard principal con mapas interactivos</p>
+                  <p className="text-lg font-medium text-muted-foreground">{t('solution.screenshotPlaceholder')}</p>
+                  <p className="text-sm text-muted-foreground/70">{t('solution.dashboardPlaceholder')}</p>
                 </div>
               </div>
             </Card>
@@ -249,57 +251,57 @@ export default function HomePage() {
             <Card className="hover:shadow-lg transition-shadow">
               <CardHeader className="text-center">
                 <Satellite className="h-12 w-12 text-primary mx-auto mb-4" />
-                <CardTitle>Datos Satelitales NASA</CardTitle>
+                <CardTitle>{t('solution.satellite.title')}</CardTitle>
               </CardHeader>
               <CardContent>
                 <p className="text-sm text-muted-foreground text-center">
-                  Integración directa con APIs de la NASA para datos actualizados cada 2 horas
+                  {t('solution.satellite.description')}
                 </p>
               </CardContent>
             </Card>
             <Card className="hover:shadow-lg transition-shadow">
               <CardHeader className="text-center">
                 <Map className="h-12 w-12 text-primary mx-auto mb-4" />
-                <CardTitle>Mapas Interactivos</CardTitle>
+                <CardTitle>{t('solution.maps.title')}</CardTitle>
               </CardHeader>
               <CardContent>
                 <p className="text-sm text-muted-foreground text-center">
-                  Visualización geoespacial avanzada con capacidades de zoom y filtrado
+                  {t('solution.maps.description')}
                 </p>
               </CardContent>
             </Card>
             <Card className="hover:shadow-lg transition-shadow">
               <CardHeader className="text-center">
                 <Clock className="h-12 w-12 text-primary mx-auto mb-4" />
-                <CardTitle>Tiempo Real</CardTitle>
+                <CardTitle>{t('solution.realtime.title')}</CardTitle>
               </CardHeader>
               <CardContent>
                 <p className="text-sm text-muted-foreground text-center">
-                  Actualizaciones automáticas siguiendo los ciclos de captura satelital
+                  {t('solution.realtime.description')}
                 </p>
               </CardContent>
             </Card>
             <Card className="hover:shadow-lg transition-shadow">
               <CardHeader className="text-center">
                 <BarChart3 className="h-12 w-12 text-primary mx-auto mb-4" />
-                <CardTitle>Análisis Temporal</CardTitle>
+                <CardTitle>{t('solution.analysis.title')}</CardTitle>
               </CardHeader>
               <CardContent>
                 <p className="text-sm text-muted-foreground text-center">
-                  Seguimiento de tendencias y patrones históricos de deforestación
+                  {t('solution.analysis.description')}
                 </p>
               </CardContent>
             </Card>
           </div>
 
           <div className="mt-16">
-            <h3 className="text-2xl font-bold text-center mb-8">Galería del Proyecto</h3>
+            <h3 className="text-2xl font-bold text-center mb-8">{t('solution.gallery.title')}</h3>
             <div className="grid md:grid-cols-3 gap-6">
               <Card className="overflow-hidden">
                 <div className="aspect-square bg-gradient-to-br from-primary/5 to-accent/5 flex items-center justify-center border-2 border-dashed border-muted-foreground/20">
                   <div className="text-center">
                     <BarChart3 className="h-12 w-12 text-muted-foreground/40 mx-auto mb-2" />
-                    <p className="text-sm font-medium text-muted-foreground">Análisis de Datos</p>
+                    <p className="text-sm font-medium text-muted-foreground">{t('solution.gallery.dataAnalysis')}</p>
                   </div>
                 </div>
               </Card>
@@ -307,7 +309,7 @@ export default function HomePage() {
                 <div className="aspect-square bg-gradient-to-br from-primary/5 to-accent/5 flex items-center justify-center border-2 border-dashed border-muted-foreground/20">
                   <div className="text-center">
                     <AlertTriangle className="h-12 w-12 text-muted-foreground/40 mx-auto mb-2" />
-                    <p className="text-sm font-medium text-muted-foreground">Detección de Incendios</p>
+                    <p className="text-sm font-medium text-muted-foreground">{t('solution.gallery.fireDetection')}</p>
                   </div>
                 </div>
               </Card>
@@ -315,7 +317,7 @@ export default function HomePage() {
                 <div className="aspect-square bg-gradient-to-br from-primary/5 to-accent/5 flex items-center justify-center border-2 border-dashed border-muted-foreground/20">
                   <div className="text-center">
                     <Globe className="h-12 w-12 text-muted-foreground/40 mx-auto mb-2" />
-                    <p className="text-sm font-medium text-muted-foreground">Vista Global</p>
+                    <p className="text-sm font-medium text-muted-foreground">{t('solution.gallery.globalView')}</p>
                   </div>
                 </div>
               </Card>
@@ -328,9 +330,9 @@ export default function HomePage() {
       <section id="tecnologias" className="py-20 bg-card/50">
         <div className="container mx-auto px-4">
           <div className="text-center mb-16">
-            <h2 className="text-3xl md:text-4xl font-bold mb-6">Tecnologías Utilizadas</h2>
+            <h2 className="text-3xl md:text-4xl font-bold mb-6">{t('technologies.title')}</h2>
             <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
-              Stack tecnológico moderno y robusto para garantizar rendimiento, escalabilidad y confiabilidad.
+              {t('technologies.subtitle')}
             </p>
           </div>
 
@@ -339,8 +341,8 @@ export default function HomePage() {
               <div className="aspect-[16/9] bg-gradient-to-br from-accent/10 to-primary/10 flex items-center justify-center border-2 border-dashed border-muted-foreground/20">
                 <div className="text-center">
                   <Database className="h-16 w-16 text-muted-foreground/40 mx-auto mb-4" />
-                  <p className="text-lg font-medium text-muted-foreground">Diagrama de Arquitectura</p>
-                  <p className="text-sm text-muted-foreground/70">Flujo de datos y componentes del sistema</p>
+                  <p className="text-lg font-medium text-muted-foreground">{t('technologies.architecturePlaceholder')}</p>
+                  <p className="text-sm text-muted-foreground/70">{t('technologies.architectureDesc')}</p>
                 </div>
               </div>
             </Card>
@@ -351,7 +353,7 @@ export default function HomePage() {
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
                   <Database className="h-5 w-5 text-accent" />
-                  Frontend
+                  {t('technologies.frontend')}
                 </CardTitle>
               </CardHeader>
               <CardContent>
@@ -367,7 +369,7 @@ export default function HomePage() {
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
                   <Zap className="h-5 w-5 text-accent" />
-                  Backend & APIs
+                  {t('technologies.backend')}
                 </CardTitle>
               </CardHeader>
               <CardContent>
@@ -383,7 +385,7 @@ export default function HomePage() {
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
                   <Shield className="h-5 w-5 text-accent" />
-                  Infraestructura
+                  {t('technologies.infrastructure')}
                 </CardTitle>
               </CardHeader>
               <CardContent>
@@ -403,10 +405,9 @@ export default function HomePage() {
       <section id="equipo" className="py-20">
         <div className="container mx-auto px-4">
           <div className="text-center mb-16">
-            <h2 className="text-3xl md:text-4xl font-bold mb-6">Nuestro Equipo</h2>
+            <h2 className="text-3xl md:text-4xl font-bold mb-6">{t('team.title')}</h2>
             <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
-              Un equipo multidisciplinario de desarrolladores, científicos de datos y especialistas en ciencias
-              ambientales comprometidos con la conservación forestal.
+              {t('team.subtitle')}
             </p>
           </div>
 
@@ -415,8 +416,8 @@ export default function HomePage() {
               <div className="aspect-[21/9] bg-gradient-to-r from-primary/5 to-accent/5 flex items-center justify-center border-2 border-dashed border-muted-foreground/20">
                 <div className="text-center">
                   <Users className="h-16 w-16 text-muted-foreground/40 mx-auto mb-4" />
-                  <p className="text-lg font-medium text-muted-foreground">Foto del Equipo</p>
-                  <p className="text-sm text-muted-foreground/70">Equipo trabajando en el hackathon</p>
+                  <p className="text-lg font-medium text-muted-foreground">{t('team.photoPlaceholder')}</p>
+                  <p className="text-sm text-muted-foreground/70">{t('team.photoDesc')}</p>
                 </div>
               </div>
             </Card>
@@ -430,11 +431,11 @@ export default function HomePage() {
                   <AvatarFallback>AM</AvatarFallback>
                 </Avatar>
                 <CardTitle>Ana Martínez</CardTitle>
-                <CardDescription>Full Stack Developer</CardDescription>
+                <CardDescription>{t('team.ana.role')}</CardDescription>
               </CardHeader>
               <CardContent>
                 <p className="text-sm text-muted-foreground">
-                  Especialista en React y Node.js con experiencia en aplicaciones geoespaciales
+                  {t('team.ana.description')}
                 </p>
               </CardContent>
             </Card>
@@ -445,11 +446,11 @@ export default function HomePage() {
                   <AvatarFallback>CG</AvatarFallback>
                 </Avatar>
                 <CardTitle>Carlos González</CardTitle>
-                <CardDescription>Data Scientist</CardDescription>
+                <CardDescription>{t('team.carlos.role')}</CardDescription>
               </CardHeader>
               <CardContent>
                 <p className="text-sm text-muted-foreground">
-                  Experto en análisis de datos satelitales y algoritmos de detección de patrones
+                  {t('team.carlos.description')}
                 </p>
               </CardContent>
             </Card>
@@ -460,11 +461,11 @@ export default function HomePage() {
                   <AvatarFallback>LR</AvatarFallback>
                 </Avatar>
                 <CardTitle>Laura Rodríguez</CardTitle>
-                <CardDescription>Científica Ambiental</CardDescription>
+                <CardDescription>{t('team.laura.role')}</CardDescription>
               </CardHeader>
               <CardContent>
                 <p className="text-sm text-muted-foreground">
-                  PhD en Ciencias Forestales con 10 años de experiencia en conservación
+                  {t('team.laura.description')}
                 </p>
               </CardContent>
             </Card>
@@ -475,11 +476,11 @@ export default function HomePage() {
                   <AvatarFallback>MV</AvatarFallback>
                 </Avatar>
                 <CardTitle>Miguel Vargas</CardTitle>
-                <CardDescription>UI/UX Designer</CardDescription>
+                <CardDescription>{t('team.miguel.role')}</CardDescription>
               </CardHeader>
               <CardContent>
                 <p className="text-sm text-muted-foreground">
-                  Diseñador especializado en interfaces para aplicaciones científicas y ambientales
+                  {t('team.miguel.description')}
                 </p>
               </CardContent>
             </Card>
@@ -491,43 +492,42 @@ export default function HomePage() {
       <section id="impacto" className="py-20 bg-gradient-to-r from-primary/5 to-accent/5">
         <div className="container mx-auto px-4">
           <div className="text-center mb-16">
-            <h2 className="text-3xl md:text-4xl font-bold mb-6">Impacto Esperado</h2>
+            <h2 className="text-3xl md:text-4xl font-bold mb-6">{t('impact.title')}</h2>
             <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
-              Nuestro objetivo es democratizar el acceso a información crítica sobre el estado de los bosques mundiales
-              y facilitar la toma de decisiones informadas.
+              {t('impact.subtitle')}
             </p>
           </div>
           <div className="grid md:grid-cols-3 gap-8">
             <Card className="text-center border-accent/20">
               <CardHeader>
                 <Users className="h-12 w-12 text-accent mx-auto mb-4" />
-                <CardTitle>Para Investigadores</CardTitle>
+                <CardTitle>{t('impact.researchers.title')}</CardTitle>
               </CardHeader>
               <CardContent>
                 <p className="text-muted-foreground">
-                  Acceso a datos actualizados para estudios en ciencias ambientales y climáticas
+                  {t('impact.researchers.description')}
                 </p>
               </CardContent>
             </Card>
             <Card className="text-center border-accent/20">
               <CardHeader>
                 <Shield className="h-12 w-12 text-accent mx-auto mb-4" />
-                <CardTitle>Para Gobiernos</CardTitle>
+                <CardTitle>{t('impact.governments.title')}</CardTitle>
               </CardHeader>
               <CardContent>
                 <p className="text-muted-foreground">
-                  Herramientas para políticas de protección ambiental y respuesta a emergencias
+                  {t('impact.governments.description')}
                 </p>
               </CardContent>
             </Card>
             <Card className="text-center border-accent/20">
               <CardHeader>
                 <Globe className="h-12 w-12 text-accent mx-auto mb-4" />
-                <CardTitle>Para el Público</CardTitle>
+                <CardTitle>{t('impact.public.title')}</CardTitle>
               </CardHeader>
               <CardContent>
                 <p className="text-muted-foreground">
-                  Concienciación sobre el estado actual de los bosques y desafíos ambientales
+                  {t('impact.public.description')}
                 </p>
               </CardContent>
             </Card>
@@ -538,17 +538,16 @@ export default function HomePage() {
       {/* CTA Section */}
       <section className="py-20 bg-primary text-primary-foreground">
         <div className="container mx-auto px-4 text-center">
-          <h2 className="text-3xl md:text-4xl font-bold mb-6">Únete a la Misión de Conservación Global</h2>
+          <h2 className="text-3xl md:text-4xl font-bold mb-6">{t('cta.title')}</h2>
           <p className="text-xl mb-8 max-w-3xl mx-auto opacity-90">
-            Explora nuestra plataforma y descubre cómo la tecnología puede ayudar a proteger los bosques del mundo para
-            las futuras generaciones.
+            {t('cta.subtitle')}
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Button asChild size="lg" variant="secondary" className="text-lg px-8 py-6">
-              <a href="/dashboard" target="_blank" rel="noopener noreferrer">
+              <Link href="/dashboard">
                 <Satellite className="mr-2 h-5 w-5" />
-                Acceder a la Plataforma
-              </a>
+                {t('cta.platformButton')}
+              </Link>
             </Button>
             <Button
               size="lg"
@@ -556,7 +555,7 @@ export default function HomePage() {
               className="text-lg px-8 py-6 border-primary-foreground text-primary-foreground hover:bg-primary-foreground hover:text-primary bg-transparent"
             >
               <Users className="mr-2 h-5 w-5" />
-              Contactar al Equipo
+              {t('cta.contactButton')}
             </Button>
           </div>
         </div>
@@ -566,16 +565,16 @@ export default function HomePage() {
       <footer className="py-12 bg-card border-t">
         <div className="container mx-auto px-4">
           <div className="text-center">
-            <h3 className="text-2xl font-bold mb-4">Sistema de Monitoreo Forestal Global</h3>
+            <h3 className="text-2xl font-bold mb-4">{t('footer.title')}</h3>
             <p className="text-muted-foreground mb-6">
-              Desarrollado para Hackathon 2025 • Powered by NASA Satellite Data
+              {t('footer.subtitle')}
             </p>
             <div className="flex justify-center space-x-6 text-sm text-muted-foreground">
-              <span>© 2025 Equipo ForestWatch</span>
+              <span>{t('footer.copyright')}</span>
               <span>•</span>
-              <span>Datos proporcionados por NASA</span>
+              <span>{t('footer.nasa')}</span>
               <span>•</span>
-              <span>Proyecto Open Source</span>
+              <span>{t('footer.openSource')}</span>
             </div>
           </div>
         </div>
