@@ -6,12 +6,14 @@ import "leaflet/dist/leaflet.css";
 import "leaflet.heat";
 import { firesApi } from "@/lib/api";
 import { Map as MapIcon, Satellite } from "lucide-react";
+import { MapSkeleton } from "./MapSkeleton";
 
 interface MapProps {
   center?: [number, number];
   fires: Fire[];
   zoom?: number;
   radius?: number;
+  isLoading?: boolean;
 }
 
 interface Fire {
@@ -34,6 +36,7 @@ export default function HeatMap2({
   zoom = 4,
   fires,
   radius = 30,
+  isLoading = false,
 }: MapProps) {
   const mapRef = useRef<HTMLDivElement>(null);
   const leafletMapRef = useRef<L.Map | null>(null);
@@ -232,7 +235,23 @@ export default function HeatMap2({
 
   return (
     <div style={{ position: "relative", height: "100%", width: "100%" }}>
-      <div ref={mapRef} style={{ height: "100%", width: "100%" }} />
+      {isLoading && (
+        <div className="absolute inset-0 z-[999]">
+          <MapSkeleton
+            message="Cargando incendios..."
+            showStats={false}
+          />
+        </div>
+      )}
+      <div
+        ref={mapRef}
+        style={{
+          height: "100%",
+          width: "100%",
+          opacity: isLoading ? 0 : 1,
+          transition: "opacity 0.5s ease-in-out"
+        }}
+      />
 
       {/* Selector de vista */}
       <div

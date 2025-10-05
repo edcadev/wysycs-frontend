@@ -222,16 +222,16 @@ export default function DashboardPage() {
 
       {/* Tabs de contenido */}
       <section className="container mx-auto px-4 sm:px-6 pb-4 sm:pb-6">
-        <Tabs defaultValue="lista" className="w-full">
+        <Tabs defaultValue="mapa" className="w-full">
           <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 sm:gap-0 mb-4">
             <TabsList className="w-full sm:w-auto">
-              <TabsTrigger value="lista" className="cursor-pointer flex-1 sm:flex-none">
-                <List className="h-4 w-4 sm:mr-2" />
-                <span className="hidden sm:inline">{t('tabs.forestList')}</span>
-              </TabsTrigger>
               <TabsTrigger value="mapa" className="cursor-pointer flex-1 sm:flex-none">
                 <MapPin className="h-4 w-4 sm:mr-2" />
                 <span className="hidden sm:inline">{t('tabs.map')}</span>
+              </TabsTrigger>
+              <TabsTrigger value="lista" className="cursor-pointer flex-1 sm:flex-none">
+                <List className="h-4 w-4 sm:mr-2" />
+                <span className="hidden sm:inline">{t('tabs.forestList')}</span>
               </TabsTrigger>
             </TabsList>
 
@@ -358,11 +358,11 @@ export default function DashboardPage() {
             )}
           </TabsContent>
 
-          {/* Mapa - Placeholder */}
+          {/* Mapa */}
           <TabsContent value="mapa">
             <Card className="h-[600px] flex items-center justify-center">
               <div className="h-full w-full">
-                  <Map zoom={5} forests={forestsMap}/>
+                  <Map zoom={5} forests={forestsMap} isLoading={loading}/>
                 </div>
             </Card>
           </TabsContent>

@@ -293,9 +293,13 @@ export default function FiresPage() {
         )}
 
         {/* Tabs de contenido */}
-        <Tabs defaultValue="alertas" className="w-full">
+        <Tabs defaultValue="mapa" className="w-full">
           <div className="overflow-x-auto -mx-4 sm:mx-0 mb-4">
             <TabsList className="w-full sm:w-auto inline-flex min-w-full sm:min-w-0 px-4 sm:px-0">
+              <TabsTrigger value="mapa" className='cursor-pointer flex-1 sm:flex-none'>
+                <MapPin className="h-4 w-4 sm:mr-2" />
+                <span className="hidden sm:inline">{tDashboard('tabs.map')}</span>
+              </TabsTrigger>
               <TabsTrigger value="alertas" className='cursor-pointer flex-1 sm:flex-none'>
                 <List className="h-4 w-4 sm:mr-2" />
                 <span className="hidden sm:inline">{tDashboard('tabs.activeAlerts')}</span>
@@ -303,10 +307,6 @@ export default function FiresPage() {
               <TabsTrigger value="analisis" className='cursor-pointer flex-1 sm:flex-none'>
                 <Search className="h-4 w-4 sm:mr-2" />
                 <span className="hidden sm:inline">{tDashboard('tabs.riskAnalysis')}</span>
-              </TabsTrigger>
-              <TabsTrigger value="mapa" className='cursor-pointer flex-1 sm:flex-none'>
-                <MapPin className="h-4 w-4 sm:mr-2" />
-                <span className="hidden sm:inline">{tDashboard('tabs.map')}</span>
               </TabsTrigger>
             </TabsList>
           </div>
@@ -564,11 +564,11 @@ export default function FiresPage() {
             )}
           </TabsContent>
 
-          {/* Tab: Mapa - Placeholder */}
+          {/* Tab: Mapa */}
           <TabsContent value="mapa">
             <Card className="h-[600px] flex items-center justify-center">
               <div className="h-full w-full">
-                <FireHeatmap fires={fires}/>
+                <FireHeatmap fires={fires} isLoading={loading}/>
               </div>
             </Card>
           </TabsContent>
