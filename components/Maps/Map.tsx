@@ -1,9 +1,10 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
 import { Forest } from "@/interfaces/Forest";
+import { Map as MapIcon, Satellite } from "lucide-react";
 
 interface MapProps {
   center?: [number, number];
@@ -25,6 +26,8 @@ export default function Map({
   const mapRef = useRef<HTMLDivElement>(null);
   const leafletMapRef = useRef<L.Map | null>(null);
   const markersLayerRef = useRef<L.LayerGroup | null>(null);
+  const tileLayerRef = useRef<L.TileLayer | null>(null);
+  const [viewMode, setViewMode] = useState<"satellite" | "street">("satellite");
 
   /** 🔹 Inicializar el mapa solo una vez */
   useEffect(() => {
@@ -38,16 +41,40 @@ export default function Map({
 
     leafletMapRef.current = map;
 
-    L.tileLayer("https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png", {
+    tileLayerRef.current = L.tileLayer(
+      "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}",
+      {
+        attribution:
+          '&copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> &copy; <a href="https://carto.com/">CARTO</a>',
+        subdomains: "abcd",
+        minZoom: 5,
+        maxZoom: 20,
+      }
+    ).addTo(map);
+
+    markersLayerRef.current = L.layerGroup().addTo(map);
+  }, [center, zoom]);
+
+  /** 🔹 Cambiar entre vista satelital y calles */
+  useEffect(() => {
+    const map = leafletMapRef.current;
+    if (!map || !tileLayerRef.current) return;
+
+    map.removeLayer(tileLayerRef.current);
+
+    const tileUrl =
+      viewMode === "satellite"
+        ? "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}"
+        : "https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png";
+
+    tileLayerRef.current = L.tileLayer(tileUrl, {
       attribution:
         '&copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> &copy; <a href="https://carto.com/">CARTO</a>',
       subdomains: "abcd",
       minZoom: 5,
       maxZoom: 20,
     }).addTo(map);
-
-    markersLayerRef.current = L.layerGroup().addTo(map);
-  }, [center, zoom]);
+  }, [viewMode]);
 
   /** 🔹 Actualizar marcadores cuando cambien los bosques */
   useEffect(() => {
@@ -75,5 +102,37 @@ export default function Map({
     });
   }, [forests]);
 
-  return <div ref={mapRef} style={{ height: "100%", width: "100%" }} />;
+  return (
+    <div style={{ position: "relative", height: "100%", width: "100%" }}>
+      <div ref={mapRef} style={{ height: "100%", width: "100%" }} />
+
+      {/* Selector de vista */}
+      <div
+        className="absolute top-2 right-2 z-[1000] flex gap-1 bg-card/95 backdrop-blur border border-border rounded-lg p-1 shadow-lg"
+      >
+        <button
+          onClick={() => setViewMode("satellite")}
+          className={`px-3 py-2 rounded-md flex items-center gap-2 text-sm font-medium transition-all ${
+            viewMode === "satellite"
+              ? "bg-primary text-primary-foreground"
+              : "text-muted-foreground hover:bg-muted hover:text-foreground"
+          }`}
+        >
+          <Satellite size={16} />
+          Satellite
+        </button>
+        <button
+          onClick={() => setViewMode("street")}
+          className={`px-3 py-2 rounded-md flex items-center gap-2 text-sm font-medium transition-all ${
+            viewMode === "street"
+              ? "bg-primary text-primary-foreground"
+              : "text-muted-foreground hover:bg-muted hover:text-foreground"
+          }`}
+        >
+          <MapIcon size={16} />
+          Street
+        </button>
+      </div>
+    </div>
+  );
 }

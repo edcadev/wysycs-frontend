@@ -1,10 +1,11 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
 import "leaflet.heat";
 import { firesApi } from "@/lib/api";
+import { Map as MapIcon, Satellite } from "lucide-react";
 
 interface MapProps {
   center?: [number, number];
@@ -38,6 +39,8 @@ export default function HeatMap2({
   const leafletMapRef = useRef<L.Map | null>(null);
   const markersLayerRef = useRef<L.LayerGroup | null>(null);
   const heatLayerRef = useRef<L.HeatLayer | null>(null);
+  const tileLayerRef = useRef<L.TileLayer | null>(null);
+  const [viewMode, setViewMode] = useState<"satellite" | "street">("satellite");
 
   /** 🔹 Inicializar mapa una sola vez */
   useEffect(() => {
@@ -51,15 +54,38 @@ export default function HeatMap2({
 
     leafletMapRef.current = map;
 
-    L.tileLayer("https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png", {
+    tileLayerRef.current = L.tileLayer(
+      "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}",
+      {
+        attribution:
+          '&copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> &copy; <a href="https://carto.com/">CARTO</a>',
+        subdomains: "abcd",
+        minZoom: 5,
+      }
+    ).addTo(map);
+
+    markersLayerRef.current = L.layerGroup().addTo(map);
+  }, [center, zoom]);
+
+  /** 🔹 Cambiar entre vista satelital y calles */
+  useEffect(() => {
+    const map = leafletMapRef.current;
+    if (!map || !tileLayerRef.current) return;
+
+    map.removeLayer(tileLayerRef.current);
+
+    const tileUrl =
+      viewMode === "satellite"
+        ? "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}"
+        : "https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png";
+
+    tileLayerRef.current = L.tileLayer(tileUrl, {
       attribution:
         '&copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> &copy; <a href="https://carto.com/">CARTO</a>',
       subdomains: "abcd",
       minZoom: 5,
     }).addTo(map);
-
-    markersLayerRef.current = L.layerGroup().addTo(map);
-  }, [center, zoom]);
+  }, [viewMode]);
 
   /** 🔹 Actualizar marcadores y heatmap cuando cambien los fires */
   useEffect(() => {
@@ -79,19 +105,21 @@ export default function HeatMap2({
       Math.min(fire.brightness / 400, 1),
     ]) as [number, number, number][];
 
-    heatLayerRef.current = (L as any).heatLayer(heatData, {
-      radius,
-      blur: 20,
-      maxZoom: 8,
-      gradient: {
-        0.0: "transparent",
-        0.2: "#fef3c7",
-        0.4: "#fbbf24",
-        0.6: "#f59e0b",
-        0.8: "#f97316",
-        1.0: "#ef4444",
-      },
-    }).addTo(map);
+    heatLayerRef.current = (L as any)
+      .heatLayer(heatData, {
+        radius,
+        blur: 20,
+        maxZoom: 8,
+        gradient: {
+          0.0: "transparent",
+          0.2: "#fef3c7",
+          0.4: "#fbbf24",
+          0.6: "#f59e0b",
+          0.8: "#f97316",
+          1.0: "#ef4444",
+        },
+      })
+      .addTo(map);
 
     // Crear marcadores
     fires.forEach((fire, index) => {
@@ -147,7 +175,9 @@ export default function HeatMap2({
           `;
 
           const buttons = popup.querySelectorAll<HTMLButtonElement>(".day-btn");
-          const detailsContainer = document.getElementById(`${popupId}-details`);
+          const detailsContainer = document.getElementById(
+            `${popupId}-details`
+          );
 
           buttons.forEach((btn) => {
             btn.addEventListener("click", () => {
@@ -172,12 +202,22 @@ export default function HeatMap2({
                   <hr style="margin: 4px 0;">
                   <p><b>🌳 CO₂:</b> ${environmental_impact.co2_tonnes.toLocaleString()} t</p>
                   <p><b>🚗 Car equivalent:</b> ${environmental_impact.cars_equivalent.toLocaleString()}</p>
-                  <p><b>🐾 Species at risk:</b> ${environmental_impact.species_at_risk}</p>
-                  <p><b>💧 Water sources at risk:</b> ${environmental_impact.water_sources_at_risk}</p>
+                  <p><b>🐾 Species at risk:</b> ${
+                    environmental_impact.species_at_risk
+                  }</p>
+                  <p><b>💧 Water sources at risk:</b> ${
+                    environmental_impact.water_sources_at_risk
+                  }</p>
                   <hr style="margin: 4px 0;">
-                  <p><b>👥 People at risk:</b> ${population_impact.people_at_risk}</p>
-                  <p><b>👨‍👩‍👧 Affected families:</b> ${population_impact.families_affected}</p>
-                  <p><b>📊 Severity:</b> <span style="font-weight:bold;">${population_impact.severity}</span></p>
+                  <p><b>👥 People at risk:</b> ${
+                    population_impact.people_at_risk
+                  }</p>
+                  <p><b>👨‍👩‍👧 Affected families:</b> ${
+                    population_impact.families_affected
+                  }</p>
+                  <p><b>📊 Severity:</b> <span style="font-weight:bold;">${
+                    population_impact.severity
+                  }</span></p>
                 `;
               }
             });
@@ -190,5 +230,37 @@ export default function HeatMap2({
     });
   }, [fires, radius]);
 
-  return <div ref={mapRef} style={{ height: "100%", width: "100%" }} />;
+  return (
+    <div style={{ position: "relative", height: "100%", width: "100%" }}>
+      <div ref={mapRef} style={{ height: "100%", width: "100%" }} />
+
+      {/* Selector de vista */}
+      <div
+        className="absolute top-2 right-2 z-[1000] flex gap-1 bg-card/95 backdrop-blur border border-border rounded-lg p-1 shadow-lg"
+      >
+        <button
+          onClick={() => setViewMode("satellite")}
+          className={`px-3 py-2 rounded-md flex items-center gap-2 text-sm font-medium transition-all ${
+            viewMode === "satellite"
+              ? "bg-primary text-primary-foreground"
+              : "text-muted-foreground hover:bg-muted hover:text-foreground"
+          }`}
+        >
+          <Satellite size={16} />
+          Satellite
+        </button>
+        <button
+          onClick={() => setViewMode("street")}
+          className={`px-3 py-2 rounded-md flex items-center gap-2 text-sm font-medium transition-all ${
+            viewMode === "street"
+              ? "bg-primary text-primary-foreground"
+              : "text-muted-foreground hover:bg-muted hover:text-foreground"
+          }`}
+        >
+          <MapIcon size={16} />
+          Street
+        </button>
+      </div>
+    </div>
+  );
 }
