@@ -1,3 +1,5 @@
+    import { parseISO, differenceInDays } from 'date-fns';
+
 /**
  * Utilidades compartidas para lógica relacionada con bosques
  * Evita duplicación de código en componentes
@@ -114,9 +116,9 @@ export function getLevelEmoji(level: string): string {
  * @returns Número de días desde la adopción
  */
 export function getDaysSinceAdoption(adoptionDate: string): number {
-  const now = new Date().getTime();
-  const adoption = new Date(adoptionDate).getTime();
-  return Math.floor((now - adoption) / (1000 * 60 * 60 * 24));
+  const now = parseISO(new Date().toISOString())
+  const adoption = parseISO(new Date(adoptionDate).toISOString())
+  return differenceInDays(adoption, now)
 }
 
 /**
