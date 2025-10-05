@@ -1,134 +1,107 @@
-"use client"
+"use client";
 
-import { ReactNode, useState } from 'react'
-import { useRouter, usePathname } from '@/i18n/routing'
-import Image from 'next/image'
-import { useTranslations } from 'next-intl'
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Button } from "@/components/ui/button"
-import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet"
-import { DashboardHeader } from "@/components/dashboard-header"
-import { LanguageSwitcher } from "@/components/language-switcher"
+import { ReactNode, useState } from "react";
+import { useRouter, usePathname } from "@/i18n/routing";
+import Image from "next/image";
+import { useTranslations } from "next-intl";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Sheet, SheetContent } from "@/components/ui/sheet";
+import { DashboardHeader } from "@/components/dashboard-header";
+import { LanguageSwitcher } from "@/components/language-switcher";
 import {
   LayoutDashboard,
-  MapPin,
-  List,
-  BarChart3,
-  Settings,
   Flame,
   RefreshCw,
   Shield,
   LucideIcon,
   Menu,
-} from "lucide-react"
+} from "lucide-react";
 
 interface DashboardLayoutProps {
-  children: ReactNode
+  children: ReactNode;
 }
 
 interface NavItem {
-  key: string
-  icon: LucideIcon
-  href: string
-  enabled: boolean
+  key: string;
+  icon: LucideIcon;
+  href: string;
+  enabled: boolean;
 }
 
 interface PageConfig {
-  titleKey: string
-  descriptionKey: string
+  titleKey: string;
+  descriptionKey: string;
 }
 
 // Configuración de navegación del sidebar
 const NAV_ITEMS: NavItem[] = [
   {
-    key: 'dashboard',
+    key: "forests",
     icon: LayoutDashboard,
-    href: '/dashboard',
+    href: "/dashboard",
     enabled: true,
   },
+
   {
-    key: 'interactiveMap',
-    icon: MapPin,
-    href: '/dashboard/map',
-    enabled: false,
-  },
-  {
-    key: 'forestList',
-    icon: List,
-    href: '/dashboard/forests',
-    enabled: false,
-  },
-  {
-    key: 'guardianProfile',
-    icon: Shield,
-    href: '/dashboard/guardian',
-    enabled: true,
-  },
-  {
-    key: 'statistics',
-    icon: BarChart3,
-    href: '/dashboard/stats',
-    enabled: false,
-  },
-  {
-    key: 'fireAlerts',
+    key: "fireAlerts",
     icon: Flame,
-    href: '/dashboard/fires',
+    href: "/dashboard/fires",
     enabled: true,
   },
   {
-    key: 'settings',
-    icon: Settings,
-    href: '/dashboard/settings',
-    enabled: false,
+    key: "guardianProfile",
+    icon: Shield,
+    href: "/dashboard/guardian",
+    enabled: true,
   },
-]
+];
 
 // Configuración de títulos y descripciones por página
 const PAGE_CONFIG: Record<string, PageConfig> = {
-  '/dashboard': {
-    titleKey: 'dashboard.pages.dashboard.title',
-    descriptionKey: 'dashboard.pages.dashboard.description',
+  "/dashboard": {
+    titleKey: "dashboard.pages.dashboard.title",
+    descriptionKey: "dashboard.pages.dashboard.description",
   },
-  '/dashboard/fires': {
-    titleKey: 'dashboard.pages.fires.title',
-    descriptionKey: 'dashboard.pages.fires.description',
+  "/dashboard/fires": {
+    titleKey: "dashboard.pages.fires.title",
+    descriptionKey: "dashboard.pages.fires.description",
   },
-  '/dashboard/guardian': {
-    titleKey: 'dashboard.pages.guardian.title',
-    descriptionKey: 'dashboard.pages.guardian.description',
+  "/dashboard/guardian": {
+    titleKey: "dashboard.pages.guardian.title",
+    descriptionKey: "dashboard.pages.guardian.description",
   },
-}
+};
 
 export default function DashboardLayout({ children }: DashboardLayoutProps) {
-  const t = useTranslations('dashboard.sidebar')
-  const tPages = useTranslations()
-  const router = useRouter()
-  const pathname = usePathname()
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
+  const t = useTranslations("dashboard.sidebar");
+  const tPages = useTranslations();
+  const router = useRouter();
+  const pathname = usePathname();
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   const handleRefresh = () => {
-    window.location.reload()
-  }
+    window.location.reload();
+  };
 
   const handleNavigation = (href: string) => {
-    router.push(href as any)
-    setMobileMenuOpen(false)
-  }
+    router.push(href as any);
+    setMobileMenuOpen(false);
+  };
 
-  const currentPageConfig = PAGE_CONFIG[pathname] || PAGE_CONFIG['/dashboard']
+  const currentPageConfig = PAGE_CONFIG[pathname] || PAGE_CONFIG["/dashboard"];
 
   // Componente de navegación reutilizable
   const NavigationItems = () => (
     <>
       {NAV_ITEMS.map((item) => {
-        const Icon = item.icon
-        const isActive = pathname === item.href
+        const Icon = item.icon;
+        const isActive = pathname === item.href;
 
         return (
           <Button
             key={item.href}
-            variant={isActive ? 'default' : 'ghost'}
+            variant={isActive ? "default" : "ghost"}
             className="w-full justify-start gap-2"
             onClick={() => item.enabled && handleNavigation(item.href)}
             disabled={!item.enabled}
@@ -136,17 +109,20 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
             <Icon className="h-4 w-4" />
             {t(item.key)}
           </Button>
-        )
+        );
       })}
     </>
-  )
+  );
 
   return (
     <div className="flex min-h-screen bg-gradient-to-br from-primary/5 via-background to-accent/5">
       {/* Sidebar Desktop */}
       <aside className="hidden lg:flex w-64 flex-col border-r bg-card/50 backdrop-blur sticky top-0 h-screen flex-shrink-0">
         <div className="p-6 border-b">
-          <div className="flex items-center space-x-3">
+          <div
+            className="flex items-center space-x-3 cursor-pointer"
+            onClick={() => handleNavigation("/dashboard")}
+          >
             <Image
               src="/wysycs-logo.SVG"
               alt="WYSYCS Logo"
@@ -155,12 +131,10 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
               className="w-10 h-10"
             />
             <span className="text-xl font-bold bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
-              {t('title')}
+              {t("title")}
             </span>
           </div>
-          <p className="text-xs text-muted-foreground mt-2">
-            {t('subtitle')}
-          </p>
+          <p className="text-xs text-muted-foreground mt-2">{t("subtitle")}</p>
         </div>
 
         <nav className="flex-1 p-4 space-y-2">
@@ -170,12 +144,12 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
         <div className="p-4 border-t">
           <Card className="bg-gradient-to-br from-accent/10 to-primary/10">
             <CardHeader className="pb-3">
-              <CardTitle className="text-sm">{t('systemStatus')}</CardTitle>
+              <CardTitle className="text-sm">{t("systemStatus")}</CardTitle>
             </CardHeader>
             <CardContent>
               <div className="flex items-center gap-2 text-xs text-muted-foreground">
                 <div className="h-2 w-2 rounded-full bg-green-500 animate-pulse" />
-                {t('dataUpdated')}
+                {t("dataUpdated")}
               </div>
             </CardContent>
           </Card>
@@ -187,7 +161,10 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
         <SheetContent side="left" className="w-64 p-0">
           <div className="flex flex-col h-full">
             <div className="p-6 border-b">
-              <div className="flex items-center space-x-3">
+              <div
+                className="flex items-center space-x-3 cursor-pointer"
+                onClick={() => handleNavigation("/dashboard")}
+              >
                 <Image
                   src="/wysycs-logo.SVG"
                   alt="WYSYCS Logo"
@@ -196,11 +173,11 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
                   className="w-10 h-10"
                 />
                 <span className="text-xl font-bold bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
-                  {t('title')}
+                  {t("title")}
                 </span>
               </div>
               <p className="text-xs text-muted-foreground mt-2">
-                {t('subtitle')}
+                {t("subtitle")}
               </p>
             </div>
 
@@ -211,12 +188,12 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
             <div className="p-4 border-t">
               <Card className="bg-gradient-to-br from-accent/10 to-primary/10">
                 <CardHeader className="pb-3">
-                  <CardTitle className="text-sm">{t('systemStatus')}</CardTitle>
+                  <CardTitle className="text-sm">{t("systemStatus")}</CardTitle>
                 </CardHeader>
                 <CardContent>
                   <div className="flex items-center gap-2 text-xs text-muted-foreground">
                     <div className="h-2 w-2 rounded-full bg-green-500 animate-pulse" />
-                    {t('dataUpdated')}
+                    {t("dataUpdated")}
                   </div>
                 </CardContent>
               </Card>
@@ -243,9 +220,16 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
               </Button>
 
               <LanguageSwitcher />
-              <Button variant="outline" size="sm" onClick={handleRefresh} className="whitespace-nowrap">
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={handleRefresh}
+                className="whitespace-nowrap"
+              >
                 <RefreshCw className="h-4 w-4 mr-2" />
-                <span className="hidden sm:inline">{tPages('dashboard.header.refresh')}</span>
+                <span className="hidden sm:inline">
+                  {tPages("dashboard.header.refresh")}
+                </span>
               </Button>
             </div>
           }
@@ -253,5 +237,5 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
         {children}
       </main>
     </div>
-  )
+  );
 }

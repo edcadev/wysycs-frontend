@@ -126,14 +126,10 @@
   "dashboard": {
     "sidebar": {
       "title": "WYSYCS",
-      "subtitle": "Forest Monitoring System",
-      "dashboard": "Dashboard",
-      "interactiveMap": "Interactive Map",
-      "forestList": "Forest List",
+      "subtitle": "What You See, You Can Save",
+      "forests": "Forests",
       "guardianProfile": "Guardian Profile",
-      "statistics": "Statistics",
       "fireAlerts": "Fire Alerts",
-      "settings": "Settings",
       "systemStatus": "System Status",
       "dataUpdated": "Data updated 2h ago"
     },
